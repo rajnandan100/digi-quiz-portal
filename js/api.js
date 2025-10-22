@@ -2,8 +2,8 @@
 
 class QuizAPI {
   constructor() {
-    this.baseUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
-    this.sheetId = 'YOUR_SHEET_ID';
+    this.baseUrl = 'https://script.google.com/macros/s/AKfycbwWeFdki41WLQ2CSj9O3wZRTuxRGTGfSUKETKYf3uTPSl-o5yu7y406bAOCvFmDv07Q5A/exec';
+    this.sheetId = '1JPL_iMgCjz8k4rp-s8pZnKuJA92-UIWEdq_rV4nhgSc';
     console.log('📡 QuizAPI initialized');
   }
 
