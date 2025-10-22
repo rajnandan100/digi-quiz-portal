@@ -1,0 +1,59 @@
+{
+  "name": "Digital Quiz Portal",
+  "short_name": "Digi Quiz",
+  "description": "Government exam preparation quiz platform with SSC MTS, GK, English and more",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Take Quiz",
+      "short_name": "Quiz",
+      "description": "Start a new quiz",
+      "url": "/index.html",
+      "icons": [{ "src": "assets/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Leaderboard",
+      "short_name": "Rankings",
+      "description": "View leaderboard",
+      "url": "/leaderboard.html",
+      "icons": [{ "src": "assets/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
