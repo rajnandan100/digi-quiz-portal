@@ -684,6 +684,56 @@
                 });
             });
 
+
+
+// new code added at 02 06 pm 
+
+
+// Add this AFTER the existing DOMContentLoaded function
+document.getElementById('preQuizForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const date = document.getElementById('quizDate').value;
+    const subject = document.getElementById('selectedSubject').value;
+    
+    // Store user info
+    sessionStorage.setItem('userInfo', JSON.stringify({
+        name: name,
+        email: email
+    }));
+    
+    // Filter quizzes and scroll down
+    document.getElementById('filterDate').value = date;
+    document.getElementById('filterSubject').value = subject;
+    applyFilters();
+    
+    document.querySelector('.quiz-dashboard').scrollIntoView({ behavior: 'smooth' });
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Ready to Start!',
+        text: `Hi ${name}! Check the filtered quizzes below.`,
+        timer: 2000
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             function checkFormReady() {
                 const name = document.getElementById('fullName').value;
                 const email = document.getElementById('email').value;
