@@ -1,231 +1,1056 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Digi Quiz Portal</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    
-    <style>
-        body { font-family: 'Poppins', sans-serif; background: #f8fafc; }
-        .sidebar { min-height: 100vh; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
-        .sidebar .nav-link { color: rgba(255,255,255,0.8); border-radius: 10px; margin: 5px 15px; transition: all 0.3s ease; }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(255,255,255,0.2); color: white; transform: translateX(5px); }
-        .main-content { min-height: 100vh; padding: 0; }
-        .header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 1rem 2rem; }
-        .quiz-card { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); border: none; transition: all 0.3s ease; }
-        .quiz-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .content-section { display: none; animation: fadeIn 0.3s ease; }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .form-control, .form-select { border-radius: 10px; border: 2px solid #e2e8f0; transition: all 0.3s ease; }
-        .form-control:focus, .form-select:focus { border-color: #dc3545; box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25); }
-        .login-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: white; border-radius: 20px; padding: 3rem; max-width: 400px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel - Digi Quiz Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8fafc;
+    }
+    .sidebar {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .sidebar .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      margin: 5px 15px;
+      transition: all 0.3s ease;
+    }
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      transform: translateX(5px);
+    }
+    .main-content {
+      min-height: 100vh;
+      padding: 0;
+    }
+    .header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .quiz-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      border: none;
+      transition: all 0.3s ease;
+    }
+    .quiz-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    .content-section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+      margin-top: 20px;
+    }
+    .content-section.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .form-control,
+    .form-select {
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    .form-control:focus,
+    .form-select:focus {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+    #apiStatus {
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    #apiStatus.connected {
+      color: #155724;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+    }
+    #apiStatus.disconnected {
+      color: #721c24;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
 </head>
 <body>
-    <!-- Admin Login Overlay -->
-    <div class="login-overlay" id="loginOverlay">
-        <div class="login-card">
-            <div class="text-center mb-4">
-                <i class="fas fa-shield-alt fa-4x text-danger mb-3"></i>
-                <h3 class="fw-bold text-danger">Admin Access</h3>
-                <p class="text-muted">Enter password to access admin panel</p>
-            </div>
-            <form id="adminLoginForm">
-                <div class="mb-3">
-                    <label class="form-label fw-semibold"><i class="fas fa-key me-2 text-danger"></i>Admin Password</label>
-                    <input type="password" class="form-control form-control-lg" id="adminPassword" required autocomplete="off">
-                </div>
-                <button type="submit" class="btn btn-danger w-100 btn-lg"><i class="fas fa-sign-in-alt me-2"></i>Access Admin Panel</button>
-                <div id="loginError" class="alert alert-danger mt-3" style="display:none;"><i class="fas fa-exclamation-triangle me-2"></i>Invalid password! Access denied.</div>
-            </form>
+  <!-- Admin Login Overlay -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="text-center mb-4">
+        <i class="fas fa-shield-alt fa-4x text-danger mb-3"></i>
+        <h3 class="fw-bold text-danger">Admin Access</h3>
+        <p class="text-muted">Enter password to access admin panel</p>
+      </div>
+      <form id="adminLoginForm">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">
+            <i class="fas fa-key me-2 text-danger"></i>Admin Password
+          </label>
+          <input
+            type="password"
+            class="form-control form-control-lg"
+            id="adminPassword"
+            required
+            autocomplete="off"
+          />
         </div>
+        <button type="submit" class="btn btn-danger w-100 btn-lg">
+          <i class="fas fa-sign-in-alt me-2"></i>Access Admin Panel
+        </button>
+        <div id="loginError" class="alert alert-danger mt-3" style="display: none;">
+          <i class="fas fa-exclamation-triangle me-2"></i>Invalid password! Access denied.
+        </div>
+      </form>
     </div>
+  </div>
 
-    <div class="container-fluid p-0" id="adminContent" style="display:none;">
-        <div class="row g-0">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar">
-                <div class="p-3">
-                    <div class="navbar-brand text-white mb-4"><i class="fas fa-shield-alt me-2"></i>Admin Panel</div>
-                    <nav class="nav flex-column">
-                        <a class="nav-link active" href="#" data-section="stats"><i class="fas fa-chart-bar me-2"></i>Website Stats</a>
-                        <a class="nav-link" href="#" data-section="quizzes"><i class="fas fa-clipboard-list me-2"></i>Manage Quizzes</a>
-                        <a class="nav-link" href="#" data-section="attempts"><i class="fas fa-chart-line me-2"></i>View Attempts</a>
-                        <a class="nav-link" href="#" data-section="settings"><i class="fas fa-cog me-2"></i>Settings</a>
-                        <hr class="text-white-50 my-3">
-                        <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Back to Portal</a>
-                        <a class="nav-link" href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                    </nav>
-                </div>
+  <div class="container-fluid p-0" id="adminContent" style="display: none;">
+    <div class="row g-0">
+      <!-- Sidebar -->
+      <div class="col-md-3 col-lg-2 sidebar">
+        <div class="p-3">
+          <div class="navbar-brand text-white mb-4">
+            <i class="fas fa-shield-alt me-2"></i>Admin Panel
+          </div>
+          <nav class="nav flex-column">
+            <a class="nav-link active" href="#" data-section="stats"
+              ><i class="fas fa-chart-bar me-2"></i>Website Stats</a
+            >
+            <a class="nav-link" href="#" data-section="quizzes"
+              ><i class="fas fa-clipboard-list me-2"></i>Manage Quizzes</a
+            >
+            <a class="nav-link" href="#" data-section="attempts"
+              ><i class="fas fa-chart-line me-2"></i>View Attempts</a
+            >
+            <a class="nav-link" href="#" data-section="settings"
+              ><i class="fas fa-cog me-2"></i>Settings</a
+            >
+            <hr class="text-white-50 my-3" />
+            <a class="nav-link" href="index.html"
+              ><i class="fas fa-home me-2"></i>Back to Portal</a
+            >
+            <a class="nav-link" href="#" onclick="adminLogout()"
+              ><i class="fas fa-sign-out-alt me-2"></i>Logout</a
+            >
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-md-9 col-lg-10 main-content">
+        <div class="header d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="mb-0 fw-bold" id="pageTitle">Admin Dashboard</h4>
+            <small class="text-muted" id="pageSubtitle">Manage your quiz portal</small>
+          </div>
+          <div id="apiStatus" class="disconnected">API Status: Disconnected</div>
+        </div>
+
+        <div class="p-4">
+          <!-- Website Stats Section -->
+          <div id="stats" class="content-section active">
+            <div class="card quiz-card mb-4">
+              <div class="card-header bg-danger text-white">
+                <h5 class="fw-bold mb-0">Edit Website Statistics</h5>
+                <small class="opacity-75">Update the stats displayed on homepage</small>
+              </div>
+              <div class="card-body">
+                <form id="statsForm">
+                  <div class="row g-4">
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">
+                        <i class="fas fa-users text-danger me-2"></i>Active Users
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="activeUsers"
+                        value="1000+"
+                        placeholder="e.g., 1000+"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">
+                        <i class="fas fa-clipboard-list text-success me-2"></i
+                        >Quizzes Available
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="quizzesAvailable"
+                        value="50+"
+                        placeholder="e.g., 50+"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">
+                        <i class="fas fa-trophy text-warning me-2"></i>Quiz Attempts
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="quizAttempts"
+                        value="5000+"
+                        placeholder="e.g., 5000+"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">
+                        <i class="fas fa-star text-info me-2"></i>User Rating
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="userRatingInput"
+                        value="4.8/5"
+                        placeholder="e.g., 4.8/5"
+                      />
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <button type="submit" class="btn btn-danger px-4">
+                      <i class="fas fa-save me-2"></i>Update Statistics
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-            
-            <!-- Main Content -->
-            <div class="col-md-9 col-lg-10 main-content">
-                <div class="header d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 class="mb-0 fw-bold" id="pageTitle">Admin Dashboard</h4>
-                        <small class="text-muted" id="pageSubtitle">Manage your quiz portal</small>
-                    </div>
-                    <div class="badge bg-success px-3 py-2"><i class="fas fa-circle me-1" style="font-size: 0.6rem;"></i>Online</div>
-                </div>
-                
-                <div class="p-4">
-                    <!-- Website Stats Section -->
-                    <div id="stats" class="content-section active">
-                        <div class="card quiz-card mb-4">
-                            <div class="card-header bg-danger text-white"><h5 class="fw-bold mb-0">Edit Website Statistics</h5><small class="opacity-75">Update the stats displayed on homepage</small></div>
-                            <div class="card-body">
-                                <form id="statsForm">
-                                    <div class="row g-4">
-                                        <div class="col-md-6"><label class="form-label fw-semibold"><i class="fas fa-users text-danger me-2"></i>Active Users</label><input type="text" class="form-control" id="activeUsers" value="1000+"></div>
-                                        <div class="col-md-6"><label class="form-label fw-semibold"><i class="fas fa-clipboard-list text-success me-2"></i>Quizzes Available</label><input type="text" class="form-control" id="quizzesAvailable" value="50+"></div>
-                                        <div class="col-md-6"><label class="form-label fw-semibold"><i class="fas fa-trophy text-warning me-2"></i>Quiz Attempts</label><input type="text" class="form-control" id="quizAttempts" value="5000+"></div>
-                                        <div class="col-md-6"><label class="form-label fw-semibold"><i class="fas fa-star text-info me-2"></i>User Rating</label><input type="text" class="form-control" id="userRatingInput" value="4.8/5"></div>
-                                    </div>
-                                    <div class="mt-4"><button type="submit" class="btn btn-danger px-4"><i class="fas fa-save me-2"></i>Update Statistics</button></div>
-                                </form>
+          </div>
+
+          <!-- Quiz Management Section -->
+          <div id="quizzes" class="content-section">
+            <ul
+              class="nav nav-tabs nav-fill mb-4"
+              id="quizTabs"
+              role="tablist"
+            >
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="create-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#createQuiz"
+                  type="button"
+                >
+                  <i class="fas fa-plus-circle me-2"></i>Create Quiz
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="manage-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#manageQuizzes"
+                  type="button"
+                >
+                  <i class="fas fa-list me-2"></i>Manage Quizzes
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="quizTabContent">
+              <!-- Create Quiz -->
+              <div
+                class="tab-pane fade show active"
+                id="createQuiz"
+                role="tabpanel"
+              >
+                <div class="row">
+                  <div class="col-lg-8">
+                    <div class="card quiz-card mb-4">
+                      <div class="card-header bg-danger text-white py-3">
+                        <h4 class="mb-0">
+                          <i class="fas fa-plus-circle me-2"></i>Create New Quiz
+                        </h4>
+                        <small class="opacity-75"
+                          >Paste JSON of 30-50 MCQs and save</small
+                        >
+                      </div>
+                      <div class="card-body p-4">
+                        <form id="quizCreationForm">
+                          <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                              <label class="form-label fw-semibold"
+                                ><i
+                                  class="fas fa-calendar-alt text-danger me-2"
+                                ></i
+                                >Quiz Date *</label
+                              >
+                              <input
+                                type="date"
+                                class="form-control"
+                                id="quizDateInput"
+                                required
+                              />
                             </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Quiz Management Section -->
-                    <div id="quizzes" class="content-section">
-                        <ul class="nav nav-tabs nav-fill mb-4" id="quizTabs" role="tablist">
-                            <li class="nav-item" role="presentation"><button class="nav-link active" id="create-tab" data-bs-toggle="tab" data-bs-target="#createQuiz" type="button"><i class="fas fa-plus-circle me-2"></i>Create Quiz</button></li>
-                            <li class="nav-item" role="presentation"><button class="nav-link" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manageQuizzes" type="button"><i class="fas fa-list me-2"></i>Manage Quizzes</button></li>
-                        </ul>
+                            <div class="col-md-6">
+                              <label class="form-label fw-semibold"
+                                ><i
+                                  class="fas fa-book text-danger me-2"
+                                ></i
+                                >Subject *</label
+                              >
+                              <select class="form-select" id="subjectInput" required>
+                                <option value="">Select subject...</option>
+                                <option value="General Knowledge">
+                                  General Knowledge
+                                </option>
+                                <option value="English">English</option>
+                              </select>
+                            </div>
+                          </div>
 
-                        <div class="tab-content" id="quizTabContent">
-                            <!-- CREATE QUIZ TAB -->
-                            <div class="tab-pane fade show active" id="createQuiz" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        <div class="card quiz-card mb-4">
-                                            <div class="card-header bg-danger text-white py-3"><h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Create New Quiz</h4><small class="opacity-75">Paste JSON of 30-50 MCQs and save</small></div>
-                                            <div class="card-body p-4">
-                                                <form id="quizCreationForm">
-                                                    <div class="row g-3 mb-3">
-                                                        <div class="col-md-6"><label class="form-label fw-semibold"><i class="fas fa-calendar-alt text-danger me-2"></i>Quiz Date *</label><input type="date" class="form-control" id="quizDateInput" required></div>
-                                                        <div class="col-md-6"><label class="form-label fw-semibold"><i class="fas fa-book text-danger me-2"></i>Subject *</label>
-                                                            <select class="form-select" id="subjectInput" required>
-                                                                <option value="">Select subject...</option>
-                                                                <option value="General Knowledge">General Knowledge</option>
-                                                                <option value="English">English</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-semibold"><i class="fas fa-code text-danger me-2"></i>Questions JSON *</label>
-                                                        <textarea class="form-control font-monospace" id="questionsJson" rows="14" placeholder='[
+                          <div class="mb-3">
+                            <label class="form-label fw-semibold"
+                              ><i class="fas fa-code text-danger me-2"></i>Questions
+                              JSON *</label
+                            >
+                            <textarea
+                              class="form-control font-monospace"
+                              id="questionsJson"
+                              rows="14"
+                              placeholder='[
   {
     "question": "What is the capital of India?",
-    "options": ["Mumbai","New Delhi","Kolkata","Chennai"],
+    "options": ["Mumbai", "New Delhi", "Kolkata", "Chennai"],
     "correctAnswer": 1,
     "explanation": "New Delhi is the capital of India.",
     "timeAllocation": 60
   }
-]'></textarea>
-                                                        <div class="form-text"><i class="fas fa-info-circle me-1"></i>Array of questions. Each needs: question, options (4), correctAnswer (0-3), explanation, timeAllocation.</div>
-                                                    </div>
-
-                                                    <div class="card bg-light border-0 mb-3"><div class="card-body"><div class="row text-center">
-                                                        <div class="col-md-4"><i class="fas fa-list-ol fa-2x text-primary mb-2"></i><h4 id="questionCount" class="text-primary mb-0">0</h4><small>Questions</small></div>
-                                                        <div class="col-md-4"><i class="fas fa-clock fa-2x text-success mb-2"></i><h4 id="totalTime" class="text-success mb-0">0 min</h4><small>Duration</small></div>
-                                                        <div class="col-md-4">
-                                                            <button type="button" class="btn btn-outline-primary" id="validateBtn"><i class="fas fa-check me-1"></i>Validate JSON</button>
-                                                            <small class="d-block mt-1 text-muted">Check format</small>
-                                                        </div>
-                                                    </div></div></div>
-
-                                                    <div class="d-flex gap-2 flex-wrap">
-                                                        <button type="submit" class="btn btn-danger btn-lg px-4"><i class="fas fa-cloud-upload-alt me-2"></i>Create Quiz</button>
-                                                        <button type="reset" class="btn btn-outline-secondary btn-lg px-4"><i class="fas fa-redo me-2"></i>Reset</button>
-                                                        <button type="button" class="btn btn-outline-info btn-lg px-4" id="copyTemplateBtn"><i class="fas fa-copy me-2"></i>Template</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <div class="card quiz-card mb-3"><div class="card-header bg-info text-white"><h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Quick Guide</h5></div>
-                                            <div class="card-body"><ol class="mb-0 small"><li class="mb-2">Set quiz date</li><li class="mb-2">Select subject</li><li class="mb-2">Paste questions JSON</li><li class="mb-2">Validate</li><li>Create quiz</li></ol></div>
-                                        </div>
-                                    </div>
-                                </div>
+]'
+                              required
+                            ></textarea>
+                            <div class="form-text">
+                              <i class="fas fa-info-circle me-1"></i>Array of questions.
+                              Each needs: question, options (4), correctAnswer (0-3),
+                              explanation, timeAllocation.
                             </div>
+                          </div>
 
-                            <!-- MANAGE QUIZZES TAB -->
-                            <div class="tab-pane fade" id="manageQuizzes" role="tabpanel">
-                                <div class="card quiz-card">
-                                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>All Quizzes</h5>
-                                        <div>
-                                            <button class="btn btn-sm btn-light" onclick="loadAllQuizzes()"><i class="fas fa-sync-alt me-1"></i>Refresh</button>
-                                            <button class="btn btn-sm btn-danger ms-2" onclick="deleteAllQuizzes()"><i class="fas fa-trash me-1"></i>Delete All</button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover mb-0">
-                                                <thead class="table-light"><tr><th>#</th><th>Date</th><th>Subject</th><th>Questions</th><th>Duration</th><th>Actions</th></tr></thead>
-                                                <tbody id="allQuizzesTable"><tr><td colspan="6" class="text-center py-4">No quizzes yet</td></tr></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                          <div class="card bg-light border-0 mb-3">
+                            <div class="card-body">
+                              <div class="row text-center">
+                                <div class="col-md-4">
+                                  <i
+                                    class="fas fa-list-ol fa-2x text-primary mb-2"
+                                  ></i>
+                                  <h4 id="questionCount" class="text-primary mb-0">
+                                    0
+                                  </h4>
+                                  <small>Questions</small>
                                 </div>
+                                <div class="col-md-4">
+                                  <i
+                                    class="fas fa-clock fa-2x text-success mb-2"
+                                  ></i>
+                                  <h4 id="totalTime" class="text-success mb-0">
+                                    0 min
+                                  </h4>
+                                  <small>Duration</small>
+                                </div>
+                                <div class="col-md-4">
+                                  <button
+                                    type="button"
+                                    class="btn btn-outline-primary"
+                                    id="validateBtn"
+                                  >
+                                    <i class="fas fa-check me-1"></i>Validate JSON
+                                  </button>
+                                  <small class="d-block mt-1 text-muted"
+                                    >Check format</small
+                                  >
+                                </div>
+                              </div>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Attempts Section -->
-                    <div id="attempts" class="content-section"><div class="card quiz-card"><div class="card-body"><p class="text-muted mb-0">Attempts table will show here.</p></div></div></div>
+                          </div>
 
-                    <!-- Settings Section -->
-                    <div id="settings" class="content-section">
-                        <div class="row g-4">
-                            <div class="col-md-6"><div class="card quiz-card"><div class="card-header bg-primary text-white"><h5 class="fw-bold mb-0"><i class="fas fa-cog me-2"></i>Portal Settings</h5></div><div class="card-body"><form id="portalSettingsForm"><div class="mb-3"><label class="form-label fw-semibold">Portal Name</label><input type="text" class="form-control" value="Digi Quiz Portal"></div><div class="mb-3"><label class="form-label fw-semibold">Contact Email</label><input type="email" class="form-control" value="support@digiquizportal.com"></div><button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Save</button></form></div></div></div>
-                            <div class="col-md-6"><div class="card quiz-card"><div class="card-header bg-warning text-dark"><h5 class="fw-bold mb-0"><i class="fas fa-key me-2"></i>Security</h5></div><div class="card-body"><form id="changePasswordForm"><div class="mb-3"><label class="form-label fw-semibold">Current Password</label><input type="password" class="form-control" id="currentPassword" required></div><div class="mb-3"><label class="form-label fw-semibold">New Password</label><input type="password" class="form-control" id="newPassword" minlength="8" required></div><div class="mb-3"><label class="form-label fw-semibold">Confirm Password</label><input type="password" class="form-control" id="confirmPassword" minlength="8" required></div><button type="submit" class="btn btn-warning"><i class="fas fa-lock me-2"></i>Change</button></form></div></div></div>
-                        </div>
+                          <div class="d-flex gap-2 flex-wrap">
+                            <button
+                              type="submit"
+                              class="btn btn-danger btn-lg px-4"
+                            >
+                              <i class="fas fa-cloud-upload-alt me-2"></i>Create Quiz
+                            </button>
+                            <button
+                              type="reset"
+                              class="btn btn-outline-secondary btn-lg px-4"
+                            >
+                              <i class="fas fa-redo me-2"></i>Reset
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-info btn-lg px-4"
+                              id="copyTemplateBtn"
+                            >
+                              <i class="fas fa-copy me-2"></i>Template
+                            </button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="card quiz-card mb-3">
+                      <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                          <i class="fas fa-info-circle me-2"></i>Quick Guide
+                        </h5>
+                      </div>
+                      <div class="card-body">
+                        <ol class="mb-0 small">
+                          <li class="mb-2">Set quiz date</li>
+                          <li class="mb-2">Select subject</li>
+                          <li class="mb-2">Paste questions JSON</li>
+                          <li class="mb-2">Validate</li>
+                          <li class="mb-2">Review count & duration</li>
+                          <li>Create quiz</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              <!-- Manage Quizzes -->
+              <div
+                class="tab-pane fade"
+                id="manageQuizzes"
+                role="tabpanel"
+              >
+                <div class="card quiz-card">
+                  <div
+                    class="card-header bg-secondary text-white d-flex justify-content-between align-items-center"
+                  >
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>All Quizzes</h5>
+                    <div>
+                      <button class="btn btn-sm btn-light" onclick="loadAllQuizzes()">
+                        <i class="fas fa-sync-alt me-1"></i>Refresh
+                      </button>
+                      <button
+                        class="btn btn-sm btn-danger ms-2"
+                        onclick="deleteAllQuizzes()"
+                      >
+                        <i class="fas fa-trash me-1"></i>Delete All
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Subject</th>
+                            <th>Questions</th>
+                            <th>Duration</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="allQuizzesTable">
+                          <tr>
+                            <td colspan="6" class="text-center py-4"
+                              >Loading quizzes...</td
+                            >
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <!-- View Attempts Section -->
+          <div id="attempts" class="content-section">
+            <div class="card quiz-card">
+              <div
+                class="card-header bg-success text-white d-flex justify-content-between align-items-center"
+              >
+                <h5 class="mb-0">
+                  <i class="fas fa-chart-line me-2"></i>All Quiz Attempts
+                </h5>
+                <div>
+                  <button
+                    class="btn btn-sm btn-light"
+                    onclick="loadAllAttempts()"
+                  >
+                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger ms-2"
+                    onclick="deleteAllAttempts()"
+                  >
+                    <i class="fas fa-trash me-1"></i>Clear All
+                  </button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th width="5%">#</th>
+                        <th>
+                          <i class="fas fa-user me-1"></i>Name
+                        </th>
+                        <th>
+                          <i class="fas fa-envelope me-1"></i>Email
+                        </th>
+                        <th>
+                          <i class="fas fa-book me-1"></i>Quiz
+                        </th>
+                        <th>
+                          <i class="fas fa-award me-1"></i>Score
+                        </th>
+                        <th>
+                          <i class="fas fa-percentage me-1"></i>Accuracy
+                        </th>
+                        <th>
+                          <i class="fas fa-calendar me-1"></i>Date
+                        </th>
+                        <th>
+                          <i class="fas fa-cog me-1"></i>Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody id="allAttemptsTable">
+                      <tr>
+                        <td colspan="8" class="text-center py-4">No attempts found</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings Section -->
+          <div id="settings" class="content-section">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="card quiz-card">
+                  <div class="card-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0">
+                      <i class="fas fa-cog me-2"></i>Portal Settings
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="portalSettingsForm">
+                      <div class="mb-3">
+                        <label class="form-label fw-semibold">Portal Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          value="Digi Quiz Portal"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label fw-semibold">Contact Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          value="support@digiquizportal.com"
+                        />
+                      </div>
+                      <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card quiz-card">
+                  <div class="card-header bg-warning text-dark">
+                    <h5 class="fw-bold mb-0">
+                      <i class="fas fa-key me-2"></i>Security
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="changePasswordForm">
+                      <div class="mb-3">
+                        <label class="form-label fw-semibold">Current Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="currentPassword"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label fw-semibold">New Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="newPassword"
+                          minlength="8"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label fw-semibold">Confirm Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="confirmPassword"
+                          minlength="8"
+                          required
+                        />
+                      </div>
+                      <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-lock me-2"></i>Change
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="js/api.js"></script>
-    <script>
-        const ADMIN_PASSWORD='Dq#2025@Admin$Portal!';
-        document.getElementById('adminLoginForm').addEventListener('submit',(e)=>{e.preventDefault();const p=adminPassword.value;if(p===ADMIN_PASSWORD){loginOverlay.style.display='none';adminContent.style.display='block';localStorage.setItem('adminAuthenticated','true');initAdmin();}else{loginError.style.display='block';setTimeout(()=>loginError.style.display='none',3000);}});
-        window.addEventListener('DOMContentLoaded',()=>{if(localStorage.getItem('adminAuthenticated')==='true'){loginOverlay.style.display='none';adminContent.style.display='block';initAdmin();}validateBtn.addEventListener('click',()=>validateJSON());copyTemplateBtn.addEventListener('click',()=>copyTemplate());questionsJson.addEventListener('input',updateQuestionStats);});
-        function adminLogout(){localStorage.removeItem('adminAuthenticated');location.reload();}
-        document.querySelectorAll('[data-section]').forEach(l=>l.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.nav-link').forEach(a=>a.classList.remove('active'));l.classList.add('active');document.querySelectorAll('.content-section').forEach(s=>s.classList.remove('active'));document.getElementById(l.dataset.section).classList.add('active');const t={stats:['Website Statistics','Update homepage statistics'],quizzes:['Quiz Management','Create and manage quizzes'],attempts:['Quiz Attempts','View attempts'],settings:['Settings','Configure portal']};const [h,sh]=t[l.dataset.section]||['Admin Panel',''];pageTitle.textContent=h;pageSubtitle.textContent=sh;}));
-        function initAdmin(){const s=localStorage.getItem('adminStats');if(s){const v=JSON.parse(s);activeUsers.value=v.activeUsers||'1000+';quizzesAvailable.value=v.quizzesAvailable||'50+';quizAttempts.value=v.quizAttempts||'5000+';userRatingInput.value=v.userRating||'4.8/5';}quizDateInput.value=new Date().toISOString().split('T')[0];loadAllQuizzes();}
-        statsForm.addEventListener('submit',(e)=>{e.preventDefault();const stats={activeUsers:activeUsers.value,quizzesAvailable:quizzesAvailable.value,quizAttempts:quizAttempts.value,userRating:userRatingInput.value};localStorage.setItem('adminStats',JSON.stringify(stats));Swal.fire({icon:'success',title:'Updated',text:'Homepage statistics updated'});});
-        function validateJSON(){try{const raw=questionsJson.value.trim();if(!raw){Swal.fire({icon:'warning',title:'Empty JSON',text:'Paste questions JSON first'});return;}const arr=JSON.parse(raw);if(!Array.isArray(arr)||arr.length===0)throw new Error('JSON must be a non-empty array');arr.forEach((q,i)=>{if(!q.question)throw new Error(`Q${i+1}: missing question`);if(!Array.isArray(q.options)||q.options.length!==4)throw new Error(`Q${i+1}: need exactly 4 options`);if(typeof q.correctAnswer!=='number'||q.correctAnswer<0||q.correctAnswer>3)throw new Error(`Q${i+1}: correctAnswer must be 0-3`);});updateQuestionStats();Swal.fire({icon:'success',title:'Valid JSON',text:`Found ${arr.length} questions`,timer:2000,showConfirmButton:false});}catch(err){console.error('Validate error:',err);Swal.fire({icon:'error',title:'Invalid JSON',text:err.message||'Fix JSON and try again'});questionCount.textContent='0';totalTime.textContent='0 min';}}
-        function updateQuestionStats(){try{const raw=questionsJson.value.trim();if(!raw){questionCount.textContent='0';totalTime.textContent='0 min';return;}const arr=JSON.parse(raw);const secs=arr.reduce((s,q)=>s+(q.timeAllocation||60),0);questionCount.textContent=arr.length;totalTime.textContent=Math.ceil(secs/60)+' min';}catch{questionCount.textContent='0';totalTime.textContent='0 min';}}
-        function copyTemplate(){const tpl=`[\n  {\n    \"question\":\"Sample question?\",\n    \"options\":[\"Option A\",\"Option B\",\"Option C\",\"Option D\"],\n    \"correctAnswer\":1,\n    \"explanation\":\"Why this is correct\",\n    \"timeAllocation\":60\n  }\n]`;navigator.clipboard.writeText(tpl).then(()=>Swal.fire({icon:'success',title:'Copied',text:'Template copied'}));}
-        quizCreationForm.addEventListener('submit',async(e)=>{e.preventDefault();const date=quizDateInput.value;const subject=subjectInput.value;const raw=questionsJson.value;if(!date||!subject||!raw.trim()){Swal.fire({icon:'warning',title:'Missing',text:'Fill date, subject and JSON'});return;}let questions;try{questions=JSON.parse(raw);if(!Array.isArray(questions)||questions.length===0)throw new Error('Provide questions array');}catch{Swal.fire({icon:'error',title:'Invalid JSON',text:'Fix your questions JSON and try again'});return;}Swal.fire({title:'Creating Quiz...',text:'Saving to Google Sheets',allowOutsideClick:false,didOpen:()=>Swal.showLoading()});const payload={title:`${subject} Quiz - ${new Date(date).toLocaleDateString('en-IN')}`,description:'',subject,duration:Math.ceil(questions.reduce((s,q)=>s+(q.timeAllocation||60),0)/60)||30,scheduledDate:date,isActive:true,questions:questions.map(q=>({question:q.question,options:q.options,correctAnswer:q.correctAnswer,explanation:q.explanation||''}))};try{const res=await QuizAPI.QuizAPI.saveQuiz(payload);if(res&&res.success){Swal.fire({icon:'success',title:'Quiz Created',text:`Saved ${questions.length} questions to Google Sheets`,timer:2500});quizCreationForm.reset();updateQuestionStats();const saved=JSON.parse(localStorage.getItem('adminQuizzes')||'[]');saved.push({id:res.quizId||('quiz_'+Date.now()),title:payload.title,subject,date,questions,createdAt:new Date().toISOString()});localStorage.setItem('adminQuizzes',JSON.stringify(saved));loadAllQuizzes();}else{Swal.fire({icon:'error',title:'Save failed',text:(res&&res.error)||'Unknown error'});} }catch(err){console.error('Save error:',err);Swal.fire({icon:'error',title:'Network/API error',text:err.message||'Request failed'});} });
-        function loadAllQuizzes(){const list=JSON.parse(localStorage.getItem('adminQuizzes')||'[]');const tb=allQuizzesTable;if(list.length===0){tb.innerHTML='<tr><td colspan="6" class="text-center py-4">No quizzes yet</td></tr>';return;}tb.innerHTML=list.map((q,i)=>`<tr><td>${i+1}</td><td>${new Date(q.date).toLocaleDateString('en-IN')}</td><td><span class="badge bg-primary">${q.subject}</span></td><td>${q.questions.length}</td><td>${Math.ceil(q.questions.reduce((s,x)=>s+(x.timeAllocation||60),0)/60)} min</td><td><button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${q.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');}
-        function deleteQuiz(id){Swal.fire({title:'Delete Quiz?',text:'This cannot be undone',icon:'warning',showCancelButton:true,confirmButtonColor:'#dc3545'}).then(r=>{if(r.isConfirmed){const list=JSON.parse(localStorage.getItem('adminQuizzes')||'[]').filter(q=>q.id!==id);localStorage.setItem('adminQuizzes',JSON.stringify(list));loadAllQuizzes();Swal.fire('Deleted','Quiz removed','success');}});}
-        function deleteAllQuizzes(){Swal.fire({title:'Delete All Quizzes?',text:'This will remove all local quiz records',icon:'warning',showCancelButton:true,confirmButtonColor:'#dc3545'}).then(r=>{if(r.isConfirmed){localStorage.removeItem('adminQuizzes');loadAllQuizzes();Swal.fire('Deleted','All quizzes removed','success');}});}
-    </script>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/api.js"></script>
+  <script>
+    const ADMIN_PASSWORD = 'Dq#2025@Admin$Portal!';
+
+    // DOM elements shortcut
+    const loginOverlay = document.getElementById('loginOverlay');
+    const adminContent = document.getElementById('adminContent');
+    const loginError = document.getElementById('loginError');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+    const apiStatus = document.getElementById('apiStatus');
+    const quizCreationForm = document.getElementById('quizCreationForm');
+    const validateBtn = document.getElementById('validateBtn');
+    const copyTemplateBtn = document.getElementById('copyTemplateBtn');
+    const questionsJson = document.getElementById('questionsJson');
+    const questionCount = document.getElementById('questionCount');
+    const totalTime = document.getElementById('totalTime');
+    const allQuizzesTable = document.getElementById('allQuizzesTable');
+    const statsForm = document.getElementById('statsForm');
+    const activeUsers = document.getElementById('activeUsers');
+    const quizzesAvailable = document.getElementById('quizzesAvailable');
+    const quizAttempts = document.getElementById('quizAttempts');
+    const userRatingInput = document.getElementById('userRatingInput');
+
+    // Authentication
+    document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
+        loginOverlay.style.display = 'none';
+        adminContent.style.display = 'block';
+        localStorage.setItem('adminAuthenticated', 'true');
+        initAdmin();
+        checkAPIConnection();
+      } else {
+        loginError.style.display = 'block';
+        setTimeout(() => (loginError.style.display = 'none'), 3000);
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('adminAuthenticated') === 'true') {
+        loginOverlay.style.display = 'none';
+        adminContent.style.display = 'block';
+        initAdmin();
+        checkAPIConnection();
+      }
+      validateBtn.addEventListener('click', validateJSON);
+      copyTemplateBtn.addEventListener('click', copyTemplate);
+      questionsJson.addEventListener('input', updateQuestionStats);
+    });
+
+    function adminLogout() {
+      localStorage.removeItem('adminAuthenticated');
+      location.reload();
+    }
+
+    // Navigation
+    document.querySelectorAll('[data-section]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-link').forEach((nav) =>
+          nav.classList.remove('active')
+        );
+        link.classList.add('active');
+        document.querySelectorAll('.content-section').forEach((sec) =>
+          sec.classList.remove('active')
+        );
+        document.getElementById(link.dataset.section).classList.add('active');
+        updatePageTitle(link.dataset.section);
+      });
+    });
+
+    function updatePageTitle(section) {
+      const titles = {
+        stats: ['Website Statistics', 'Update homepage statistics'],
+        quizzes: ['Quiz Management', 'Create and manage quizzes'],
+        attempts: ['Quiz Attempts', 'View all user attempts'],
+        settings: ['Settings', 'Configure portal settings'],
+      };
+      const [t, s] = titles[section] || ['Admin Panel', ''];
+      pageTitle.textContent = t;
+      pageSubtitle.textContent = s;
+    }
+
+    function initAdmin() {
+      const savedStats = localStorage.getItem('adminStats');
+      if (savedStats) {
+        const s = JSON.parse(savedStats);
+        activeUsers.value = s.activeUsers || '1000+';
+        quizzesAvailable.value = s.quizzesAvailable || '50+';
+        quizAttempts.value = s.quizAttempts || '5000+';
+        userRatingInput.value = s.userRating || '4.8/5';
+      }
+      document.getElementById('quizDateInput').value =
+        new Date().toISOString().split('T')[0];
+      loadAllQuizzes();
+    }
+
+    // Stats Form Handler
+    statsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const stats = {
+        activeUsers: activeUsers.value,
+        quizzesAvailable: quizzesAvailable.value,
+        quizAttempts: quizAttempts.value,
+        userRating: userRatingInput.value,
+      };
+      localStorage.setItem('adminStats', JSON.stringify(stats));
+      Swal.fire({
+        icon: 'success',
+        title: 'Updated',
+        text: 'Homepage statistics updated',
+      });
+    });
+
+    // Validate JSON function
+    function validateJSON() {
+      try {
+        const raw = questionsJson.value.trim();
+        if (!raw) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Empty JSON',
+            text: 'Paste questions JSON first',
+          });
+          return;
+        }
+        const arr = JSON.parse(raw);
+        if (!Array.isArray(arr) || arr.length === 0)
+          throw new Error('JSON must be a non-empty array');
+        arr.forEach((q, i) => {
+          if (!q.question) throw new Error(`Q${i + 1}: missing question`);
+          if (!Array.isArray(q.options) || q.options.length !== 4)
+            throw new Error(`Q${i + 1}: need exactly 4 options`);
+          if (
+            typeof q.correctAnswer !== 'number' ||
+            q.correctAnswer < 0 ||
+            q.correctAnswer > 3
+          )
+            throw new Error(`Q${i + 1}: correctAnswer must be 0-3`);
+        });
+        updateQuestionStats();
+        Swal.fire({
+          icon: 'success',
+          title: 'Valid JSON',
+          text: `Found ${arr.length} questions`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (err) {
+        console.error('Validate error:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid JSON',
+          text: err.message || 'Fix JSON and try again',
+        });
+        questionCount.textContent = '0';
+        totalTime.textContent = '0 min';
+      }
+    }
+
+    // Update question statistics
+    function updateQuestionStats() {
+      try {
+        const raw = questionsJson.value.trim();
+        if (!raw) {
+          questionCount.textContent = '0';
+          totalTime.textContent = '0 min';
+          return;
+        }
+        const arr = JSON.parse(raw);
+        const secs = arr.reduce((s, q) => s + (q.timeAllocation || 60), 0);
+        questionCount.textContent = arr.length;
+        totalTime.textContent = Math.ceil(secs / 60) + ' min';
+      } catch {
+        questionCount.textContent = '0';
+        totalTime.textContent = '0 min';
+      }
+    }
+
+    // Copy template
+    function copyTemplate() {
+      const tpl = `[
+  {
+    "question": "Sample question?",
+    "options": [
+      "Option A",
+      "Option B",
+      "Option C",
+      "Option D"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Why this is correct",
+    "timeAllocation": 60
+  }
+]`;
+      navigator.clipboard.writeText(tpl).then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Copied',
+          text: 'Template copied',
+        });
+      });
+    }
+
+    // Create Quiz form submit handler
+    quizCreationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const date = document.getElementById('quizDateInput').value;
+      const subject = document.getElementById('subjectInput').value;
+      const raw = questionsJson.value;
+      if (!date || !subject || !raw.trim()) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Missing',
+          text: 'Fill date, subject and JSON',
+        });
+        return;
+      }
+      let questions;
+      try {
+        questions = JSON.parse(raw);
+        if (!Array.isArray(questions) || questions.length === 0)
+          throw new Error('Provide questions array');
+      } catch {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid JSON',
+          text: 'Fix your questions JSON and try again',
+        });
+        return;
+      }
+      Swal.fire({
+        title: 'Creating Quiz...',
+        text: 'Saving to Google Sheets',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      const payload = {
+        title: `${subject} Quiz - ${new Date(date).toLocaleDateString('en-IN')}`,
+        description: '',
+        subject,
+        duration: Math.ceil(
+          questions.reduce((s, q) => s + (q.timeAllocation || 60), 0) / 60
+        ) || 30,
+        scheduledDate: date,
+        isActive: true,
+        questions: questions.map((q) => ({
+          question: q.question,
+          options: q.options,
+          correctAnswer: q.correctAnswer,
+          explanation: q.explanation || '',
+        })),
+      };
+
+      try {
+        const res = await window.QuizAPI.saveQuiz(payload);
+        if (res && res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Quiz Created',
+            text: `Saved ${questions.length} questions to Google Sheets`,
+            timer: 2500,
+          });
+          quizCreationForm.reset();
+          updateQuestionStats();
+          const saved = JSON.parse(localStorage.getItem('adminQuizzes') || '[]');
+          saved.push({
+            id: res.quizId || 'quiz_' + Date.now(),
+            title: payload.title,
+            subject,
+            date,
+            questions,
+            createdAt: new Date().toISOString(),
+          });
+          localStorage.setItem('adminQuizzes', JSON.stringify(saved));
+          loadAllQuizzes();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Save failed',
+            text: (res && res.error) || 'Unknown error',
+          });
+        }
+      } catch (err) {
+        console.error('Save error:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Network/API error',
+          text: err.message || 'Request failed',
+        });
+      }
+    });
+
+    // Load all quizzes (local mirror)
+    function loadAllQuizzes() {
+      const list = JSON.parse(localStorage.getItem('adminQuizzes') || '[]');
+      if (list.length === 0) {
+        allQuizzesTable.innerHTML =
+          '<tr><td colspan="6" class="text-center py-4">No quizzes yet</td></tr>';
+        return;
+      }
+      allQuizzesTable.innerHTML = list
+        .map(
+          (q, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${new Date(q.date).toLocaleDateString('en-IN')}</td>
+            <td><span class="badge bg-primary">${q.subject}</span></td>
+            <td>${q.questions.length}</td>
+            <td>${Math.ceil(
+              q.questions.reduce((s, x) => s + (x.timeAllocation || 60), 0) / 60
+            )} min</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${q.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>`
+        )
+        .join('');
+    }
+
+    // Delete a quiz
+    function deleteQuiz(id) {
+      Swal.fire({
+        title: 'Delete Quiz?',
+        text: 'This cannot be undone',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+      }).then((r) => {
+        if (r.isConfirmed) {
+          const list = JSON.parse(localStorage.getItem('adminQuizzes') || '[]').filter(
+            (q) => q.id !== id
+          );
+          localStorage.setItem('adminQuizzes', JSON.stringify(list));
+          loadAllQuizzes();
+          Swal.fire('Deleted', 'Quiz removed', 'success');
+        }
+      });
+    }
+
+    // Delete all quizzes
+    function deleteAllQuizzes() {
+      Swal.fire({
+        title: 'Delete All Quizzes?',
+        text: 'This will remove all local quiz records',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+      }).then((r) => {
+        if (r.isConfirmed) {
+          localStorage.removeItem('adminQuizzes');
+          loadAllQuizzes();
+          Swal.fire('Deleted', 'All quizzes removed', 'success');
+        }
+      });
+    }
+
+    // Placeholder for attempts tab
+    function loadAllAttempts() {
+      const tbody = document.getElementById('allAttemptsTable');
+      tbody.innerHTML =
+        '<tr><td colspan="8" class="text-center py-4">No attempts found</td></tr>';
+    }
+
+    // Logout function
+    function adminLogout() {
+      localStorage.removeItem('adminAuthenticated');
+      location.reload();
+    }
+
+    // API Connection Status Check
+    async function checkAPIConnection() {
+      apiStatus.textContent = 'API Status: Checking...';
+      apiStatus.className = '';
+      try {
+        const connected = await window.QuizAPI.checkStatus();
+        if (connected) {
+          apiStatus.textContent = 'API Status: Connected';
+          apiStatus.className = 'connected';
+        } else {
+          apiStatus.textContent = 'API Status: Disconnected';
+          apiStatus.className = 'disconnected';
+        }
+      } catch (error) {
+        apiStatus.textContent = 'API Status: Disconnected';
+        apiStatus.className = 'disconnected';
+      }
+    }
+  </script>
 </body>
 </html>
