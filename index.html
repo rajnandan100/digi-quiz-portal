@@ -101,7 +101,7 @@
         }
         
         .subject-card.active .checkmark {
-            display: block;
+            display: flex;
         }
         
         .subject-icon {
@@ -596,7 +596,7 @@
                 document.getElementById(id).addEventListener('input', checkFormReady);
             });
 
-            // Load available quiz dates
+            // Load available quiz dates (reverse chronological order - past dates only)
             loadQuizDates();
             
             // Load admin stats
@@ -605,42 +605,40 @@
 
         async function loadQuizDates() {
             try {
-                // Get quizzes from API
-                const quizzes = await QuizAPI.getQuizzes();
                 const dateSelect = document.getElementById('quizDate');
                 
-                // Get unique dates from quizzes
-                const dates = [...new Set(quizzes.map(quiz => {
-                    if (quiz.scheduledDate) {
-                        return quiz.scheduledDate;
-                    }
-                    return new Date().toISOString().split('T')[0]; // Today as default
-                }))].sort().reverse();
+                // Generate past dates only (last 30 days)
+                const dates = [];
+                const today = new Date();
+                
+                for (let i = 0; i < 30; i++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    dates.push(date);
+                }
 
-                // Add date options
-                dates.forEach(date => {
+                // Add date options in reverse chronological order
+                dates.forEach((date, index) => {
                     const option = document.createElement('option');
-                    const dateObj = new Date(date);
-                    const today = new Date();
-                    const yesterday = new Date(today);
-                    yesterday.setDate(yesterday.getDate() - 1);
-
-                    if (dateObj.toDateString() === today.toDateString()) {
-                        option.text = 'Today';
-                    } else if (dateObj.toDateString() === yesterday.toDateString()) {
-                        option.text = 'Yesterday';
+                    const dateStr = date.toISOString().split('T')[0];
+                    
+                    if (index === 0) {
+                        option.text = 'Today (' + date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + ')';
+                    } else if (index === 1) {
+                        option.text = 'Yesterday (' + date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + ')';
                     } else {
-                        option.text = dateObj.toLocaleDateString('en-IN', {
+                        option.text = date.toLocaleDateString('en-IN', {
                             day: 'numeric',
                             month: 'short'
                         });
                     }
-                    option.value = date;
+                    
+                    option.value = dateStr;
                     dateSelect.appendChild(option);
                 });
             } catch (error) {
                 console.error('Error loading quiz dates:', error);
-                // Add default dates if API fails
+                // Add fallback dates
                 const dateSelect = document.getElementById('quizDate');
                 const today = new Date();
                 const yesterday = new Date(today);
@@ -657,19 +655,21 @@
 
         async function loadAdminStats() {
             try {
-                // This will be connected to admin panel data in future
-                // For now, using static data that can be updated via admin
-                const stats = {
-                    totalUsers: '1000+',
-                    totalQuizzes: '50+',
-                    totalAttempts: '5000+',
-                    userRating: '4.8/5'
-                };
-
-                document.getElementById('totalUsers').textContent = stats.totalUsers;
-                document.getElementById('totalQuizzes').textContent = stats.totalQuizzes;
-                document.getElementById('totalAttempts').textContent = stats.totalAttempts;
-                document.getElementById('userRating').textContent = stats.userRating;
+                // Load from localStorage if admin has updated stats
+                const savedStats = localStorage.getItem('adminStats');
+                if (savedStats) {
+                    const stats = JSON.parse(savedStats);
+                    document.getElementById('totalUsers').textContent = stats.activeUsers || '1000+';
+                    document.getElementById('totalQuizzes').textContent = stats.quizzesAvailable || '50+';
+                    document.getElementById('totalAttempts').textContent = stats.quizAttempts || '5000+';
+                    document.getElementById('userRating').textContent = stats.userRating || '4.8/5';
+                } else {
+                    // Default stats if no admin updates
+                    document.getElementById('totalUsers').textContent = '1000+';
+                    document.getElementById('totalQuizzes').textContent = '50+';
+                    document.getElementById('totalAttempts').textContent = '5000+';
+                    document.getElementById('userRating').textContent = '4.8/5';
+                }
             } catch (error) {
                 console.error('Error loading admin stats:', error);
             }
