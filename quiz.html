@@ -3,23 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz - Digital Quiz Portal</title>
+    <title>Quiz - Digi Quiz Portal</title>
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/quiz.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .quiz-timer {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #0ea5e9;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.35);
+            z-index: 1000;
+            font-weight: 700;
+        }
+        
+        .quiz-container {
+            max-width: 900px;
+            margin: 2rem auto;
+        }
+        
+        .question-card {
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background: white;
+        }
+        
+        .question-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 1rem 1.25rem;
+            color: white;
+        }
+        
+        .quiz-progress {
+            height: 6px;
+            background: #eef2ff;
+        }
+        
+        .quiz-progress-bar {
+            height: 6px;
+            background: #22c55e;
+            width: 0%;
+            transition: width 0.2s ease;
+        }
+        
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            transition: all 0.15s ease;
+            font-weight: 600;
+        }
+        
+        .option-btn:hover {
+            border-color: #6366f1;
+            background: #f5f7ff;
+        }
+        
+        .option-btn.selected {
+            border-color: #22c55e;
+            background: #ecfdf5;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Top Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.html">
@@ -36,67 +107,241 @@
         </div>
     </nav>
 
-    <!-- Quiz Timer -->
+    <!-- Timer Badge -->
     <div class="quiz-timer" id="timerDisplay">
         <i class="fas fa-clock me-2"></i>00:00
     </div>
 
-    <!-- Main Quiz Container -->
+    <!-- Main Content -->
     <div class="container my-4">
         <div class="quiz-container">
-            <!-- Quiz Header -->
-            <div class="card question-card">
-                <div class="question-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="fas fa-book me-2"></i><span id="quizSubject">Loading...</span>
-                        </h5>
-                        <span class="badge bg-white text-primary fs-6">
-                            <span id="currentQuestion">0</span> / <span id="totalQuestions">0</span>
-                        </span>
+            <!-- Loading Screen -->
+            <div id="loadingState" class="text-center py-5">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+                <p class="mt-3">Loading quiz...</p>
+            </div>
+
+            <!-- Quiz Content -->
+            <div id="quizContent" style="display: none;">
+                <div class="card question-card">
+                    <!-- Quiz Header -->
+                    <div class="question-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-book me-2"></i><span id="quizSubject">Loading...</span>
+                            </h5>
+                            <span class="badge bg-white text-primary fs-6">
+                                <span id="currentQuestion">0</span> / <span id="totalQuestions">0</span>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Progress Bar -->
-                <div class="quiz-progress">
-                    <div class="quiz-progress-bar" id="progressBar" style="width: 0%"></div>
-                </div>
-                
-                <div class="card-body">
-                    <!-- Question -->
-                    <h4 class="mb-4" id="questionText">Loading question...</h4>
-                    
-                    <!-- Options -->
-                    <div id="optionsContainer">
-                        <!-- Options will be dynamically loaded -->
+
+                    <!-- Progress Bar -->
+                    <div class="quiz-progress">
+                        <div class="quiz-progress-bar" id="progressBar"></div>
                     </div>
-                    
-                    <!-- Navigation Buttons -->
-                    <div class="navigation-buttons">
-                        <button class="btn btn-outline-secondary" id="prevBtn" disabled>
-                            <i class="fas fa-arrow-left me-2"></i>Previous
-                        </button>
-                        <button class="btn btn-primary" id="nextBtn" disabled>
-                            Next<i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                        <button class="btn btn-success" id="submitBtn" style="display: none;">
-                            <i class="fas fa-check me-2"></i>Submit Quiz
-                        </button>
+
+                    <!-- Quiz Body -->
+                    <div class="card-body">
+                        <h4 class="mb-4" id="questionText">Loading question...</h4>
+                        <div id="optionsContainer"></div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="navigation-buttons">
+                            <button class="btn btn-outline-secondary" id="prevBtn" disabled>
+                                <i class="fas fa-arrow-left me-2"></i>Previous
+                            </button>
+                            <button class="btn btn-primary" id="nextBtn">
+                                Next<i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                            <button class="btn btn-success" id="submitBtn" style="display: none;">
+                                <i class="fas fa-check me-2"></i>Submit Quiz
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- Custom JS -->
-    <script src="js/utils.js"></script>
     <script src="js/api.js"></script>
-    <script src="js/quiz.js"></script>
+    
+    <script>
+        let QUIZ = null;
+        let currentIndex = 0;
+        let answers = [];
+        let timerInterval = null;
+
+        // Start when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const quizId = params.get('quizId');
+
+            const user = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
+            document.getElementById('userNameDisplay').textContent = user.name || 'Guest';
+
+            if (!quizId) {
+                Swal.fire('Error', 'No quiz selected', 'error').then(() => {
+                    window.location.href = 'index.html';
+                });
+                return;
+            }
+
+            await loadQuiz(quizId);
+        });
+
+        // Load quiz data
+        async function loadQuiz(quizId) {
+            try {
+                QUIZ = await window.QuizAPI.getQuiz(quizId);
+                
+                if (!QUIZ || !QUIZ.questions || QUIZ.questions.length === 0) {
+                    throw new Error('Quiz not found');
+                }
+
+                answers = new Array(QUIZ.questions.length).fill(null);
+
+                document.getElementById('quizSubject').textContent = QUIZ.title + ' • ' + (QUIZ.subject || '');
+                document.getElementById('totalQuestions').textContent = QUIZ.questions.length;
+
+                document.getElementById('prevBtn').addEventListener('click', goToPrevious);
+                document.getElementById('nextBtn').addEventListener('click', goToNext);
+                document.getElementById('submitBtn').addEventListener('click', submitQuiz);
+
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('quizContent').style.display = 'block';
+
+                showQuestion();
+
+                if (QUIZ.duration) {
+                    startTimer(QUIZ.duration * 60); // minutes to seconds
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Could not load quiz', 'error').then(() => {
+                    window.location.href = 'index.html';
+                });
+            }
+        }
+
+        // Display current question
+        function showQuestion() {
+            const question = QUIZ.questions[currentIndex];
+
+            document.getElementById('currentQuestion').textContent = currentIndex + 1;
+            document.getElementById('questionText').textContent = question.question;
+
+            const optionsHTML = question.options.map((option, index) => {
+                const selected = answers[currentIndex] === index ? ' selected' : '';
+                return `
+                    <button class="btn option-btn${selected}" onclick="selectAnswer(${index})">
+                        ${String.fromCharCode(65 + index)}. ${option}
+                    </button>
+                `;
+            }).join('');
+
+            document.getElementById('optionsContainer').innerHTML = optionsHTML;
+
+            const progress = Math.round(((currentIndex + 1) / QUIZ.questions.length) * 100);
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            
+            const isLastQuestion = currentIndex === QUIZ.questions.length - 1;
+            document.getElementById('nextBtn').style.display = isLastQuestion ? 'none' : 'inline-block';
+            document.getElementById('submitBtn').style.display = isLastQuestion ? 'inline-block' : 'none';
+        }
+
+        // Select an answer
+        function selectAnswer(index) {
+            answers[currentIndex] = index;
+            showQuestion();
+        }
+
+        // Go to previous question
+        function goToPrevious() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showQuestion();
+            }
+        }
+
+        // Go to next question
+        function goToNext() {
+            if (currentIndex < QUIZ.questions.length - 1) {
+                currentIndex++;
+                showQuestion();
+            }
+        }
+
+        // Start countdown timer
+        function startTimer(seconds) {
+            let timeLeft = seconds;
+            
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                const secs = (timeLeft % 60).toString().padStart(2, '0');
+                
+                document.getElementById('timerDisplay').innerHTML = 
+                    `<i class="fas fa-clock me-2"></i>${minutes}:${secs}`;
+                
+                timeLeft--;
+                
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Submit quiz and show results
+        async function submitQuiz() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            let correctAnswers = 0;
+            QUIZ.questions.forEach((question, index) => {
+                if (answers[index] === question.correctAnswer) {
+                    correctAnswers++;
+                }
+            });
+
+            const accuracy = Math.round((correctAnswers / QUIZ.questions.length) * 100);
+
+            const user = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
+            
+            try {
+                await window.QuizAPI.saveAttempt({
+                    name: user.name || 'Anonymous',
+                    email: user.email || '',
+                    quizId: QUIZ.id,
+                    quizTitle: QUIZ.title,
+                    score: correctAnswers,
+                    totalQuestions: QUIZ.questions.length,
+                    accuracy: accuracy
+                });
+            } catch (error) {
+                console.log('Could not save attempt:', error);
+            }
+
+            Swal.fire({
+                title: 'Quiz Completed!',
+                html: `
+                    <div class="text-start">
+                        <p><strong>Score:</strong> ${correctAnswers}/${QUIZ.questions.length}</p>
+                        <p><strong>Accuracy:</strong> ${accuracy}%</p>
+                    </div>
+                `,
+                icon: accuracy >= 60 ? 'success' : 'info',
+                confirmButtonText: 'Go Home'
+            }).then(() => {
+                window.location.href = 'index.html';
+            });
+        }
+    </script>
 </body>
 </html>
