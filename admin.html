@@ -1128,6 +1128,106 @@ document.getElementById('quizCreationForm').addEventListener('submit', async fun
         
         // Auto-update question stats on input
         document.getElementById('questionsJson').addEventListener('input', updateQuestionStats);
+
+
+
+// JSON Validation - ADD THIS FUNCTION
+function validateJSON() {
+    try {
+        const json = document.getElementById('questionsJson').value;
+        
+        if (!json.trim()) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Empty JSON!',
+                text: 'Please paste your questions JSON first.'
+            });
+            return;
+        }
+        
+        const questions = JSON.parse(json);
+        
+        if (!Array.isArray(questions)) {
+            throw new Error('JSON must be an array of questions');
+        }
+        
+        if (questions.length === 0) {
+            throw new Error('Array cannot be empty');
+        }
+        
+        // Validate each question structure
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            if (!q.question || !q.options || !Array.isArray(q.options) || q.options.length !== 4) {
+                throw new Error(`Question ${i + 1}: Invalid structure. Need question, options (4 items), correctAnswer, explanation`);
+            }
+            if (typeof q.correctAnswer !== 'number' || q.correctAnswer < 0 || q.correctAnswer > 3) {
+                throw new Error(`Question ${i + 1}: correctAnswer must be 0, 1, 2, or 3`);
+            }
+        }
+        
+        // Update stats if validation passes
+        updateQuestionStats();
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Valid JSON!',
+            text: `✅ Found ${questions.length} valid questions`,
+            timer: 2000
+        });
+        
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid JSON!',
+            text: error.message || 'Please check your JSON format.'
+        });
+        
+        // Reset stats on error
+        document.getElementById('questionCount').textContent = '0';
+        document.getElementById('totalTime').textContent = '0 min';
+    }
+}
+
+
+
+
+
+
+        // Update question statistics
+function updateQuestionStats() {
+    try {
+        const json = document.getElementById('questionsJson').value;
+        if (!json) {
+            document.getElementById('questionCount').textContent = '0';
+            document.getElementById('totalTime').textContent = '0 min';
+            return;
+        }
+        
+        const questions = JSON.parse(json);
+        const totalTime = questions.reduce((sum, q) => sum + (q.timeAllocation || 60), 0);
+        
+        document.getElementById('questionCount').textContent = questions.length;
+        document.getElementById('totalTime').textContent = Math.ceil(totalTime / 60) + ' min';
+    } catch (error) {
+        document.getElementById('questionCount').textContent = '0';
+        document.getElementById('totalTime').textContent = '0 min';
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     </script>
 </body>
 </html>
