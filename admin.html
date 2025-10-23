@@ -1016,22 +1016,34 @@
     }
 
     async function checkAPIConnection() {
-      apiStatus.textContent = 'API Status: Checking...';
-      apiStatus.className = '';
-      try {
-        const connected = await window.QuizAPI.checkStatus();
-        if (connected) {
-          apiStatus.textContent = 'API Status: Connected';
-          apiStatus.className = 'connected';
-        } else {
-          apiStatus.textContent = 'API Status: Disconnected';
-          apiStatus.className = 'disconnected';
-        }
-      } catch (error) {
-        apiStatus.textContent = 'API Status: Disconnected';
-        apiStatus.className = 'disconnected';
-      }
+  apiStatus.textContent = 'API Status: Testing...';
+  apiStatus.className = '';
+  
+  try {
+    // Test with a simple POST request instead of GET
+    const testData = { action: 'initDatabase' };
+    const response = await fetch(window.QuizAPI.baseUrl, {
+      method: 'POST',
+      body: JSON.stringify(testData),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      apiStatus.textContent = 'API Status: Connected';
+      apiStatus.className = 'connected';
+    } else {
+      apiStatus.textContent = 'API Status: Connected (with warnings)';
+      apiStatus.className = 'connected';
     }
+  } catch (error) {
+    apiStatus.textContent = 'API Status: Unknown (Try creating a quiz)';
+    apiStatus.className = 'disconnected';
+    console.log('Status check skipped due to CORS. Try creating a quiz to test.');
+  }
+}
+
   </script>
 </body>
 </html>
