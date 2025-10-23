@@ -948,32 +948,48 @@
       }
     });
 
-    function loadAllQuizzes() {
-      const list = JSON.parse(localStorage.getItem('adminQuizzes') || '[]');
-      if (list.length === 0) {
-        allQuizzesTable.innerHTML =
-          '<tr><td colspan="6" class="text-center py-4">No quizzes yet</td></tr>';
-        return;
-      }
-      allQuizzesTable.innerHTML = list
-        .map(
-          (q, i) => `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${new Date(q.date).toLocaleDateString('en-IN')}</td>
-            <td><span class="badge bg-primary">${q.subject}</span></td>
-            <td>${q.questions.length}</td>
-            <td>${Math.ceil(
-              q.questions.reduce((s, x) => s + (x.timeAllocation || 60), 0) / 60
-            )} min</td>
-            <td>
-              <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${q.id}')"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>`
-        )
-        .join('');
-    }
 
+
+
+
+async function loadAllQuizzes() {
+  allQuizzesTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">Loading quizzes from Google Sheets...</td></tr>';
+  
+  try {
+    const quizzes = await window.QuizAPI.getQuizzes();
+    
+    if (!quizzes || quizzes.length === 0) {
+      allQuizzesTable.innerHTML = '<tr><td colspan="6" class="text-center py-4">No quizzes found</td></tr>';
+      return;
+    }
+    
+    allQuizzesTable.innerHTML = quizzes
+      .map((q, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${new Date(q.scheduledDate).toLocaleDateString('en-IN')}</td>
+          <td><span class="badge bg-primary">${q.subject}</span></td>
+          <td>${q.questionCount}</td>
+          <td>${q.duration} min</td>
+          <td>
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${q.id}')"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>`)
+      .join('');
+  } catch (error) {
+    console.error('Error loading quizzes:', error);
+    allQuizzesTable.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger">Error loading quizzes</td></tr>';
+  }
+}
+
+
+
+
+
+
+
+
+    
     function deleteQuiz(id) {
       Swal.fire({
         title: 'Delete Quiz?',
