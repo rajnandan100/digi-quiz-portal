@@ -385,9 +385,15 @@
                                                                     <small>Duration</small>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <button type="button" class="btn btn-outline-primary" onclick="validateJSON()">
-                                                                        <i class="fas fa-check me-1"></i>Validate
-                                                                    </button>
+
+
+                                                                    
+                                                                  <button type="button" class="btn btn-outline-primary" id="validateBtn">
+    <i class="fas fa-check me-1"></i>Validate JSON
+</button>
+
+
+                                                                    
                                                                     <small class="d-block mt-1 text-muted">Check format</small>
                                                                 </div>
                                                             </div>
@@ -1131,6 +1137,125 @@ document.getElementById('quizCreationForm').addEventListener('submit', async fun
 
 
 
+
+
+
+
+        // Add event listener for validate button
+document.addEventListener('DOMContentLoaded', function() {
+    // Validate JSON button
+    document.getElementById('validateBtn').addEventListener('click', function() {
+        console.log('Validate button clicked'); // Debug log
+        validateJSON();
+    });
+    
+    // Auto-update stats when typing
+    document.getElementById('questionsJson').addEventListener('input', function() {
+        updateQuestionStats();
+    });
+});
+
+// Validate JSON function
+function validateJSON() {
+    console.log('validateJSON function called'); // Debug log
+    
+    try {
+        const json = document.getElementById('questionsJson').value.trim();
+        
+        if (!json) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Empty Field!',
+                text: 'Please paste your questions JSON first.'
+            });
+            return;
+        }
+        
+        const questions = JSON.parse(json);
+        
+        if (!Array.isArray(questions)) {
+            throw new Error('JSON must be an array of questions');
+        }
+        
+        if (questions.length === 0) {
+            throw new Error('Array cannot be empty');
+        }
+        
+        // Validate each question
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            
+            if (!q.question) {
+                throw new Error(`Question ${i + 1}: Missing question text`);
+            }
+            
+            if (!q.options || !Array.isArray(q.options) || q.options.length !== 4) {
+                throw new Error(`Question ${i + 1}: Need exactly 4 options`);
+            }
+            
+            if (typeof q.correctAnswer !== 'number' || q.correctAnswer < 0 || q.correctAnswer > 3) {
+                throw new Error(`Question ${i + 1}: correctAnswer must be 0, 1, 2, or 3`);
+            }
+        }
+        
+        // Update stats
+        updateQuestionStats();
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Valid JSON! ✅',
+            text: `Found ${questions.length} valid questions`,
+            timer: 2000,
+            showConfirmButton: false
+        });
+        
+    } catch (error) {
+        console.error('Validation error:', error);
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid JSON! ❌',
+            text: error.message,
+            confirmButtonText: 'OK'
+        });
+        
+        // Reset stats
+        document.getElementById('questionCount').textContent = '0';
+        document.getElementById('totalTime').textContent = '0 min';
+    }
+}
+
+// Update question statistics
+function updateQuestionStats() {
+    try {
+        const json = document.getElementById('questionsJson').value.trim();
+        
+        if (!json) {
+            document.getElementById('questionCount').textContent = '0';
+            document.getElementById('totalTime').textContent = '0 min';
+            return;
+        }
+        
+        const questions = JSON.parse(json);
+        if (Array.isArray(questions)) {
+            const totalTime = questions.reduce((sum, q) => sum + (q.timeAllocation || 60), 0);
+            
+            document.getElementById('questionCount').textContent = questions.length;
+            document.getElementById('totalTime').textContent = Math.ceil(totalTime / 60) + ' min';
+        }
+    } catch (error) {
+        document.getElementById('questionCount').textContent = '0';
+        document.getElementById('totalTime').textContent = '0 min';
+    }
+}
+
+
+
+
+
+
+
+        
 // JSON Validation - ADD THIS FUNCTION
 function validateJSON() {
     try {
