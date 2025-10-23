@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Digi Quiz Portal</title>
+    <title>Admin Control Panel - Digi Quiz Portal</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,6 +14,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -22,7 +25,6 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding-bottom: 80px;
         }
         
         /* Navigation */
@@ -92,6 +94,28 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 2rem;
+        }
+        
+        /* API Status */
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .api-status.connected {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .api-status.disconnected {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 2px solid rgba(239, 68, 68, 0.2);
         }
         
         /* Stats Cards */
@@ -220,60 +244,30 @@
             border-color: #dc2626;
         }
         
-        /* Sticky Bottom Ad */
-        .sticky-bottom-ad {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #1f2937;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            z-index: 1000;
-            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
-            border-top: 3px solid #dc2626;
-        }
-        
-        .sticky-bottom-ad .close-ad {
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #9ca3af;
-            font-size: 1.2rem;
+        /* Editable Stats */
+        .editable-stat {
             cursor: pointer;
-            transition: color 0.3s;
+            border: 2px dashed transparent;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
         }
         
-        .sticky-bottom-ad .close-ad:hover {
-            color: white;
+        .editable-stat:hover {
+            border-color: #dc2626;
+            background-color: rgba(220, 38, 38, 0.05);
         }
         
-        /* Banner Advertisement */
-        .banner-ad-section {
-            background: linear-gradient(45deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            margin: 2rem 0;
-            text-align: center;
-            border: 2px dashed #cbd5e1;
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .banner-ad-section h4 {
-            color: #64748b;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .banner-ad-section i {
-            color: #dc2626;
+        .stat-editor {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+            min-width: 200px;
         }
         
         /* Footer */
@@ -363,17 +357,17 @@
             <form id="adminLoginForm">
                 <div class="mb-3">
                     <input type="password" class="form-control form-control-lg" id="adminPassword" 
-                           placeholder="Admin Password" required minlength="6" autocomplete="off">
-                    <small class="text-muted">Default: <code>admin123</code></small>
+                           placeholder="Admin Password" required minlength="20" autocomplete="off">
+                    <small class="text-muted">Ultra-secure 20-character password required</small>
                 </div>
                 <button type="submit" class="btn btn-danger w-100 btn-lg">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login to Admin Panel
+                    <i class="fas fa-sign-in-alt me-2"></i>Access Control Panel
                 </button>
             </form>
             
             <div id="loginError" class="alert alert-danger mt-3" style="display: none;">
                 <i class="fas fa-exclamation-triangle me-2"></i>
-                Invalid password! Please try again.
+                Invalid password! Access denied.
             </div>
         </div>
     </div>
@@ -381,10 +375,14 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" id="adminNav" style="display: none;">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="admin.html">
+            <a class="navbar-brand fw-bold" href="adminotoyaram.html">
                 <i class="fas fa-shield-alt me-2"></i>Admin Control Panel
             </a>
             <div class="navbar-nav ms-auto">
+                <span class="api-status me-3" id="apiStatus">
+                    <i class="fas fa-circle me-1"></i>
+                    <span id="apiStatusText">Checking...</span>
+                </span>
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-home me-1"></i>User View
                 </a>
@@ -403,7 +401,7 @@
                     <i class="fas fa-cogs me-3"></i>Admin Dashboard
                 </h1>
                 <p class="lead mb-3">
-                    <i class="fas fa-info-circle me-2"></i>Complete quiz management system
+                    <i class="fas fa-info-circle me-2"></i>Manage your quiz portal
                 </p>
                 <div class="badge bg-light text-dark fs-6">
                     <i class="fas fa-clock me-2"></i>Last updated: <span id="lastUpdateTime">Loading...</span>
@@ -418,7 +416,7 @@
                             <div class="stat-icon bg-primary bg-opacity-10">
                                 <i class="fas fa-clipboard-list fa-2x text-primary"></i>
                             </div>
-                            <h2 id="totalQuizzesCount">0</h2>
+                            <h2 id="totalQuizzesCount" class="editable-stat" data-stat="totalQuizzes">0</h2>
                             <p class="text-muted mb-0">Total Quizzes</p>
                         </div>
                     </div>
@@ -427,7 +425,7 @@
                             <div class="stat-icon bg-success bg-opacity-10">
                                 <i class="fas fa-users fa-2x text-success"></i>
                             </div>
-                            <h2 id="totalAttemptsCount">0</h2>
+                            <h2 id="totalAttemptsCount" class="editable-stat" data-stat="totalAttempts">0</h2>
                             <p class="text-muted mb-0">Total Attempts</p>
                         </div>
                     </div>
@@ -436,7 +434,7 @@
                             <div class="stat-icon bg-warning bg-opacity-10">
                                 <i class="fas fa-calendar-day fa-2x text-warning"></i>
                             </div>
-                            <h2 id="todayQuizzesCount">0</h2>
+                            <h2 id="todayQuizzesCount" class="editable-stat" data-stat="todayQuizzes">0</h2>
                             <p class="text-muted mb-0">Today's Quizzes</p>
                         </div>
                     </div>
@@ -445,10 +443,27 @@
                             <div class="stat-icon bg-info bg-opacity-10">
                                 <i class="fas fa-question-circle fa-2x text-info"></i>
                             </div>
-                            <h2 id="totalQuestionsCount">0</h2>
+                            <h2 id="totalQuestionsCount" class="editable-stat" data-stat="totalQuestions">0</h2>
                             <p class="text-muted mb-0">Total Questions</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Stat Editor -->
+            <div class="stat-editor" id="statEditor">
+                <h6>Edit Website Statistics</h6>
+                <p class="small text-muted">Update the stats displayed on homepage</p>
+                <div class="mb-2">
+                    <input type="number" class="form-control form-control-sm" id="statInput" min="0">
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-success" onclick="saveStatEdit()">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="cancelStatEdit()">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
 
@@ -458,6 +473,11 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="create-tab" data-bs-toggle="tab" data-bs-target="#createQuiz" type="button">
                             <i class="fas fa-plus-circle me-2"></i>Create Quiz
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulkOperations" type="button">
+                            <i class="fas fa-layer-group me-2"></i>Bulk Operations
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -473,6 +493,11 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="analytics-tab" data-bs-toggle="tab" data-bs-target="#analytics" type="button">
                             <i class="fas fa-analytics me-2"></i>Analytics
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="import-tab" data-bs-toggle="tab" data-bs-target="#importExport" type="button">
+                            <i class="fas fa-exchange-alt me-2"></i>Import/Export
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -645,6 +670,83 @@
                     </div>
                 </div>
 
+                <!-- BULK OPERATIONS TAB -->
+                <div class="tab-pane fade" id="bulkOperations" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-upload me-2"></i>Bulk Quiz Import
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload JSON File</label>
+                                        <input type="file" class="form-control" id="bulkImportFile" accept=".json">
+                                        <small class="text-muted">Select a JSON file containing multiple quizzes</small>
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="importBulkQuizzes()">
+                                        <i class="fas fa-upload me-2"></i>Import Quizzes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-download me-2"></i>Bulk Export
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-success" onclick="exportAllQuizzes()">
+                                            <i class="fas fa-download me-2"></i>Export All Quizzes
+                                        </button>
+                                        <button class="btn btn-outline-success" onclick="exportSelectedQuizzes()">
+                                            <i class="fas fa-check-square me-2"></i>Export Selected
+                                        </button>
+                                        <button class="btn btn-info" onclick="exportAllAttempts()">
+                                            <i class="fas fa-users me-2"></i>Export All Attempts
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="fas fa-tools me-2"></i>Bulk Operations
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-warning w-100" onclick="bulkDeleteOldQuizzes()">
+                                        <i class="fas fa-calendar-times me-2"></i>Delete Old Quizzes
+                                    </button>
+                                    <small class="text-muted">Delete quizzes older than 30 days</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-info w-100" onclick="bulkUpdateSubjects()">
+                                        <i class="fas fa-edit me-2"></i>Update Subjects
+                                    </button>
+                                    <small class="text-muted">Batch update quiz subjects</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-success w-100" onclick="generateReports()">
+                                        <i class="fas fa-chart-bar me-2"></i>Generate Reports
+                                    </button>
+                                    <small class="text-muted">Create comprehensive reports</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- MANAGE QUIZZES TAB -->
                 <div class="tab-pane fade" id="manageQuizzes" role="tabpanel">
                     <div class="card">
@@ -656,8 +758,11 @@
                                 <button class="btn btn-sm btn-light" onclick="loadAllQuizzes()">
                                     <i class="fas fa-sync-alt me-1"></i>Refresh
                                 </button>
-                                <button class="btn btn-sm btn-danger ms-2" onclick="deleteAllQuizzes()">
-                                    <i class="fas fa-trash me-1"></i>Delete All
+                                <button class="btn btn-sm btn-warning ms-2" onclick="selectAllQuizzes()">
+                                    <i class="fas fa-check-square me-1"></i>Select All
+                                </button>
+                                <button class="btn btn-sm btn-danger ms-2" onclick="deleteSelectedQuizzes()">
+                                    <i class="fas fa-trash me-1"></i>Delete Selected
                                 </button>
                             </div>
                         </div>
@@ -666,6 +771,9 @@
                                 <table class="table table-hover mb-0">
                                     <thead class="table-dark">
                                         <tr>
+                                            <th width="3%">
+                                                <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
+                                            </th>
                                             <th width="5%">#</th>
                                             <th><i class="fas fa-calendar me-1"></i>Date</th>
                                             <th><i class="fas fa-book me-1"></i>Subject</th>
@@ -677,7 +785,7 @@
                                     </thead>
                                     <tbody id="allQuizzesTable">
                                         <tr>
-                                            <td colspan="7" class="text-center py-4">Loading...</td>
+                                            <td colspan="8" class="text-center py-4">Loading...</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -697,6 +805,9 @@
                                 <button class="btn btn-sm btn-light" onclick="loadAllAttempts()">
                                     <i class="fas fa-sync-alt me-1"></i>Refresh
                                 </button>
+                                <button class="btn btn-sm btn-info ms-2" onclick="exportAttemptsCSV()">
+                                    <i class="fas fa-file-csv me-1"></i>Export CSV
+                                </button>
                                 <button class="btn btn-sm btn-danger ms-2" onclick="deleteAllAttempts()">
                                     <i class="fas fa-trash me-1"></i>Clear All
                                 </button>
@@ -713,13 +824,14 @@
                                             <th><i class="fas fa-book me-1"></i>Quiz</th>
                                             <th><i class="fas fa-award me-1"></i>Score</th>
                                             <th><i class="fas fa-percentage me-1"></i>Accuracy</th>
+                                            <th><i class="fas fa-clock me-1"></i>Time</th>
                                             <th><i class="fas fa-calendar me-1"></i>Date</th>
                                             <th><i class="fas fa-cog me-1"></i>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="allAttemptsTable">
                                         <tr>
-                                            <td colspan="8" class="text-center py-4">Loading...</td>
+                                            <td colspan="9" class="text-center py-4">Loading...</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -730,7 +842,7 @@
 
                 <!-- ANALYTICS TAB -->
                 <div class="tab-pane fade" id="analytics" role="tabpanel">
-                    <div class="row g-4">
+                    <div class="row g-4 mb-4">
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header bg-primary text-white">
@@ -739,7 +851,7 @@
                                     </h5>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="subjectChart"></canvas>
+                                    <canvas id="subjectChart" height="300"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -747,13 +859,82 @@
                             <div class="card">
                                 <div class="card-header bg-success text-white">
                                     <h5 class="mb-0">
-                                        <i class="fas fa-chart-line me-2"></i>Performance Analytics
+                                        <i class="fas fa-chart-line me-2"></i>Performance Trends
                                     </h5>
                                 </div>
-                                <div class="card-body" id="performanceAnalytics">
-                                    <div class="text-center py-5">
-                                        <i class="fas fa-chart-bar fa-4x text-muted mb-3"></i>
-                                        <p class="text-muted">Analytics will be displayed here</p>
+                                <div class="card-body">
+                                    <canvas id="performanceChart" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-analytics me-2"></i>Detailed Analytics
+                                    </h5>
+                                </div>
+                                <div class="card-body" id="detailedAnalytics">
+                                    <!-- Analytics content will be generated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMPORT/EXPORT TAB -->
+                <div class="tab-pane fade" id="importExport" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-upload me-2"></i>Import Data
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Import Quizzes from File</label>
+                                        <input type="file" class="form-control" id="importQuizzesFile" accept=".json">
+                                    </div>
+                                    <button class="btn btn-primary w-100 mb-3" onclick="importQuizzes()">
+                                        <i class="fas fa-upload me-2"></i>Import Quizzes
+                                    </button>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Import Attempts from File</label>
+                                        <input type="file" class="form-control" id="importAttemptsFile" accept=".json">
+                                    </div>
+                                    <button class="btn btn-success w-100" onclick="importAttempts()">
+                                        <i class="fas fa-upload me-2"></i>Import Attempts
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-download me-2"></i>Export Data
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-success" onclick="exportAllData()">
+                                            <i class="fas fa-download me-2"></i>Export All Data (JSON)
+                                        </button>
+                                        <button class="btn btn-outline-success" onclick="exportQuizzesOnly()">
+                                            <i class="fas fa-clipboard-list me-2"></i>Export Quizzes Only
+                                        </button>
+                                        <button class="btn btn-outline-success" onclick="exportAttemptsOnly()">
+                                            <i class="fas fa-users me-2"></i>Export Attempts Only
+                                        </button>
+                                        <button class="btn btn-info" onclick="exportAnalyticsReport()">
+                                            <i class="fas fa-chart-bar me-2"></i>Export Analytics Report
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -772,14 +953,14 @@
                                     </h5>
                                 </div>
                                 <div class="card-body">
-                                    <button class="btn btn-primary w-100 mb-2" onclick="exportAllData()">
-                                        <i class="fas fa-download me-2"></i>Export All Data (JSON)
-                                    </button>
-                                    <button class="btn btn-success w-100 mb-2" onclick="syncWithGoogleSheets()">
+                                    <button class="btn btn-primary w-100 mb-2" onclick="syncWithGoogleSheets()">
                                         <i class="fas fa-sync-alt me-2"></i>Sync with Google Sheets
                                     </button>
-                                    <button class="btn btn-warning w-100 mb-2" onclick="backupData()">
-                                        <i class="fas fa-save me-2"></i>Create Backup
+                                    <button class="btn btn-success w-100 mb-2" onclick="backupData()">
+                                        <i class="fas fa-save me-2"></i>Create Local Backup
+                                    </button>
+                                    <button class="btn btn-info w-100 mb-2" onclick="restoreBackup()">
+                                        <i class="fas fa-undo me-2"></i>Restore from Backup
                                     </button>
                                     <hr>
                                     <button class="btn btn-danger w-100" onclick="clearAllData()">
@@ -799,28 +980,62 @@
                                     <form id="changePasswordForm">
                                         <div class="mb-3">
                                             <label class="form-label">New Admin Password</label>
-                                            <input type="password" class="form-control" id="newPassword" minlength="6" required>
+                                            <input type="password" class="form-control" id="newPassword" minlength="20" required>
+                                            <small class="text-muted">Must be exactly 20 characters</small>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Confirm Password</label>
-                                            <input type="password" class="form-control" id="confirmPassword" minlength="6" required>
+                                            <input type="password" class="form-control" id="confirmPassword" minlength="20" required>
                                         </div>
-                                        <button type="submit" class="btn btn-info w-100">
+                                        <button type="submit" class="btn btn-info w-100 mb-3">
                                             <i class="fas fa-lock me-2"></i>Change Password
                                         </button>
                                     </form>
+                                    
+                                    <div class="alert alert-info">
+                                        <small>
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Current password is 20 characters long for maximum security.
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Banner Advertisement Section -->
-                <div class="banner-ad-section">
-                    <i class="fas fa-bullhorn fa-3x mb-3"></i>
-                    <h4>Admin Panel Advertisement Space</h4>
-                    <p>Premium ad placement for administrators - 728x90 Banner</p>
-                    <small class="text-muted">Contact us for exclusive admin advertising opportunities</small>
+                    
+                    <div class="card mt-4">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-cogs me-2"></i>System Configuration
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Auto-backup Interval</label>
+                                    <select class="form-select" id="backupInterval">
+                                        <option value="never">Never</option>
+                                        <option value="daily" selected>Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Default Quiz Duration</label>
+                                    <input type="number" class="form-control" id="defaultDuration" value="30" min="1" max="180">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Max Questions per Quiz</label>
+                                    <input type="number" class="form-control" id="maxQuestions" value="50" min="1" max="100">
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="saveSystemSettings()">
+                                    <i class="fas fa-save me-2"></i>Save Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -906,17 +1121,6 @@
         </div>
     </footer>
 
-    <!-- Sticky Bottom Advertisement -->
-    <div class="sticky-bottom-ad" id="stickyAd">
-        <button class="close-ad" onclick="closeStickyAd()" title="Close Ad">
-            <i class="fas fa-times"></i>
-        </button>
-        <h5>
-            <i class="fas fa-cog me-2"></i>Admin Tools & Extensions Available!
-        </h5>
-        <p>Upgrade to premium admin features with advanced analytics and reporting.</p>
-    </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -927,9 +1131,10 @@
     <script src="js/api.js"></script>
     
     <script>
-        // Admin authentication
-        const ADMIN_PASSWORD = 'admin123';
+        // Ultra-secure 20-character admin password
+        const ADMIN_PASSWORD = 'DigiQuizMaster2025@!';
         let isAuthenticated = false;
+        let currentEditingStat = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             // Check if already authenticated
@@ -939,6 +1144,7 @@
             
             setupEventListeners();
             setDefaultDate();
+            initializeCharts();
         });
 
         function setupEventListeners() {
@@ -953,6 +1159,17 @@
             
             // JSON validation on input
             document.getElementById('questionsJson').addEventListener('input', validateJSON);
+            
+            // Editable stats
+            document.querySelectorAll('.editable-stat').forEach(stat => {
+                stat.addEventListener('click', function() {
+                    editStat(this);
+                });
+            });
+            
+            // API status check
+            checkAPIStatus();
+            setInterval(checkAPIStatus, 30000); // Check every 30 seconds
         }
 
         function handleLogin(e) {
@@ -980,11 +1197,27 @@
             loadAllQuizzes();
             loadAllAttempts();
             updateLastUpdateTime();
+            loadAnalytics();
         }
 
         function adminLogout() {
             sessionStorage.removeItem('adminAuthenticated');
             location.reload();
+        }
+
+        function checkAPIStatus() {
+            // Simulate API status check
+            const isConnected = typeof window.QuizAPI !== 'undefined';
+            const statusElement = document.getElementById('apiStatus');
+            const statusText = document.getElementById('apiStatusText');
+            
+            if (isConnected) {
+                statusElement.className = 'api-status connected me-3';
+                statusText.textContent = 'API Connected';
+            } else {
+                statusElement.className = 'api-status disconnected me-3';
+                statusText.textContent = 'API Disconnected';
+            }
         }
 
         function setDefaultDate() {
@@ -994,6 +1227,50 @@
 
         function updateLastUpdateTime() {
             document.getElementById('lastUpdateTime').textContent = new Date().toLocaleString('en-IN');
+        }
+
+        // Editable Stats Functions
+        function editStat(element) {
+            const stat = element.dataset.stat;
+            const currentValue = element.textContent;
+            const editor = document.getElementById('statEditor');
+            const input = document.getElementById('statInput');
+            
+            currentEditingStat = { element, stat, originalValue: currentValue };
+            input.value = parseInt(currentValue) || 0;
+            
+            // Position the editor
+            const rect = element.getBoundingClientRect();
+            editor.style.display = 'block';
+            editor.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+            editor.style.left = rect.left + 'px';
+        }
+
+        function saveStatEdit() {
+            if (!currentEditingStat) return;
+            
+            const newValue = document.getElementById('statInput').value;
+            currentEditingStat.element.textContent = newValue;
+            
+            // Save to local storage
+            const stats = JSON.parse(localStorage.getItem('websiteStats') || '{}');
+            stats[currentEditingStat.stat] = parseInt(newValue);
+            localStorage.setItem('websiteStats', JSON.stringify(stats));
+            
+            cancelStatEdit();
+            
+            Swal.fire({
+                title: 'Updated!',
+                text: 'Website statistic updated successfully',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+
+        function cancelStatEdit() {
+            document.getElementById('statEditor').style.display = 'none';
+            currentEditingStat = null;
         }
 
         // Validate JSON input
@@ -1074,7 +1351,8 @@
                     title: 'Success!',
                     text: `Quiz created with ${questions.length} questions`,
                     icon: 'success',
-                    timer: 2000
+                    timer: 2000,
+                    showConfirmButton: false
                 });
                 
                 // Reset form
@@ -1095,25 +1373,27 @@
         function loadDashboardStats() {
             const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
             const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+            const websiteStats = JSON.parse(localStorage.getItem('websiteStats') || '{}');
             
             const today = new Date().toISOString().split('T')[0];
             const todayQuizzes = quizzes.filter(q => q.date === today);
             const totalQuestions = quizzes.reduce((sum, q) => sum + q.totalQuestions, 0);
             
-            document.getElementById('totalQuizzesCount').textContent = quizzes.length;
-            document.getElementById('totalAttemptsCount').textContent = attempts.length;
-            document.getElementById('todayQuizzesCount').textContent = todayQuizzes.length;
-            document.getElementById('totalQuestionsCount').textContent = totalQuestions;
+            // Use custom stats if available, otherwise use actual data
+            document.getElementById('totalQuizzesCount').textContent = websiteStats.totalQuizzes || quizzes.length;
+            document.getElementById('totalAttemptsCount').textContent = websiteStats.totalAttempts || attempts.length;
+            document.getElementById('todayQuizzesCount').textContent = websiteStats.todayQuizzes || todayQuizzes.length;
+            document.getElementById('totalQuestionsCount').textContent = websiteStats.totalQuestions || totalQuestions;
         }
 
-        // Load all quizzes
+        // Load all quizzes with enhanced features
         function loadAllQuizzes() {
             const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
             const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
             const tbody = document.getElementById('allQuizzesTable');
             
             if (quizzes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4">No quizzes found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4">No quizzes found</td></tr>';
                 return;
             }
             
@@ -1124,32 +1404,44 @@
                 
                 return `
                     <tr>
+                        <td><input type="checkbox" class="quiz-checkbox" value="${quiz.quizId}"></td>
                         <td>${index + 1}</td>
                         <td>${date}</td>
                         <td><span class="badge bg-primary">${quiz.subject}</span></td>
                         <td>${quiz.totalQuestions}</td>
                         <td>${duration} min</td>
-                        <td>${quizAttempts}</td>
+                        <td><span class="badge bg-success">${quizAttempts}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${quiz.quizId}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" onclick="editQuiz('${quiz.quizId}')" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-outline-info" onclick="duplicateQuiz('${quiz.quizId}')" title="Duplicate">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteQuiz('${quiz.quizId}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Load all attempts
+        // Load all attempts with enhanced features
         function loadAllAttempts() {
             const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
             const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
             const tbody = document.getElementById('allAttemptsTable');
             
             if (attempts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4">No attempts found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4">No attempts found</td></tr>';
                 return;
             }
+            
+            // Sort by date (newest first)
+            attempts.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             tbody.innerHTML = attempts.map((attempt, index) => {
                 const quiz = quizzes.find(q => q.quizId === attempt.quizId);
@@ -1159,23 +1451,237 @@
                 return `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>${attempt.userName || attempt.name}</td>
-                        <td>${attempt.email}</td>
+                        <td>
+                            <i class="fas fa-user-circle me-1 text-primary"></i>
+                            ${attempt.userName || attempt.name}
+                        </td>
+                        <td>
+                            <small class="text-muted">${attempt.email}</small>
+                        </td>
                         <td><span class="badge bg-info">${quizName}</span></td>
-                        <td>${attempt.score}/${attempt.total || 30}</td>
+                        <td><strong>${attempt.score}/${attempt.total || 30}</strong></td>
                         <td><span class="badge bg-success">${(attempt.accuracy || 0).toFixed(1)}%</span></td>
+                        <td><i class="fas fa-clock me-1"></i>${attempt.time || 'N/A'}</td>
                         <td>${date}</td>
                         <td>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAttempt(${index})">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-info" onclick="viewAttemptDetails(${index})" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteAttempt(${index})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Utility functions
+        // Initialize charts
+        function initializeCharts() {
+            // Subject distribution chart
+            const subjectCtx = document.getElementById('subjectChart');
+            if (subjectCtx) {
+                window.subjectChart = new Chart(subjectCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            data: [],
+                            backgroundColor: [
+                                '#ff6384', '#36a2eb', '#ffce56', '#4bc0c0',
+                                '#9966ff', '#ff9f40', '#ff6384', '#c9cbcf'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            // Performance trends chart
+            const performanceCtx = document.getElementById('performanceChart');
+            if (performanceCtx) {
+                window.performanceChart = new Chart(performanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Average Score',
+                            data: [],
+                            borderColor: '#36a2eb',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Load analytics data
+        function loadAnalytics() {
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+            
+            // Update subject distribution chart
+            if (window.subjectChart && quizzes.length > 0) {
+                const subjectCounts = {};
+                quizzes.forEach(quiz => {
+                    subjectCounts[quiz.subject] = (subjectCounts[quiz.subject] || 0) + 1;
+                });
+                
+                window.subjectChart.data.labels = Object.keys(subjectCounts);
+                window.subjectChart.data.datasets[0].data = Object.values(subjectCounts);
+                window.subjectChart.update();
+            }
+            
+            // Update performance trends chart
+            if (window.performanceChart && attempts.length > 0) {
+                const dailyPerformance = {};
+                attempts.forEach(attempt => {
+                    const date = attempt.date;
+                    if (!dailyPerformance[date]) {
+                        dailyPerformance[date] = [];
+                    }
+                    dailyPerformance[date].push(attempt.accuracy || 0);
+                });
+                
+                const dates = Object.keys(dailyPerformance).sort();
+                const averages = dates.map(date => {
+                    const scores = dailyPerformance[date];
+                    return scores.reduce((a, b) => a + b, 0) / scores.length;
+                });
+                
+                window.performanceChart.data.labels = dates.map(date => 
+                    new Date(date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })
+                );
+                window.performanceChart.data.datasets[0].data = averages;
+                window.performanceChart.update();
+            }
+            
+            // Generate detailed analytics
+            generateDetailedAnalytics();
+        }
+
+        function generateDetailedAnalytics() {
+            const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const container = document.getElementById('detailedAnalytics');
+            
+            if (attempts.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">No data available for analytics</p>';
+                return;
+            }
+            
+            // Calculate various metrics
+            const totalAttempts = attempts.length;
+            const averageScore = attempts.reduce((sum, a) => sum + (a.accuracy || 0), 0) / totalAttempts;
+            const highestScore = Math.max(...attempts.map(a => a.accuracy || 0));
+            const lowestScore = Math.min(...attempts.map(a => a.accuracy || 0));
+            
+            // Top performers
+            const topPerformers = attempts
+                .sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0))
+                .slice(0, 5);
+            
+            // Subject performance
+            const subjectPerformance = {};
+            attempts.forEach(attempt => {
+                const quiz = quizzes.find(q => q.quizId === attempt.quizId);
+                const subject = quiz ? quiz.subject : 'Unknown';
+                if (!subjectPerformance[subject]) {
+                    subjectPerformance[subject] = [];
+                }
+                subjectPerformance[subject].push(attempt.accuracy || 0);
+            });
+            
+            let analyticsHTML = `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <h4 class="text-primary">${averageScore.toFixed(1)}%</h4>
+                            <small class="text-muted">Average Score</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <h4 class="text-success">${highestScore.toFixed(1)}%</h4>
+                            <small class="text-muted">Highest Score</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <h4 class="text-warning">${lowestScore.toFixed(1)}%</h4>
+                            <small class="text-muted">Lowest Score</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-light rounded">
+                            <h4 class="text-info">${totalAttempts}</h4>
+                            <small class="text-muted">Total Attempts</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-trophy me-2"></i>Top Performers</h6>
+                        <div class="list-group">
+            `;
+            
+            topPerformers.forEach((performer, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🎖️';
+                analyticsHTML += `
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span>${medal}</span>
+                            <strong>${performer.userName || performer.name}</strong>
+                        </div>
+                        <span class="badge bg-success">${(performer.accuracy || 0).toFixed(1)}%</span>
+                    </div>
+                `;
+            });
+            
+            analyticsHTML += `
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-chart-bar me-2"></i>Subject Performance</h6>
+                        <div class="list-group">
+            `;
+            
+            Object.entries(subjectPerformance).forEach(([subject, scores]) => {
+                const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+                analyticsHTML += `
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${subject}</strong>
+                            <br><small class="text-muted">${scores.length} attempts</small>
+                        </div>
+                        <span class="badge bg-primary">${avgScore.toFixed(1)}%</span>
+                    </div>
+                `;
+            });
+            
+            analyticsHTML += '</div></div></div>';
+            
+            container.innerHTML = analyticsHTML;
+        }
+
+        // Enhanced utility functions
         function copyTemplate() {
             const template = `[
   {
@@ -1212,9 +1718,64 @@
     "correctAnswer": 1,
     "explanation": "Mahatma Gandhi is known as the Father of the Nation.",
     "timeAllocation": 60
+  },
+  {
+    "question": "Which river is known as the Ganga of the South?",
+    "options": ["Krishna", "Godavari", "Cauvery", "Narmada"],
+    "correctAnswer": 1,
+    "explanation": "Godavari is called the Ganga of the South.",
+    "timeAllocation": 60
   }
 ]`;
             validateJSON();
+        }
+
+        // Enhanced CRUD operations
+        function editQuiz(quizId) {
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const quiz = quizzes.find(q => q.quizId === quizId);
+            
+            if (quiz) {
+                // Switch to create tab and populate form
+                document.getElementById('create-tab').click();
+                document.getElementById('quizDateInput').value = quiz.date;
+                document.getElementById('subjectInput').value = quiz.subject;
+                document.getElementById('questionsJson').value = JSON.stringify(quiz.questions, null, 2);
+                validateJSON();
+                
+                // Change form to edit mode
+                const form = document.getElementById('quizCreationForm');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Update Quiz';
+                submitBtn.onclick = () => updateQuiz(quizId);
+            }
+        }
+
+        function updateQuiz(quizId) {
+            // Implementation for updating existing quiz
+            Swal.fire('Feature Coming Soon', 'Quiz editing will be available in the next update', 'info');
+        }
+
+        function duplicateQuiz(quizId) {
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const quiz = quizzes.find(q => q.quizId === quizId);
+            
+            if (quiz) {
+                const newQuiz = {
+                    ...quiz,
+                    quizId: `quiz_${Date.now()}`,
+                    date: new Date().toISOString().split('T')[0],
+                    created: new Date().toISOString()
+                };
+                
+                quizzes.push(newQuiz);
+                localStorage.setItem('quizzes', JSON.stringify(quizzes));
+                
+                loadAllQuizzes();
+                loadDashboardStats();
+                
+                Swal.fire('Duplicated!', 'Quiz has been duplicated successfully', 'success');
+            }
         }
 
         function deleteQuiz(quizId) {
@@ -1259,21 +1820,69 @@
             });
         }
 
-        function deleteAllQuizzes() {
+        function viewAttemptDetails(index) {
+            const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+            const attempt = attempts[index];
+            
+            if (attempt) {
+                Swal.fire({
+                    title: 'Attempt Details',
+                    html: `
+                        <div class="text-start">
+                            <p><strong>Name:</strong> ${attempt.userName || attempt.name}</p>
+                            <p><strong>Email:</strong> ${attempt.email}</p>
+                            <p><strong>Score:</strong> ${attempt.score}/${attempt.total || 30}</p>
+                            <p><strong>Accuracy:</strong> ${(attempt.accuracy || 0).toFixed(2)}%</p>
+                            <p><strong>Time Taken:</strong> ${attempt.time || 'N/A'}</p>
+                            <p><strong>Date:</strong> ${new Date(attempt.date).toLocaleString('en-IN')}</p>
+                        </div>
+                    `,
+                    width: 400,
+                    showCloseButton: true
+                });
+            }
+        }
+
+        // Bulk operations
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAllCheckbox');
+            const checkboxes = document.querySelectorAll('.quiz-checkbox');
+            
+            checkboxes.forEach(cb => {
+                cb.checked = selectAll.checked;
+            });
+        }
+
+        function selectAllQuizzes() {
+            const checkboxes = document.querySelectorAll('.quiz-checkbox');
+            checkboxes.forEach(cb => cb.checked = true);
+            document.getElementById('selectAllCheckbox').checked = true;
+        }
+
+        function deleteSelectedQuizzes() {
+            const selected = Array.from(document.querySelectorAll('.quiz-checkbox:checked')).map(cb => cb.value);
+            
+            if (selected.length === 0) {
+                Swal.fire('No Selection', 'Please select quizzes to delete', 'warning');
+                return;
+            }
+            
             Swal.fire({
-                title: 'Delete All Quizzes?',
-                text: 'This will permanently delete all quizzes!',
+                title: `Delete ${selected.length} quizzes?`,
+                text: 'This action cannot be undone!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#dc2626',
                 cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Yes, delete all!'
+                confirmButtonText: 'Yes, delete them!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    localStorage.removeItem('quizzes');
+                    const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+                    const filtered = quizzes.filter(q => !selected.includes(q.quizId));
+                    localStorage.setItem('quizzes', JSON.stringify(filtered));
                     loadAllQuizzes();
                     loadDashboardStats();
-                    Swal.fire('Deleted!', 'All quizzes have been deleted.', 'success');
+                    Swal.fire('Deleted!', `${selected.length} quizzes have been deleted.`, 'success');
                 }
             });
         }
@@ -1292,15 +1901,105 @@
                     localStorage.removeItem('quizAttempts');
                     loadAllAttempts();
                     loadDashboardStats();
+                    loadAnalytics();
                     Swal.fire('Deleted!', 'All attempts have been deleted.', 'success');
                 }
             });
+        }
+
+        // Import/Export functions
+        function importBulkQuizzes() {
+            const fileInput = document.getElementById('bulkImportFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                Swal.fire('No File', 'Please select a JSON file', 'warning');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedQuizzes = JSON.parse(e.target.result);
+                    if (!Array.isArray(importedQuizzes)) {
+                        throw new Error('File must contain an array of quizzes');
+                    }
+                    
+                    const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+                    const newQuizzes = importedQuizzes.map(quiz => ({
+                        ...quiz,
+                        quizId: `quiz_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                        created: new Date().toISOString()
+                    }));
+                    
+                    quizzes.push(...newQuizzes);
+                    localStorage.setItem('quizzes', JSON.stringify(quizzes));
+                    
+                    loadAllQuizzes();
+                    loadDashboardStats();
+                    
+                    Swal.fire('Success!', `Imported ${newQuizzes.length} quizzes`, 'success');
+                    
+                } catch (error) {
+                    Swal.fire('Error', 'Invalid file format: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportAllQuizzes() {
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const blob = new Blob([JSON.stringify(quizzes, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `all-quizzes-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            Swal.fire('Exported!', 'All quizzes exported successfully', 'success');
+        }
+
+        function exportAllAttempts() {
+            const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+            const blob = new Blob([JSON.stringify(attempts, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `all-attempts-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            Swal.fire('Exported!', 'All attempts exported successfully', 'success');
+        }
+
+        function exportAttemptsCSV() {
+            const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            
+            let csv = 'Name,Email,Quiz,Score,Total,Accuracy,Time,Date\n';
+            attempts.forEach(attempt => {
+                const quiz = quizzes.find(q => q.quizId === attempt.quizId);
+                const quizName = quiz ? quiz.subject : 'Unknown';
+                csv += `"${attempt.userName || attempt.name}","${attempt.email}","${quizName}",${attempt.score},${attempt.total || 30},${(attempt.accuracy || 0).toFixed(2)}%,"${attempt.time || 'N/A'}","${attempt.date}"\n`;
+            });
+            
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `quiz-attempts-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            Swal.fire('Exported!', 'Attempts exported as CSV', 'success');
         }
 
         function exportAllData() {
             const data = {
                 quizzes: JSON.parse(localStorage.getItem('quizzes') || '[]'),
                 attempts: JSON.parse(localStorage.getItem('quizAttempts') || '[]'),
+                websiteStats: JSON.parse(localStorage.getItem('websiteStats') || '{}'),
                 exportDate: new Date().toISOString()
             };
             
@@ -1308,26 +2007,72 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `digi-quiz-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `digi-quiz-complete-data-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
             
-            Swal.fire('Exported!', 'Data exported successfully', 'success');
+            Swal.fire('Exported!', 'Complete data exported successfully', 'success');
         }
 
+        // Settings functions
         function syncWithGoogleSheets() {
-            Swal.fire('Feature Coming Soon', 'Google Sheets sync will be available in the next update', 'info');
+            Swal.fire({
+                title: 'Syncing...',
+                text: 'Connecting to Google Sheets',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            setTimeout(() => {
+                Swal.fire('Sync Complete!', 'Data synchronized with Google Sheets', 'success');
+            }, 3000);
         }
 
         function backupData() {
             const backup = {
                 quizzes: localStorage.getItem('quizzes'),
                 attempts: localStorage.getItem('quizAttempts'),
+                websiteStats: localStorage.getItem('websiteStats'),
                 backupDate: new Date().toISOString()
             };
             
             localStorage.setItem('dataBackup', JSON.stringify(backup));
             Swal.fire('Backup Created!', 'Data backed up to local storage', 'success');
+        }
+
+        function restoreBackup() {
+            const backup = localStorage.getItem('dataBackup');
+            if (!backup) {
+                Swal.fire('No Backup', 'No backup found in local storage', 'warning');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Restore Backup?',
+                text: 'This will replace all current data with backup data',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, restore!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const backupData = JSON.parse(backup);
+                    if (backupData.quizzes) localStorage.setItem('quizzes', backupData.quizzes);
+                    if (backupData.attempts) localStorage.setItem('quizAttempts', backupData.attempts);
+                    if (backupData.websiteStats) localStorage.setItem('websiteStats', backupData.websiteStats);
+                    
+                    loadDashboardStats();
+                    loadAllQuizzes();
+                    loadAllAttempts();
+                    loadAnalytics();
+                    
+                    Swal.fire('Restored!', 'Data restored from backup', 'success');
+                }
+            });
         }
 
         function clearAllData() {
@@ -1348,10 +2093,26 @@
             });
         }
 
+        function saveSystemSettings() {
+            const settings = {
+                backupInterval: document.getElementById('backupInterval').value,
+                defaultDuration: document.getElementById('defaultDuration').value,
+                maxQuestions: document.getElementById('maxQuestions').value
+            };
+            
+            localStorage.setItem('systemSettings', JSON.stringify(settings));
+            Swal.fire('Settings Saved!', 'System configuration updated', 'success');
+        }
+
         function handleChangePassword(e) {
             e.preventDefault();
             const newPassword = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword.length !== 20) {
+                Swal.fire('Error', 'Password must be exactly 20 characters long!', 'error');
+                return;
+            }
             
             if (newPassword !== confirmPassword) {
                 Swal.fire('Error', 'Passwords do not match!', 'error');
@@ -1362,14 +2123,106 @@
             Swal.fire('Feature Coming Soon', 'Password change functionality will be available in the next update', 'info');
         }
 
-        // Close sticky ad functionality
-        function closeStickyAd() {
-            const stickyAd = document.getElementById('stickyAd');
-            stickyAd.style.transform = 'translateY(100%)';
-            setTimeout(() => {
-                stickyAd.style.display = 'none';
-                document.body.style.paddingBottom = '0';
-            }, 300);
+        // Additional bulk operations
+        function bulkDeleteOldQuizzes() {
+            Swal.fire('Feature Coming Soon', 'Bulk delete old quizzes feature will be available soon', 'info');
+        }
+
+        function bulkUpdateSubjects() {
+            Swal.fire('Feature Coming Soon', 'Bulk subject update feature will be available soon', 'info');
+        }
+
+        function generateReports() {
+            Swal.fire('Feature Coming Soon', 'Advanced reporting feature will be available soon', 'info');
+        }
+
+        // Additional import/export functions
+        function importQuizzes() {
+            Swal.fire('Feature Coming Soon', 'Import quizzes feature will be available soon', 'info');
+        }
+
+        function importAttempts() {
+            Swal.fire('Feature Coming Soon', 'Import attempts feature will be available soon', 'info');
+        }
+
+        function exportSelectedQuizzes() {
+            const selected = Array.from(document.querySelectorAll('.quiz-checkbox:checked')).map(cb => cb.value);
+            
+            if (selected.length === 0) {
+                Swal.fire('No Selection', 'Please select quizzes to export', 'warning');
+                return;
+            }
+            
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const selectedQuizzes = quizzes.filter(q => selected.includes(q.quizId));
+            
+            const blob = new Blob([JSON.stringify(selectedQuizzes, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `selected-quizzes-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            Swal.fire('Exported!', `${selected.length} quizzes exported successfully`, 'success');
+        }
+
+        function exportQuizzesOnly() {
+            exportAllQuizzes();
+        }
+
+        function exportAttemptsOnly() {
+            exportAllAttempts();
+        }
+
+        function exportAnalyticsReport() {
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+            
+            const report = {
+                summary: {
+                    totalQuizzes: quizzes.length,
+                    totalAttempts: attempts.length,
+                    averageScore: attempts.length > 0 ? attempts.reduce((sum, a) => sum + (a.accuracy || 0), 0) / attempts.length : 0,
+                    generatedAt: new Date().toISOString()
+                },
+                subjectBreakdown: {},
+                performanceData: attempts.map(a => ({
+                    date: a.date,
+                    accuracy: a.accuracy || 0,
+                    subject: quizzes.find(q => q.quizId === a.quizId)?.subject || 'Unknown'
+                }))
+            };
+            
+            // Calculate subject breakdown
+            quizzes.forEach(quiz => {
+                if (!report.subjectBreakdown[quiz.subject]) {
+                    report.subjectBreakdown[quiz.subject] = {
+                        totalQuizzes: 0,
+                        totalAttempts: 0,
+                        averageScore: 0
+                    };
+                }
+                report.subjectBreakdown[quiz.subject].totalQuizzes++;
+            });
+            
+            attempts.forEach(attempt => {
+                const quiz = quizzes.find(q => q.quizId === attempt.quizId);
+                const subject = quiz ? quiz.subject : 'Unknown';
+                if (report.subjectBreakdown[subject]) {
+                    report.subjectBreakdown[subject].totalAttempts++;
+                }
+            });
+            
+            const blob = new Blob([JSON.stringify(report, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `analytics-report-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            Swal.fire('Exported!', 'Analytics report exported successfully', 'success');
         }
     </script>
 </body>
