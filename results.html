@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Results - Digital Quiz Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz Results - Digi Quiz Portal</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,104 +14,268 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .score-circle-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border: 8px solid #e0e7ff;
+            border-radius: 50%;
+            position: relative;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scoreReveal 1.5s ease-out;
+        }
+        
+        @keyframes scoreReveal {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .score-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            color: #1f2937;
+        }
+        
+        .score-content p {
+            margin: 0;
+            color: #6b7280;
+            font-weight: 600;
+        }
+        
+        .stat-badge {
+            background: white;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-badge:hover {
+            transform: translateY(-5px);
+        }
+        
+        .success-badge {
+            border-left: 4px solid #10b981;
+        }
+        
+        .danger-badge {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .warning-badge {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .info-badge {
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .ranking-message-card {
+            background: white;
+            border-radius: 20px;
+        }
+        
+        .solution-item {
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .solution-item.correct {
+            border-left: 4px solid #10b981;
+        }
+        
+        .solution-item.incorrect {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .solution-item.unattempted {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .correct-option {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 600;
+        }
+        
+        .wrong-option {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 600;
+        }
+        
+        .explanation-box {
+            background: #fef9e7;
+            border: 1px solid #fde047;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 25px;
+            margin: 2rem auto;
+            max-width: 1000px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .score-circle-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .score-content h1 {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                margin: 1rem;
+                border-radius: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: rgba(0,0,0,0.1);">
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.html">
                 <i class="fas fa-graduation-cap me-2"></i>Digi Quiz Portal
             </a>
-            <div class="ms-auto">
-                <a href="index.html" class="btn btn-outline-light btn-sm me-2">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">
                     <i class="fas fa-home me-1"></i>Home
                 </a>
-                <a href="leaderboard.html" class="btn btn-outline-light btn-sm">
+                <a class="nav-link" href="leaderboard.html">
                     <i class="fas fa-trophy me-1"></i>Leaderboard
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Results Container -->
-    <div class="container my-5">
-        <!-- Score Circle -->
-        <div class="score-circle-container">
-            <div class="score-circle">
-                <h1 id="scoreDisplay">0%</h1>
-                <p>Final Score</p>
+    <div class="container">
+        <div class="main-container p-4 p-md-5">
+            <!-- Score Reveal -->
+            <div class="text-center mb-5">
+                <div class="score-circle-container">
+                    <div class="score-circle" id="scoreCircle">
+                        <div class="score-content text-center">
+                            <h1 id="scorePercentage">0%</h1>
+                            <p>Score</p>
+                            <p id="scoreRatio" class="small">0 / 0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="fw-bold text-primary mb-2" id="congratsMessage">Congratulations!</h2>
+                <p class="lead text-muted" id="quizDetails">You completed the quiz</p>
             </div>
-        </div>
 
-        <!-- Results Cards -->
-        <div class="row g-4 mb-5">
-            <div class="col-md-3">
-                <div class="card stat-badge success-badge text-center">
-                    <div class="card-body">
-                        <i class="fas fa-check-circle fa-3x text-success mb-2"></i>
-                        <h3 id="correctCount" class="text-success">0</h3>
+            <!-- Statistics Cards -->
+            <div class="row mt-4 g-3 text-center">
+                <div class="col-md-3">
+                    <div class="stat-badge success-badge p-3 rounded shadow-sm">
+                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                        <h3 id="correctCount">0</h3>
                         <p class="mb-0">Correct</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-badge danger-badge text-center">
-                    <div class="card-body">
-                        <i class="fas fa-times-circle fa-3x text-danger mb-2"></i>
-                        <h3 id="incorrectCount" class="text-danger">0</h3>
+                <div class="col-md-3">
+                    <div class="stat-badge danger-badge p-3 rounded shadow-sm">
+                        <i class="fas fa-times-circle fa-2x text-danger mb-2"></i>
+                        <h3 id="incorrectCount">0</h3>
                         <p class="mb-0">Incorrect</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-badge warning-badge text-center">
-                    <div class="card-body">
-                        <i class="fas fa-question-circle fa-3x text-warning mb-2"></i>
-                        <h3 id="unattemptedCount" class="text-warning">0</h3>
+                <div class="col-md-3">
+                    <div class="stat-badge warning-badge p-3 rounded shadow-sm">
+                        <i class="fas fa-question-circle fa-2x text-warning mb-2"></i>
+                        <h3 id="unattemptedCount">0</h3>
                         <p class="mb-0">Unattempted</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-badge info-badge text-center">
-                    <div class="card-body">
-                        <i class="fas fa-clock fa-3x text-info mb-2"></i>
-                        <h3 id="timeTaken" class="text-info">00:00</h3>
+                <div class="col-md-3">
+                    <div class="stat-badge info-badge p-3 rounded shadow-sm">
+                        <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                        <h3 id="timeTaken">00:00</h3>
                         <p class="mb-0">Time Taken</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Ranking Message -->
-        <div class="ranking-message-card mb-5">
-            <i class="fas fa-trophy fa-2x text-warning mb-3"></i>
-            <div id="rankingMessage">Calculating your rank...</div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="text-center mb-5">
-            <a href="index.html" class="btn btn-primary btn-lg me-3">
-                <i class="fas fa-redo me-2"></i>Take Another Quiz
-            </a>
-            <a href="leaderboard.html" class="btn btn-success btn-lg">
-                <i class="fas fa-trophy me-2"></i>View Leaderboard
-            </a>
-        </div>
-
-        <!-- Solutions Section -->
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">
-                    <i class="fas fa-lightbulb me-2"></i>Detailed Solutions
-                </h4>
-            </div>
-            <div class="card-body p-0">
-                <div class="accordion" id="solutionsAccordion">
-                    <!-- Solutions will be loaded dynamically -->
+            <!-- Ranking Message -->
+            <div class="card ranking-message-card text-center p-4 mb-4 shadow-sm border-0 mt-5">
+                <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+                <h3>Great Job Completing the Quiz!</h3>
+                <p class="text-muted">Check your ranking on the leaderboard</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                    <button class="btn btn-warning btn-lg" onclick="viewQuizLeaderboard()">
+                        <i class="fas fa-trophy me-2"></i>View This Quiz Leaderboard
+                    </button>
+                    <a href="leaderboard.html" class="btn btn-outline-warning btn-lg">
+                        <i class="fas fa-list me-2"></i>View All Leaderboards
+                    </a>
                 </div>
+            </div>
+
+            <!-- Share Options -->
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-body text-center">
+                    <h5 class="mb-3">
+                        <i class="fas fa-share-alt me-2 text-primary"></i>Share Your Achievement
+                    </h5>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <button class="btn btn-success" onclick="shareOnWhatsApp()">
+                            <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                        </button>
+                        <button class="btn btn-info text-white" onclick="shareOnTelegram()">
+                            <i class="fab fa-telegram me-2"></i>Telegram
+                        </button>
+                        <button class="btn btn-dark" onclick="shareOnTwitter()">
+                            <i class="fab fa-twitter me-2"></i>Twitter
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-5 d-flex justify-content-center gap-3 flex-wrap">
+                <a href="index.html" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+                <a href="leaderboard.html" class="btn btn-warning btn-lg px-5">
+                    <i class="fas fa-trophy me-2"></i>View Rankings
+                </a>
             </div>
         </div>
     </div>
@@ -122,9 +286,121 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <!-- Custom JS -->
-    <script src="js/utils.js"></script>
-    <script src="js/api.js"></script>
-    <script>/* Results functionality will be implemented */</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', loadResults);
+
+        function loadResults() {
+            const params = new URLSearchParams(window.location.search);
+            const score = parseInt(params.get('score')) || 0;
+            const total = parseInt(params.get('total')) || 0;
+            const accuracy = parseInt(params.get('accuracy')) || 0;
+            const quizTitle = decodeURIComponent(params.get('quizTitle') || 'Quiz');
+            const subject = decodeURIComponent(params.get('subject') || '');
+            const userName = decodeURIComponent(params.get('userName') || 'Student');
+
+            if (total === 0) {
+                Swal.fire({
+                    title: 'No Results Found',
+                    text: 'Please take a quiz first',
+                    icon: 'warning'
+                }).then(() => {
+                    window.location.href = 'index.html';
+                });
+                return;
+            }
+
+            const incorrect = total - score;
+            const unattempted = 0; // Assuming all questions were attempted
+
+            // Update display elements
+            document.getElementById('scorePercentage').textContent = accuracy + '%';
+            document.getElementById('scoreRatio').textContent = `${score} / ${total}`;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('unattemptedCount').textContent = unattempted;
+            
+            // Update quiz details
+            document.getElementById('quizDetails').textContent = `${quizTitle} - ${subject}`;
+            
+            // Personalized congratulations
+            let message = `Well Done, ${userName}!`;
+            if (accuracy >= 90) {
+                message = `Outstanding, ${userName}! 🌟`;
+            } else if (accuracy >= 70) {
+                message = `Great Job, ${userName}! 👏`;
+            } else if (accuracy >= 50) {
+                message = `Good Effort, ${userName}! 💪`;
+            } else {
+                message = `Keep Practicing, ${userName}! 📚`;
+            }
+            document.getElementById('congratsMessage').textContent = message;
+
+            // Color code the circle based on score
+            const circle = document.getElementById('scoreCircle');
+            if (accuracy >= 80) {
+                circle.style.borderColor = '#10b981';
+                circle.style.boxShadow = '0 10px 30px rgba(16, 185, 129, 0.3)';
+            } else if (accuracy >= 60) {
+                circle.style.borderColor = '#f59e0b';
+                circle.style.boxShadow = '0 10px 30px rgba(245, 158, 11, 0.3)';
+            } else {
+                circle.style.borderColor = '#ef4444';
+                circle.style.boxShadow = '0 10px 30px rgba(239, 68, 68, 0.3)';
+            }
+
+            // Store current quiz ID for leaderboard
+            window.currentQuizId = params.get('quizId') || 'all';
+        }
+
+        function viewQuizLeaderboard() {
+            if (window.currentQuizId && window.currentQuizId !== 'all') {
+                window.location.href = `leaderboard.html?quizId=${window.currentQuizId}`;
+            } else {
+                window.location.href = 'leaderboard.html';
+            }
+        }
+
+        function shareOnWhatsApp() {
+            const params = new URLSearchParams(window.location.search);
+            const score = params.get('score') || 0;
+            const total = params.get('total') || 0;
+            const accuracy = params.get('accuracy') || 0;
+            const quizTitle = decodeURIComponent(params.get('quizTitle') || 'Quiz');
+            
+            const text = `🎉 I scored ${score}/${total} (${accuracy}%) in "${quizTitle}" on Digi Quiz Portal! 
+
+Try the quiz yourself and challenge me! 💪
+
+#QuizChallenge #GovernmentExams`;
+            
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function shareOnTelegram() {
+            const params = new URLSearchParams(window.location.search);
+            const score = params.get('score') || 0;
+            const total = params.get('total') || 0;
+            const accuracy = params.get('accuracy') || 0;
+            const quizTitle = decodeURIComponent(params.get('quizTitle') || 'Quiz');
+            
+            const text = `🏆 Quiz Achievement!\n\nI scored ${score}/${total} (${accuracy}%) in "${quizTitle}" on Digi Quiz Portal!\n\nTry it yourself: ${window.location.origin}`;
+            
+            window.open(`https://t.me/share/url?url=${window.location.origin}&text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const params = new URLSearchParams(window.location.search);
+            const score = params.get('score') || 0;
+            const total = params.get('total') || 0;
+            const accuracy = params.get('accuracy') || 0;
+            const quizTitle = decodeURIComponent(params.get('quizTitle') || 'Quiz');
+            
+            const text = `🎯 Just scored ${score}/${total} (${accuracy}%) in "${quizTitle}" on Digi Quiz Portal! 
+
+#QuizChallenge #GovernmentExams #OnlineQuiz`;
+            
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${window.location.origin}`, '_blank');
+        }
+    </script>
 </body>
 </html>
