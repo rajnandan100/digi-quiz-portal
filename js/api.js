@@ -3,7 +3,7 @@
 // Enhanced Version with Complete Functionality
 
 // 🔴 IMPORTANT: Replace this URL with your actual Google Apps Script Web App URL
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz92Q2D5849fRXMfCKTbVDr29uZrDaDnnwH2BNKHLaSk4H78qpztWkOfkzOQQletfdxMw/exec';
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxY3-M2neUJot9nt6t3ZiDZ_a5l5ZZgwAszvY2Dw7Knp9xCdIO76qJkUqBjK9eiimGi7g/exec';
 
 // =========================================================
 // CREATE QUIZ
