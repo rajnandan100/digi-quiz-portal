@@ -192,6 +192,99 @@
                 margin-bottom: 1rem;
             }
         }
+
+        /* Quiz Card Styles */
+        .quiz-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            transition: transform .2s ease, box-shadow .2s ease;
+            height: 100%;
+        }
+        .quiz-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        }
+        .quiz-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: .75rem 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .quiz-card-body {
+            padding: 1rem 1rem 0.75rem 1rem;
+        }
+        .quiz-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0 0 .25rem 0;
+            color: #111827;
+        }
+        .quiz-meta {
+            color: #6b7280;
+            font-size: .9rem;
+        }
+        .meta-dot::before {
+            content: "•";
+            margin: 0 .5rem;
+            color: #9ca3af;
+        }
+        .badge-subject {
+            font-weight: 600;
+            border-radius: 999px;
+            padding: .25rem .6rem;
+            font-size: .75rem;
+        }
+        .badge-gk {
+            background: #eef2ff;
+            color: #4f46e5;
+            border: 1px solid #e0e7ff;
+        }
+        .badge-en {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #d1fae5;
+        }
+        .quiz-card-footer {
+            padding: .75rem 1rem 1rem 1rem;
+        }
+        .btn-start {
+            border: none;
+            font-weight: 600;
+            padding: .55rem .9rem;
+            border-radius: 10px;
+        }
+        .btn-start-gk {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+        }
+        .btn-start-gk:hover {
+            filter: brightness(0.95);
+            color: #fff;
+        }
+        .btn-start-en {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+        }
+        .btn-start-en:hover {
+            filter: brightness(0.95);
+            color: #fff;
+        }
+        .filter-bar .form-select {
+            min-width: 200px;
+        }
+
+
+
+
+
+
+
+        
     </style>
 </head>
 <body>
@@ -383,18 +476,31 @@
                 <p class="text-muted">Choose from our collection of practice tests</p>
             </div>
 
-            <div class="filter-bar d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+
+
+
+            
+                      <div class="filter-bar d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                 <div class="filter-group d-flex gap-2 flex-wrap">
                     <select class="form-select form-select-sm" id="filterSubject" style="width: auto;">
                         <option value="">All Subjects</option>
                         <option value="General Knowledge">General Knowledge</option>
                         <option value="English">English</option>
                     </select>
+                    <select class="form-select form-select-sm" id="filterDate" style="width: auto;">
+                        <option value="">All Dates</option>
+                        <!-- Filled dynamically from quizzes -->
+                    </select>
                 </div>
                 <div class="quiz-count badge bg-primary fs-6 px-3 py-2">
                     <i class="fas fa-clipboard-list me-2"></i><span id="quizCount">0</span> Quizzes
                 </div>
             </div>
+
+
+                
+                
 
             <div class="row g-4" id="quizCards">
                 <div class="col-12 text-center py-5">
@@ -680,13 +786,14 @@
 
 
 
-
 <script>
   let ALL_QUIZZES = [];
+  let UNIQUE_DATES = [];
 
   document.addEventListener('DOMContentLoaded', () => {
     loadQuizzesToHome();
     document.getElementById('filterSubject').addEventListener('change', applyFilters);
+    document.getElementById('filterDate').addEventListener('change', applyFilters);
   });
 
   async function loadQuizzesToHome() {
@@ -694,7 +801,7 @@
     const countEl = document.getElementById('quizCount');
 
     try {
-      // Show loading state
+      // Loading state
       cardsWrap.innerHTML = `
         <div class="col-12 text-center py-5">
           <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
@@ -703,12 +810,21 @@
           <p class="mt-3 text-muted fw-semibold">Loading available quizzes...</p>
         </div>`;
 
-      // Fetch from Google Sheets via your API
-      const list = await window.QuizAPI.getQuizzes();  // returns array of {id,title,subject,duration,scheduledDate,...}
+      // Fetch quizzes from backend
+      const list = await window.QuizAPI.getQuizzes();
       ALL_QUIZZES = Array.isArray(list) ? list : [];
 
-      // Sort by scheduledDate desc
+      // Sort newest first by scheduledDate
       ALL_QUIZZES.sort((a, b) => new Date(b.scheduledDate) - new Date(a.scheduledDate));
+
+      // Build date filter options from quizzes (unique dates, latest first)
+      UNIQUE_DATES = [...new Set(
+        ALL_QUIZZES
+          .map(q => q.scheduledDate)
+          .filter(Boolean)
+      )].sort((a,b) => new Date(b) - new Date(a));
+
+      fillDateFilter(UNIQUE_DATES);
 
       renderQuizCards(ALL_QUIZZES);
       countEl.textContent = ALL_QUIZZES.length;
@@ -718,15 +834,43 @@
         <div class="col-12 text-center py-5">
           <i class="fas fa-triangle-exclamation fa-2x text-danger mb-3"></i>
           <p class="text-muted fw-semibold mb-1">Could not load quizzes.</p>
-          <small class="text-muted">Please try again in a moment.</small>
+          <small class="text-muted">Please try again later.</small>
         </div>`;
       document.getElementById('quizCount').textContent = '0';
     }
   }
 
+  function fillDateFilter(dates) {
+    const filterDate = document.getElementById('filterDate');
+    filterDate.innerHTML = '<option value="">All Dates</option>';
+    dates.forEach(d => {
+      const dt = new Date(d);
+      const opt = document.createElement('option');
+      opt.value = dt.toISOString().split('T')[0];
+      opt.textContent = dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      filterDate.appendChild(opt);
+    });
+  }
+
   function applyFilters() {
     const subj = document.getElementById('filterSubject').value;
-    const filtered = subj ? ALL_QUIZZES.filter(q => q.subject === subj) : ALL_QUIZZES;
+    const date = document.getElementById('filterDate').value;
+
+    let filtered = ALL_QUIZZES.slice();
+
+    if (subj) filtered = filtered.filter(q => q.subject === subj);
+    if (date) {
+      filtered = filtered.filter(q => {
+        const qd = q.scheduledDate ? new Date(q.scheduledDate) : null;
+        if (!qd) return false;
+        // compare yyyy-mm-dd
+        return qd.toISOString().split('T')[0] === date;
+      });
+    }
+
+    // Always newest first
+    filtered.sort((a, b) => new Date(b.scheduledDate) - new Date(a.scheduledDate));
+
     renderQuizCards(filtered);
     document.getElementById('quizCount').textContent = filtered.length;
   }
@@ -742,41 +886,50 @@
       return;
     }
 
-    cardsWrap.innerHTML = list.map(q => {
-      const dateStr = q.scheduledDate
-        ? new Date(q.scheduledDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-        : '—';
-      const duration = q.duration ? `${q.duration} min` : '—';
-      const subjectBadge = q.subject ? q.subject : 'General';
-
-      return `
-        <div class="col-lg-4 col-md-6">
-          <div class="card shadow-sm h-100">
-            <div class="card-body d-flex flex-column">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge bg-primary">${subjectBadge}</span>
-                <span class="text-muted small"><i class="fas fa-calendar-alt me-1"></i>${dateStr}</span>
-              </div>
-              <h5 class="card-title mb-2">${escapeHTML(q.title || 'Untitled Quiz')}</h5>
-              <p class="text-muted small mb-3">
-                <i class="fas fa-clock me-1"></i>${duration} • 
-                <i class="fas fa-list-ol ms-2 me-1"></i>${q.questionCount || '—'} Qs
-              </p>
-              <div class="mt-auto d-flex gap-2">
-                <a href="quiz.html?quizId=${encodeURIComponent(q.id)}" class="btn btn-sm btn-primary">
-                  <i class="fas fa-play me-1"></i>Start
-                </a>
-                <a href="leaderboard.html?quizId=${encodeURIComponent(q.id)}" class="btn btn-sm btn-outline-secondary">
-                  <i class="fas fa-trophy me-1"></i>Leaderboard
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
+    cardsWrap.innerHTML = list.map(q => buildQuizCard(q)).join('');
   }
 
-  // Basic HTML escape for safety
+  function buildQuizCard(q) {
+    // Data formatting
+    const dateStr = q.scheduledDate
+      ? new Date(q.scheduledDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+      : '—';
+    const duration = q.duration ? `${q.duration} min` : '—';
+    const questions = q.questionCount != null ? q.questionCount : '—';
+
+    const isEnglish = (q.subject || '').toLowerCase() === 'english';
+    const badgeClass = isEnglish ? 'badge-en' : 'badge-gk';
+    const startBtnClass = isEnglish ? 'btn-start-en' : 'btn-start-gk';
+
+    return `
+      <div class="col-lg-4 col-md-6">
+        <div class="quiz-card h-100">
+          <div class="quiz-card-header">
+            <span class="badge-subject ${badgeClass}">
+              <i class="fas fa-book-open me-1"></i>${escapeHTML(q.subject || 'General')}
+            </span>
+            <span class="text-muted small">
+              <i class="fas fa-calendar-alt me-1"></i>${dateStr}
+            </span>
+          </div>
+          <div class="quiz-card-body">
+            <h5 class="quiz-title">${escapeHTML(q.title || 'Untitled Quiz')}</h5>
+            <div class="quiz-meta">
+              <span><i class="fas fa-clock me-1"></i>${duration}</span>
+              <span class="meta-dot"></span>
+              <span><i class="fas fa-list-ol me-1"></i>${questions} Questions</span>
+            </div>
+          </div>
+          <div class="quiz-card-footer">
+            <a href="quiz.html?quizId=${encodeURIComponent(q.id)}" class="btn btn-start ${startBtnClass}">
+              <i class="fas fa-play me-1"></i>Start Quiz
+            </a>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // Basic HTML escape
   function escapeHTML(s) {
     return (s || '').replace(/[&<>"']/g, m => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
