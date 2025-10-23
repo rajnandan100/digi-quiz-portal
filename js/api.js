@@ -6,7 +6,7 @@
 class QuizAPI {
   constructor() {
     // Replace with your actual deployed Google Apps Script Web App URL
-    this.baseUrl = 'https://script.google.com/macros/s/AKfycbzp5cGwp8yZmnpO5LCuA4YCe37BnIcWvttBr1XFS9t8VrFKNbWEGkuxrc1IiNwLIe5NeA/exec';
+    this.baseUrl = 'https://script.google.com/macros/s/AKfycbxNu8eHU91qcXG9fNLsL4X0nIUWMKIi5q-cuVBi5h4mWZ51piLrJUPKoSXWePAzDw7qtg/exec';
     console.log('🚀 Digi Quiz Portal API initialized');
   }
 
