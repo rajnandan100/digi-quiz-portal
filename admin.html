@@ -495,9 +495,9 @@
                         </thead>
                         <tbody id="allQuizzesTable">
                           <tr>
-                            <td colspan="6" class="text-center py-4"
-                              >Loading quizzes...</td
-                            >
+                            <td colspan="6" class="text-center py-4">
+                              Loading quizzes...
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -665,7 +665,6 @@
   <script>
     const ADMIN_PASSWORD = 'Dq#2025@Admin$Portal!';
 
-    // DOM elements shortcut
     const loginOverlay = document.getElementById('loginOverlay');
     const adminContent = document.getElementById('adminContent');
     const loginError = document.getElementById('loginError');
@@ -685,7 +684,6 @@
     const quizAttempts = document.getElementById('quizAttempts');
     const userRatingInput = document.getElementById('userRatingInput');
 
-    // Authentication
     document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
@@ -717,7 +715,6 @@
       location.reload();
     }
 
-    // Navigation
     document.querySelectorAll('[data-section]').forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -759,7 +756,6 @@
       loadAllQuizzes();
     }
 
-    // Stats Form Handler
     statsForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const stats = {
@@ -776,7 +772,6 @@
       });
     });
 
-    // Validate JSON function
     function validateJSON() {
       try {
         const raw = questionsJson.value.trim();
@@ -822,7 +817,6 @@
       }
     }
 
-    // Update question statistics
     function updateQuestionStats() {
       try {
         const raw = questionsJson.value.trim();
@@ -841,7 +835,6 @@
       }
     }
 
-    // Copy template
     function copyTemplate() {
       const tpl = `[
   {
@@ -866,7 +859,6 @@
       });
     }
 
-    // Create Quiz form submit handler
     quizCreationForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const date = document.getElementById('quizDateInput').value;
@@ -904,9 +896,9 @@
         title: `${subject} Quiz - ${new Date(date).toLocaleDateString('en-IN')}`,
         description: '',
         subject,
-        duration: Math.ceil(
-          questions.reduce((s, q) => s + (q.timeAllocation || 60), 0) / 60
-        ) || 30,
+        duration:
+          Math.ceil(questions.reduce((s, q) => s + (q.timeAllocation || 60), 0) / 60) ||
+          30,
         scheduledDate: date,
         isActive: true,
         questions: questions.map((q) => ({
@@ -956,7 +948,6 @@
       }
     });
 
-    // Load all quizzes (local mirror)
     function loadAllQuizzes() {
       const list = JSON.parse(localStorage.getItem('adminQuizzes') || '[]');
       if (list.length === 0) {
@@ -983,7 +974,6 @@
         .join('');
     }
 
-    // Delete a quiz
     function deleteQuiz(id) {
       Swal.fire({
         title: 'Delete Quiz?',
@@ -1003,7 +993,6 @@
       });
     }
 
-    // Delete all quizzes
     function deleteAllQuizzes() {
       Swal.fire({
         title: 'Delete All Quizzes?',
@@ -1020,20 +1009,12 @@
       });
     }
 
-    // Placeholder for attempts tab
     function loadAllAttempts() {
       const tbody = document.getElementById('allAttemptsTable');
       tbody.innerHTML =
         '<tr><td colspan="8" class="text-center py-4">No attempts found</td></tr>';
     }
 
-    // Logout function
-    function adminLogout() {
-      localStorage.removeItem('adminAuthenticated');
-      location.reload();
-    }
-
-    // API Connection Status Check
     async function checkAPIConnection() {
       apiStatus.textContent = 'API Status: Checking...';
       apiStatus.className = '';
