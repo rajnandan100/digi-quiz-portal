@@ -86,6 +86,21 @@
             gap: 0.5rem;
             justify-content: space-between;
             margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .navigation-buttons .btn {
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        @media (max-width: 768px) {
+            .navigation-buttons {
+                flex-direction: column;
+            }
+            .navigation-buttons .btn {
+                margin-bottom: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -154,8 +169,11 @@
                             <button class="btn btn-primary" id="nextBtn">
                                 Next<i class="fas fa-arrow-right ms-2"></i>
                             </button>
+                            <button class="btn btn-warning" id="submitEarlyBtn">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Now
+                            </button>
                             <button class="btn btn-success" id="submitBtn" style="display: none;">
-                                <i class="fas fa-check me-2"></i>Submit Quiz
+                                <i class="fas fa-check me-2"></i>Final Submit
                             </button>
                         </div>
                     </div>
@@ -207,9 +225,13 @@
                 document.getElementById('quizSubject').textContent = QUIZ.title + ' • ' + (QUIZ.subject || '');
                 document.getElementById('totalQuestions').textContent = QUIZ.questions.length;
 
+                // Event listeners
                 document.getElementById('prevBtn').addEventListener('click', goToPrevious);
                 document.getElementById('nextBtn').addEventListener('click', goToNext);
-                document.getElementById('submitBtn').addEventListener('click', submitQuiz);
+                
+                // Submit handlers with warnings
+                document.getElementById('submitEarlyBtn').addEventListener('click', confirmEarlySubmit);
+                document.getElementById('submitBtn').addEventListener('click', confirmFinalSubmit);
 
                 document.getElementById('loadingState').style.display = 'none';
                 document.getElementById('quizContent').style.display = 'block';
@@ -248,11 +270,21 @@
             const progress = Math.round(((currentIndex + 1) / QUIZ.questions.length) * 100);
             document.getElementById('progressBar').style.width = progress + '%';
 
+            // Navigation button states
             document.getElementById('prevBtn').disabled = currentIndex === 0;
             
             const isLastQuestion = currentIndex === QUIZ.questions.length - 1;
-            document.getElementById('nextBtn').style.display = isLastQuestion ? 'none' : 'inline-block';
-            document.getElementById('submitBtn').style.display = isLastQuestion ? 'inline-block' : 'none';
+            
+            // Show different buttons based on position
+            if (isLastQuestion) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitEarlyBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitEarlyBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
         }
 
         // Select an answer
@@ -277,6 +309,56 @@
             }
         }
 
+        // Confirm early submission
+        function confirmEarlySubmit() {
+            const unanswered = answers.filter(a => a === null).length;
+            let warningText = 'Are you sure you want to submit your quiz now?';
+            
+            if (unanswered > 0) {
+                warningText += ` You have ${unanswered} unanswered question(s). These will be marked as incorrect.`;
+            }
+            
+            Swal.fire({
+                icon: 'warning',
+                title: 'Submit Quiz Early?',
+                text: warningText,
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, Submit Now',
+                cancelButtonText: 'Continue Quiz'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitQuiz();
+                }
+            });
+        }
+
+        // Confirm final submission
+        function confirmFinalSubmit() {
+            const unanswered = answers.filter(a => a === null).length;
+            let warningText = 'Are you sure you want to finish your quiz?';
+            
+            if (unanswered > 0) {
+                warningText += ` You have ${unanswered} unanswered question(s).`;
+            }
+            
+            Swal.fire({
+                icon: 'question',
+                title: 'Final Submit?',
+                text: warningText,
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, Submit',
+                cancelButtonText: 'Review Answers'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitQuiz();
+                }
+            });
+        }
+
         // Start countdown timer
         function startTimer(seconds) {
             let timeLeft = seconds;
@@ -292,17 +374,26 @@
                 
                 if (timeLeft < 0) {
                     clearInterval(timerInterval);
-                    submitQuiz();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Time Up!',
+                        text: 'Your quiz time has ended. Submitting automatically.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        submitQuiz();
+                    });
                 }
             }, 1000);
         }
 
-        // Submit quiz and show results
+        // Submit quiz and redirect to results
         async function submitQuiz() {
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
 
+            // Calculate results
             let correctAnswers = 0;
             QUIZ.questions.forEach((question, index) => {
                 if (answers[index] === question.correctAnswer) {
@@ -310,8 +401,12 @@
                 }
             });
 
-            const accuracy = Math.round((correctAnswers / QUIZ.questions.length) * 100);
+            const totalQuestions = QUIZ.questions.length;
+            const accuracy = Math.round((correctAnswers / totalQuestions) * 100);
+            const quizTitle = encodeURIComponent(QUIZ.title || "Quiz");
+            const subject = encodeURIComponent(QUIZ.subject || "");
 
+            // Save attempt to backend
             const user = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
             
             try {
@@ -321,26 +416,17 @@
                     quizId: QUIZ.id,
                     quizTitle: QUIZ.title,
                     score: correctAnswers,
-                    totalQuestions: QUIZ.questions.length,
+                    totalQuestions: totalQuestions,
                     accuracy: accuracy
                 });
             } catch (error) {
                 console.log('Could not save attempt:', error);
             }
 
-            Swal.fire({
-                title: 'Quiz Completed!',
-                html: `
-                    <div class="text-start">
-                        <p><strong>Score:</strong> ${correctAnswers}/${QUIZ.questions.length}</p>
-                        <p><strong>Accuracy:</strong> ${accuracy}%</p>
-                    </div>
-                `,
-                icon: accuracy >= 60 ? 'success' : 'info',
-                confirmButtonText: 'Go Home'
-            }).then(() => {
-                window.location.href = 'index.html';
-            });
+            // Redirect to result.html with parameters
+            const resultUrl = `result.html?score=${correctAnswers}&total=${totalQuestions}&accuracy=${accuracy}&quizTitle=${quizTitle}&subject=${subject}&userName=${encodeURIComponent(user.name || 'Anonymous')}`;
+            
+            window.location.href = resultUrl;
         }
     </script>
 </body>
