@@ -939,8 +939,11 @@ document.getElementById('preQuizForm').addEventListener('submit', function(e) {
     cardsWrap.innerHTML = list.map(q => buildQuizCard(q)).join('');
   }
 
-  function buildQuizCard(q) {
-    // Data formatting
+
+
+
+
+function buildQuizCard(q) {
     const dateStr = q.scheduledDate
       ? new Date(q.scheduledDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
       : '—';
@@ -971,14 +974,61 @@ document.getElementById('preQuizForm').addEventListener('submit', function(e) {
             </div>
           </div>
           <div class="quiz-card-footer">
-            <a href="quiz.html?quizId=${encodeURIComponent(q.id)}" class="btn btn-start ${startBtnClass}">
+            <button onclick="startQuiz('${q.id}')" class="btn btn-start ${startBtnClass}">
               <i class="fas fa-play me-1"></i>Start Quiz
-            </a>
+            </button>
           </div>
         </div>
       </div>`;
-  }
+}
 
+// Add this new function after buildQuizCard
+function startQuiz(quizId) {
+    const userInfo = sessionStorage.getItem('userInfo');
+    
+    if (userInfo) {
+        // User info exists, go to quiz
+        window.location.href = `quiz.html?quizId=${quizId}`;
+    } else {
+        // Ask for user details
+        Swal.fire({
+            title: 'Enter Your Details',
+            html: `
+                <input id="swal-name" class="form-control mb-2" placeholder="Full Name" required>
+                <input id="swal-email" class="form-control" type="email" placeholder="Email Address" required>
+            `,
+            confirmButtonText: 'Start Quiz',
+            showCancelButton: true,
+            preConfirm: () => {
+                const name = document.getElementById('swal-name').value;
+                const email = document.getElementById('swal-email').value;
+                
+                if (!name || !email || !email.includes('@')) {
+                    Swal.showValidationMessage('Please fill valid details');
+                    return false;
+                }
+                return { name, email };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sessionStorage.setItem('userInfo', JSON.stringify(result.value));
+                window.location.href = `quiz.html?quizId=${quizId}`;
+            }
+        });
+    }
+}
+
+
+
+ 
+
+
+
+
+
+
+
+    
   // Basic HTML escape
   function escapeHTML(s) {
     return (s || '').replace(/[&<>"']/g, m => ({
