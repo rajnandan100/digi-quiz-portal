@@ -6,7 +6,7 @@
 class QuizAPI {
   constructor() {
     // Replace with your actual deployed Google Apps Script Web App URL
-    this.baseUrl = 'https://script.google.com/macros/s/AKfycbxfCjTyWGyshGNqKXv22ez8usEaoR-QKv9oxWih8sYb5KRG-R1ZxcZMYB0lrKpDFDi9eg/exec';
+    this.baseUrl = 'https://script.google.com/macros/s/AKfycbyyt0G6mQvnjnzlMyOYQUvPnheZYPz3kn6zOjSpkCeH_tTKvVm1tZ1lZfmMNnSZ8XheKw/exec';
     console.log('🚀 Digi Quiz Portal API initialized');
   }
 
@@ -57,16 +57,23 @@ class QuizAPI {
     return await this.makeRequest('initDatabase');
   }
 
- async saveQuiz(quiz) {
+
+
+
+async saveQuiz(quiz) {
   try {
-    // Convert quiz data to URL-safe string
-    const quizString = encodeURIComponent(JSON.stringify(quiz));
+    console.log('📡 Saving quiz via GET request...');
     
-    // Use GET request instead of POST
-    const url = `${this.baseUrl}?action=saveQuiz&quizData=${quizString}`;
+    // Encode quiz data for URL
+    const quizJSON = JSON.stringify(quiz);
+    const encodedData = encodeURIComponent(quizJSON);
+    
+    // Use GET request to avoid CORS preflight
+    const url = `${this.baseUrl}?action=saveQuiz&data=${encodedData}`;
     const response = await fetch(url);
     const result = await response.json();
     
+    console.log('✅ Quiz save result:', result);
     return result;
   } catch (error) {
     console.error('❌ Save quiz failed:', error);
@@ -74,6 +81,14 @@ class QuizAPI {
   }
 }
 
+
+
+
+
+
+
+
+  
 
   async getQuizzes() {
     try {
