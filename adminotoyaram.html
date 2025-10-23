@@ -1570,19 +1570,39 @@ function loadAnalytics() {
     // Analytics loading code here
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
 // Load all quizzes (placeholder)
 // FIXED: Complete implementation of loadAllQuizzes function
+
+
+// CORRECTED: loadAllQuizzes function for your HTML structure
 async function loadAllQuizzes() {
     console.log('📋 Loading all quizzes for management...');
     
-    const quizzesTableBody = document.getElementById('quizzesTableBody');
-    const loadingDiv = document.getElementById('quizzesLoading');
-    const errorDiv = document.getElementById('quizzesError');
+    const quizzesTableBody = document.getElementById('allQuizzesTable');
     
     // Show loading state
-    if (loadingDiv) loadingDiv.style.display = 'block';
-    if (errorDiv) errorDiv.style.display = 'none';
-    if (quizzesTableBody) quizzesTableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading quizzes...</td></tr>';
+    if (quizzesTableBody) {
+        quizzesTableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><i class="fas fa-spinner fa-spin me-2"></i>Loading quizzes...</td></tr>';
+    }
     
     try {
         let quizzes = [];
@@ -1625,21 +1645,39 @@ async function loadAllQuizzes() {
             console.log(`📱 Using ${quizzes.length} quizzes from localStorage`);
         }
         
-        // Hide loading state
-        if (loadingDiv) loadingDiv.style.display = 'none';
-        
         // Populate the table
         if (quizzesTableBody) {
             if (quizzes.length === 0) {
                 quizzesTableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
-                            <i class="fas fa-inbox fa-2x mb-2"></i><br>
-                            No quizzes found. Create your first quiz!
+                        <td colspan="8" class="text-center text-muted py-5">
+                            <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                            <h5>No quizzes found</h5>
+                            <p class="mb-0">Create your first quiz to get started!</p>
                         </td>
                     </tr>
                 `;
             } else {
+                // Get attempts data for counting
+                let attempts = [];
+                try {
+                    const attemptsResponse = await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getLeaderboard&quizId=all&t=${Date.now()}`, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' },
+                        mode: 'cors'
+                    });
+                    
+                    if (attemptsResponse.ok) {
+                        const attemptsResult = await attemptsResponse.json();
+                        if (attemptsResult.status === 'success' && attemptsResult.data && attemptsResult.data.leaderboard) {
+                            attempts = attemptsResult.data.leaderboard;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Could not fetch attempts data:', e);
+                    attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
+                }
+                
                 quizzesTableBody.innerHTML = quizzes.map((quiz, index) => {
                     // Handle different property name formats
                     const quizId = quiz.quizId || quiz.quiz_id || quiz.quizID || `quiz_${index}`;
@@ -1647,32 +1685,44 @@ async function loadAllQuizzes() {
                     const subject = quiz.subject || 'Unknown Subject';
                     const totalQuestions = quiz.totalQuestions || quiz.total_questions || (quiz.questions ? quiz.questions.length : 0);
                     const timeLimit = quiz.timeLimit || quiz.time_limit || 'N/A';
-                    const created = quiz.created || quiz.createdAt || new Date().toISOString();
+                    
+                    // Count attempts for this quiz
+                    const quizAttempts = attempts.filter(attempt => 
+                        (attempt.quizId || attempt.quiz_id) === quizId
+                    ).length;
                     
                     // Format date nicely
                     const formattedDate = formatDate(date);
-                    const formattedCreated = formatDateTime(created);
                     
                     return `
                         <tr data-quiz-id="${quizId}">
-                            <td><strong>${quizId}</strong></td>
-                            <td>${formattedDate}</td>
+                            <td class="text-center">
+                                <input type="checkbox" class="quiz-checkbox" value="${quizId}">
+                            </td>
+                            <td><strong>${index + 1}</strong></td>
+                            <td><span class="badge bg-info">${formattedDate}</span></td>
                             <td><span class="badge bg-primary">${subject}</span></td>
-                            <td class="text-center"><span class="badge bg-info">${totalQuestions}</span></td>
-                            <td class="text-center">${timeLimit} min</td>
-                            <td><small class="text-muted">${formattedCreated}</small></td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="viewQuiz('${quizId}')" title="View Details">
+                            <td class="text-center">
+                                <span class="badge bg-success">${totalQuestions}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-warning text-dark">${timeLimit} min</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-secondary">${quizAttempts}</span>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="viewQuiz('${quizId}')" title="View Details">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-success" onclick="editQuiz('${quizId}')" title="Edit Quiz">
+                                    <button class="btn btn-outline-success btn-sm" onclick="editQuiz('${quizId}')" title="Edit Quiz">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-warning" onclick="duplicateQuiz('${quizId}')" title="Duplicate Quiz">
+                                    <button class="btn btn-outline-warning btn-sm" onclick="duplicateQuiz('${quizId}')" title="Duplicate Quiz">
                                         <i class="fas fa-copy"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${quizId}')" title="Delete Quiz">
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteQuiz('${quizId}')" title="Delete Quiz">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -1685,38 +1735,21 @@ async function loadAllQuizzes() {
             }
         }
         
-        // Update quiz count display
-        const quizCountElement = document.getElementById('totalQuizzesInManage');
-        if (quizCountElement) {
-            quizCountElement.textContent = quizzes.length;
-        }
-        
         return quizzes;
         
     } catch (error) {
         console.error('❌ Error loading quizzes:', error);
         
-        // Hide loading, show error
-        if (loadingDiv) loadingDiv.style.display = 'none';
-        if (errorDiv) {
-            errorDiv.style.display = 'block';
-            errorDiv.innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Failed to load quizzes: ${error.message}
-                    <button class="btn btn-sm btn-outline-danger ms-2" onclick="loadAllQuizzes()">
-                        <i class="fas fa-refresh"></i> Retry
-                    </button>
-                </div>
-            `;
-        }
-        
         if (quizzesTableBody) {
             quizzesTableBody.innerHTML = `
                 <tr>
-                    <td colspan="7" class="text-center text-danger py-4">
-                        <i class="fas fa-exclamation-triangle fa-2x mb-2"></i><br>
-                        Error loading quizzes: ${error.message}
+                    <td colspan="8" class="text-center text-danger py-5">
+                        <i class="fas fa-exclamation-triangle fa-2x mb-3 d-block text-danger"></i>
+                        <h5 class="text-danger">Error loading quizzes</h5>
+                        <p class="mb-3">${error.message}</p>
+                        <button class="btn btn-outline-primary" onclick="loadAllQuizzes()">
+                            <i class="fas fa-refresh me-1"></i>Try Again
+                        </button>
                     </td>
                 </tr>
             `;
@@ -1726,6 +1759,188 @@ async function loadAllQuizzes() {
     }
 }
 
+// HELPER FUNCTIONS for your HTML structure
+function formatDate(dateString) {
+    if (!dateString || dateString === 'N/A') return 'N/A';
+    
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-IN', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    } catch (e) {
+        return dateString;
+    }
+}
+
+// QUIZ ACTION FUNCTIONS
+function viewQuiz(quizId) {
+    console.log('👁️ Viewing quiz:', quizId);
+    
+    // Find the quiz data
+    const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+    const quiz = quizzes.find(q => q.quizId === quizId);
+    
+    if (quiz) {
+        const questionsCount = quiz.questions ? quiz.questions.length : 0;
+        Swal.fire({
+            title: 'Quiz Details',
+            html: `
+                <div style="text-align: left;">
+                    <p><strong>ID:</strong> ${quiz.quizId}</p>
+                    <p><strong>Subject:</strong> ${quiz.subject}</p>
+                    <p><strong>Date:</strong> ${quiz.date}</p>
+                    <p><strong>Questions:</strong> ${questionsCount}</p>
+                    <p><strong>Time Limit:</strong> ${quiz.timeLimit} minutes</p>
+                    <p><strong>Created:</strong> ${formatDate(quiz.created)}</p>
+                </div>
+            `,
+            icon: 'info',
+            width: 500
+        });
+    } else {
+        Swal.fire('Error', 'Quiz not found!', 'error');
+    }
+}
+
+function editQuiz(quizId) {
+    console.log('✏️ Editing quiz:', quizId);
+    Swal.fire({
+        title: 'Edit Quiz',
+        text: `Edit functionality for ${quizId} - Coming soon!`,
+        icon: 'info'
+    });
+}
+
+function duplicateQuiz(quizId) {
+    console.log('📋 Duplicating quiz:', quizId);
+    Swal.fire({
+        title: 'Duplicate Quiz',
+        text: `Duplicate functionality for ${quizId} - Coming soon!`,
+        icon: 'info'
+    });
+}
+
+function deleteQuiz(quizId) {
+    console.log('🗑️ Deleting quiz:', quizId);
+    
+    Swal.fire({
+        title: 'Delete Quiz?',
+        text: `Are you sure you want to delete ${quizId}? This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Remove from localStorage
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const updatedQuizzes = quizzes.filter(q => q.quizId !== quizId);
+            localStorage.setItem('quizzes', JSON.stringify(updatedQuizzes));
+            
+            Swal.fire(
+                'Deleted!',
+                `Quiz ${quizId} has been deleted locally.`,
+                'success'
+            );
+            
+            // Reload quizzes after deletion
+            loadAllQuizzes();
+            loadDashboardStats(); // Update dashboard
+        }
+    });
+}
+
+// SELECT ALL FUNCTIONALITY
+function selectAllQuizzes() {
+    const checkboxes = document.querySelectorAll('.quiz-checkbox');
+    const selectAllBtn = event.target;
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+    
+    selectAllBtn.innerHTML = '<i class="fas fa-square me-1"></i>Deselect All';
+    selectAllBtn.onclick = deselectAllQuizzes;
+}
+
+function deselectAllQuizzes() {
+    const checkboxes = document.querySelectorAll('.quiz-checkbox');
+    const deselectAllBtn = event.target;
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    deselectAllBtn.innerHTML = '<i class="fas fa-check-square me-1"></i>Select All';
+    deselectAllBtn.onclick = selectAllQuizzes;
+}
+
+function toggleSelectAll() {
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+    const checkboxes = document.querySelectorAll('.quiz-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
+}
+
+function deleteSelectedQuizzes() {
+    const selectedQuizzes = Array.from(document.querySelectorAll('.quiz-checkbox:checked')).map(cb => cb.value);
+    
+    if (selectedQuizzes.length === 0) {
+        Swal.fire('No Selection', 'Please select at least one quiz to delete.', 'warning');
+        return;
+    }
+    
+    Swal.fire({
+        title: 'Delete Selected Quizzes?',
+        text: `Are you sure you want to delete ${selectedQuizzes.length} selected quiz(es)? This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete them!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Remove from localStorage
+            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            const updatedQuizzes = quizzes.filter(q => !selectedQuizzes.includes(q.quizId));
+            localStorage.setItem('quizzes', JSON.stringify(updatedQuizzes));
+            
+            Swal.fire(
+                'Deleted!',
+                `${selectedQuizzes.length} quiz(es) have been deleted.`,
+                'success'
+            );
+            
+            // Reload quizzes after deletion
+            loadAllQuizzes();
+            loadDashboardStats(); // Update dashboard
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
 // HELPER FUNCTIONS for date formatting
 function formatDate(dateString) {
     if (!dateString || dateString === 'N/A') return 'N/A';
