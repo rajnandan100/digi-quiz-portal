@@ -36,7 +36,7 @@
             font-weight: 600;
         }
         
-        .quiz-navbar .user-info, .quiz-navbar .subject-info {
+        .quiz-navbar .subject-info {
             font-size: 0.95rem;
         }
         
@@ -177,6 +177,36 @@
             color: #1f2937;
             min-height: 60px;
             line-height: 1.7;
+        }
+        
+        /* Motivation Card */
+        .motivation-card {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-left: 4px solid #06b6d4;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .motivation-card .greeting {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+        
+        .motivation-card .message {
+            color: #475569;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .motivation-card .icon {
+            font-size: 2rem;
+            color: #06b6d4;
+            margin-bottom: 10px;
         }
         
         /* Options Container */
@@ -387,7 +417,7 @@
             }
             
             .quiz-main-container {
-                margin-top: 120px;
+                margin-top: 100px;
                 padding: 10px;
             }
             
@@ -397,6 +427,18 @@
             
             .question-text {
                 font-size: 1.1rem;
+            }
+            
+            .motivation-card {
+                padding: 15px;
+            }
+            
+            .motivation-card .greeting {
+                font-size: 1.1rem;
+            }
+            
+            .motivation-card .message {
+                font-size: 0.9rem;
             }
             
             .option-item {
@@ -448,7 +490,7 @@
             }
             
             .quiz-main-container {
-                margin-top: 140px;
+                margin-top: 120px;
             }
             
             .question-numbers {
@@ -471,10 +513,6 @@
     <nav class="quiz-navbar">
         <div class="container-fluid">
             <div class="d-flex justify-content-between align-items-center w-100 flex-wrap gap-2">
-                <div class="user-info">
-                    <i class="fas fa-user-circle me-2"></i>
-                    <span id="userName">User</span>
-                </div>
                 <div class="subject-info">
                     <i class="fas fa-book me-2"></i>
                     <span id="subjectName">Subject</span>
@@ -573,6 +611,19 @@
                     </div>
                 </div>
                 
+                <!-- Motivation Card -->
+                <div class="motivation-card">
+                    <div class="icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="greeting" id="motivationGreeting">
+                        Hello Champion!
+                    </div>
+                    <p class="message" id="motivationMessage">
+                        You're doing great! Every question brings you closer to success. Stay focused, trust your knowledge, and remember - you've got this! 🌟
+                    </p>
+                </div>
+                
                 <!-- Advertisement Banner -->
                 <div class="advertisement-banner">
                     <div>
@@ -645,7 +696,7 @@
                             <div class="col-4">
                                 <h3 id="markedCount" class="text-warning">0</h3>
                                 <p class="small">Marked</p>
-                            </div>
+            </div>
                             <div class="col-4">
                                 <h3 id="notVisitedCount" class="text-secondary">0</h3>
                                 <p class="small">Not Visited</p>
@@ -683,6 +734,17 @@
         let timerInterval = null;
         let timeRemaining = 0;
 
+        // Motivational messages array
+        const motivationalMessages = [
+            "You're doing great! Every question brings you closer to success. Stay focused, trust your knowledge, and remember - you've got this! 🌟",
+            "Believe in yourself! Your hard work and preparation are about to pay off. Keep going strong! 💪",
+            "Success is just around the corner! Stay calm, think clearly, and let your knowledge shine. You're amazing! ✨",
+            "You've prepared for this moment. Trust your instincts, stay positive, and show the world what you're capable of! 🚀",
+            "Every great achievement starts with the decision to try. You're already winning by being here. Keep pushing forward! 🏆",
+            "Your potential is limitless! Approach each question with confidence and remember - you're stronger than you think! 💯",
+            "Excellence is not a skill, it's an attitude. You have that attitude! Keep up the fantastic work! 🎯"
+        ];
+
         // Load quiz on page load
         document.addEventListener('DOMContentLoaded', async () => {
             const params = new URLSearchParams(window.location.search);
@@ -712,11 +774,17 @@
                 currentQuestion = 0;
                 timeRemaining = (QUIZ.duration || 30) * 60; // Convert to seconds
 
-                // Set user info
+                // Set user info and motivational message
                 const user = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-                document.getElementById('userName').textContent = user.name || 'User';
+                const userName = user.name || 'Champion';
+                
                 document.getElementById('subjectName').textContent = QUIZ.subject || 'Quiz';
                 document.getElementById('totalQuestions').textContent = QUIZ.questions.length;
+                
+                // Set personalized greeting and random motivational message
+                document.getElementById('motivationGreeting').textContent = `Hello ${userName}!`;
+                const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+                document.getElementById('motivationMessage').textContent = randomMessage;
 
                 // Generate question palette
                 generateQuestionPalette();
