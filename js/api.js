@@ -60,7 +60,9 @@ class QuizAPI {
 
 
 
-async saveQuiz(quiz) {
+
+
+  async saveQuiz(quiz) {
   try {
     console.log('📡 Saving quiz via GET request...');
     
@@ -82,6 +84,14 @@ async saveQuiz(quiz) {
 }
 
 
+
+
+
+
+
+
+
+  
 
 
 
