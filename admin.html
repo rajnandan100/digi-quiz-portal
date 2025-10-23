@@ -762,76 +762,85 @@
                 text: 'Website statistics updated successfully!'
             });
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Quiz Creation Form
+document.getElementById('quizCreationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        date: document.getElementById('quizDateInput').value,
+        subject: document.getElementById('subjectInput').value,
+        questionsJson: document.getElementById('questionsJson').value
+    };
+    
+    try {
+        const questions = JSON.parse(formData.questionsJson);
         
-        // Quiz Creation Form
-        document.getElementById('quizCreationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                date: document.getElementById('quizDateInput').value,
-                subject: document.getElementById('subjectInput').value,
-                questionsJson: document.getElementById('questionsJson').value
-            };
-            
-            try {
-                const questions = JSON.parse(formData.questionsJson);
-                
-                const quizData = {
-                    id: 'quiz_' + Date.now(),
-                    title: `${formData.subject} Quiz - ${new Date(formData.date).toLocaleDateString()}`,
-                    subject: formData.subject,
-                    date: formData.date,
-                    questions: questions,
-                    createdAt: new Date().toISOString()
-                };
-                
-                // Save to localStorage
-                const savedQuizzes = JSON.parse(localStorage.getItem('adminQuizzes') || '[]');
-                savedQuizzes.push(quizData);
-                localStorage.setItem('adminQuizzes', JSON.stringify(savedQuizzes));
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Quiz Created!',
-                    text: `Successfully created ${questions.length} question quiz for ${formData.subject}`
-                });
-                
-                document.getElementById('quizCreationForm').reset();
-                updateQuestionStats();
-                
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid JSON!',
-                    text: 'Please check your JSON format and try again.'
-                });
-            }
-        });
+        const quizData = {
+            title: `${formData.subject} Quiz - ${new Date(formData.date).toLocaleDateString()}`,
+            subject: formData.subject,
+            scheduledDate: formData.date,
+            isActive: true,
+            questions: questions
+        };
         
-        // JSON Validation
-        function validateJSON() {
-            try {
-                const json = document.getElementById('questionsJson').value;
-                const questions = JSON.parse(json);
-                
-                if (Array.isArray(questions) && questions.length > 0) {
-                    updateQuestionStats();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Valid JSON!',
-                        text: `Found ${questions.length} questions`
-                    });
-                } else {
-                    throw new Error('Invalid format');
-                }
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid JSON!',
-                    text: 'Please check your JSON format.'
-                });
-            }
+        // Save to Google Sheets instead ← THIS FIXES IT
+        const result = await QuizAPI.saveQuiz(quizData);
+        
+        if (result.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Quiz Saved to Google Sheets!',
+                text: `Successfully created ${questions.length} question quiz`
+            });
+            
+            document.getElementById('quizCreationForm').reset();
+            updateQuestionStats();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Save Failed!',
+                text: result.error || 'Could not save to Google Sheets'
+            });
         }
+        
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid JSON!',
+            text: 'Please check your JSON format and try again.'
+        });
+    }
+});
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
         // Update question statistics
         function updateQuestionStats() {
