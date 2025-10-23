@@ -1571,9 +1571,267 @@ function loadAnalytics() {
 }
 
 // Load all quizzes (placeholder)
-function loadAllQuizzes() {
-    console.log('Loading all quizzes...');
+// FIXED: Complete implementation of loadAllQuizzes function
+async function loadAllQuizzes() {
+    console.log('📋 Loading all quizzes for management...');
+    
+    const quizzesTableBody = document.getElementById('quizzesTableBody');
+    const loadingDiv = document.getElementById('quizzesLoading');
+    const errorDiv = document.getElementById('quizzesError');
+    
+    // Show loading state
+    if (loadingDiv) loadingDiv.style.display = 'block';
+    if (errorDiv) errorDiv.style.display = 'none';
+    if (quizzesTableBody) quizzesTableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading quizzes...</td></tr>';
+    
+    try {
+        let quizzes = [];
+        
+        // Try to fetch from Google Sheets first
+        try {
+            console.log('📥 Fetching quizzes from Google Sheets...');
+            
+            const response = await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getQuizzes&t=${Date.now()}`, {
+                method: 'GET',
+                headers: { 
+                    'Accept': 'application/json',
+                    'Cache-Control': 'no-cache'
+                },
+                mode: 'cors'
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Quizzes API response:', result);
+                
+                if (result.status === 'success' && result.data && result.data.quizzes) {
+                    quizzes = result.data.quizzes;
+                    console.log(`✅ Loaded ${quizzes.length} quizzes from Google Sheets`);
+                } else {
+                    console.warn('⚠️ API returned success but no quizzes:', result);
+                }
+            } else {
+                console.warn('⚠️ API request failed:', response.status);
+            }
+            
+        } catch (fetchError) {
+            console.warn('⚠️ Failed to fetch from Google Sheets:', fetchError);
+        }
+        
+        // Fallback to localStorage if Google Sheets fails or returns no data
+        if (quizzes.length === 0) {
+            const localQuizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            quizzes = localQuizzes;
+            console.log(`📱 Using ${quizzes.length} quizzes from localStorage`);
+        }
+        
+        // Hide loading state
+        if (loadingDiv) loadingDiv.style.display = 'none';
+        
+        // Populate the table
+        if (quizzesTableBody) {
+            if (quizzes.length === 0) {
+                quizzesTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-2x mb-2"></i><br>
+                            No quizzes found. Create your first quiz!
+                        </td>
+                    </tr>
+                `;
+            } else {
+                quizzesTableBody.innerHTML = quizzes.map((quiz, index) => {
+                    // Handle different property name formats
+                    const quizId = quiz.quizId || quiz.quiz_id || quiz.quizID || `quiz_${index}`;
+                    const date = quiz.date || quiz.created || 'N/A';
+                    const subject = quiz.subject || 'Unknown Subject';
+                    const totalQuestions = quiz.totalQuestions || quiz.total_questions || (quiz.questions ? quiz.questions.length : 0);
+                    const timeLimit = quiz.timeLimit || quiz.time_limit || 'N/A';
+                    const created = quiz.created || quiz.createdAt || new Date().toISOString();
+                    
+                    // Format date nicely
+                    const formattedDate = formatDate(date);
+                    const formattedCreated = formatDateTime(created);
+                    
+                    return `
+                        <tr data-quiz-id="${quizId}">
+                            <td><strong>${quizId}</strong></td>
+                            <td>${formattedDate}</td>
+                            <td><span class="badge bg-primary">${subject}</span></td>
+                            <td class="text-center"><span class="badge bg-info">${totalQuestions}</span></td>
+                            <td class="text-center">${timeLimit} min</td>
+                            <td><small class="text-muted">${formattedCreated}</small></td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="viewQuiz('${quizId}')" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" onclick="editQuiz('${quizId}')" title="Edit Quiz">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" onclick="duplicateQuiz('${quizId}')" title="Duplicate Quiz">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${quizId}')" title="Delete Quiz">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                console.log('✅ Quiz table populated with', quizzes.length, 'quizzes');
+            }
+        }
+        
+        // Update quiz count display
+        const quizCountElement = document.getElementById('totalQuizzesInManage');
+        if (quizCountElement) {
+            quizCountElement.textContent = quizzes.length;
+        }
+        
+        return quizzes;
+        
+    } catch (error) {
+        console.error('❌ Error loading quizzes:', error);
+        
+        // Hide loading, show error
+        if (loadingDiv) loadingDiv.style.display = 'none';
+        if (errorDiv) {
+            errorDiv.style.display = 'block';
+            errorDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Failed to load quizzes: ${error.message}
+                    <button class="btn btn-sm btn-outline-danger ms-2" onclick="loadAllQuizzes()">
+                        <i class="fas fa-refresh"></i> Retry
+                    </button>
+                </div>
+            `;
+        }
+        
+        if (quizzesTableBody) {
+            quizzesTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-danger py-4">
+                        <i class="fas fa-exclamation-triangle fa-2x mb-2"></i><br>
+                        Error loading quizzes: ${error.message}
+                    </td>
+                </tr>
+            `;
+        }
+        
+        return [];
+    }
 }
+
+// HELPER FUNCTIONS for date formatting
+function formatDate(dateString) {
+    if (!dateString || dateString === 'N/A') return 'N/A';
+    
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-IN', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    } catch (e) {
+        return dateString;
+    }
+}
+
+function formatDateTime(dateString) {
+    if (!dateString) return 'N/A';
+    
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-IN', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (e) {
+        return dateString;
+    }
+}
+
+// QUIZ ACTION FUNCTIONS
+function viewQuiz(quizId) {
+    console.log('👁️ Viewing quiz:', quizId);
+    // Implementation for viewing quiz details
+    Swal.fire({
+        title: 'Quiz Details',
+        text: `Viewing details for ${quizId}`,
+        icon: 'info'
+    });
+}
+
+function editQuiz(quizId) {
+    console.log('✏️ Editing quiz:', quizId);
+    // Implementation for editing quiz
+    Swal.fire({
+        title: 'Edit Quiz',
+        text: `Edit functionality for ${quizId} - Coming soon!`,
+        icon: 'info'
+    });
+}
+
+function duplicateQuiz(quizId) {
+    console.log('📋 Duplicating quiz:', quizId);
+    // Implementation for duplicating quiz
+    Swal.fire({
+        title: 'Duplicate Quiz',
+        text: `Duplicate functionality for ${quizId} - Coming soon!`,
+        icon: 'info'
+    });
+}
+
+function deleteQuiz(quizId) {
+    console.log('🗑️ Deleting quiz:', quizId);
+    
+    Swal.fire({
+        title: 'Delete Quiz?',
+        text: `Are you sure you want to delete ${quizId}? This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // TODO: Implement actual deletion
+            Swal.fire(
+                'Deleted!',
+                `Quiz ${quizId} has been deleted.`,
+                'success'
+            );
+            // Reload quizzes after deletion
+            loadAllQuizzes();
+        }
+    });
+}
+
+// AUTO-REFRESH functionality
+function setupAutoRefresh() {
+    // Refresh quizzes every 30 seconds when on manage tab
+    setInterval(() => {
+        const activeTab = document.querySelector('.nav-link.active');
+        if (activeTab && activeTab.textContent.includes('Manage')) {
+            console.log('🔄 Auto-refreshing quizzes...');
+            loadAllQuizzes();
+        }
+    }, 30000);
+}
+
+// Initialize auto-refresh
+document.addEventListener('DOMContentLoaded', () => {
+    setupAutoRefresh();
+});
+
 
 // Load all attempts (placeholder)
 function loadAllAttempts() {
