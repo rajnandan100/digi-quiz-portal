@@ -1,56 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-<style>
-    /* Immediate visibility fixes */
-    .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    }
-    
-    .hero-content * {
-        color: white !important;
-        position: relative;
-        z-index: 10;
-    }
-    
-    .card-header.bg-gradient-primary,
-    .modern-card .card-header {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-    }
-    
-    .card-header h2,
-    .card-header p {
-        color: white !important;
-    }
-    
-    .stat-card {
-        background: rgba(255, 255, 255, 0.2) !important;
-        backdrop-filter: blur(15px) !important;
-    }
-    
-    .stat-card h3,
-    .stat-card p,
-    .stat-card i {
-        color: white !important;
-    }
-    
-    .hero-overlay {
-        background: rgba(0, 0, 0, 0.3) !important;
-    }
-</style>
-
-
-
-
-
-
-
-
-
-
-    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Daily Exam Quiz Portal - Prepare Smart, Score High</title>
@@ -73,13 +23,183 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#6366f1" />
+
+    <style>
+        /* Enhanced Styles for Commercial Use */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .hero-stats-row {
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .registration-section {
+            margin-top: 4rem !important;
+        }
+        
+        .modern-card {
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        
+        .subject-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .subject-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .subject-card.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-color: #6366f1;
+        }
+        
+        .subject-card.active .checkmark {
+            display: block;
+        }
+        
+        .subject-icon {
+            font-size: 2.5rem;
+            color: #6366f1;
+            margin-bottom: 1rem;
+        }
+        
+        .subject-card.active .subject-icon {
+            color: white;
+        }
+        
+        .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        .particles-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+        
+        .hero-wave {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            z-index: 3;
+        }
+        
+        .hero-wave svg {
+            width: 100%;
+            height: auto;
+        }
+        
+        .banner-ad-section {
+            background: linear-gradient(45deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .banner-ad {
+            background: white;
+            border: 2px dashed #cbd5e1;
+            border-radius: 15px;
+            padding: 4rem 2rem;
+            margin: 0 auto;
+            max-width: 800px;
+            color: #64748b;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-stats-row {
+                margin-top: 2rem;
+            }
+            
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top shadow-lg">
         <div class="container">
             <a class="navbar-brand fw-bold fs-4" href="index.html">
-                <i class="fas fa-graduation-cap me-2 rotate-icon"></i>Digi Quiz Portal
+                <i class="fas fa-graduation-cap me-2"></i>Digi Quiz Portal
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -96,120 +216,91 @@
                             <i class="fas fa-trophy me-1"></i>Leaderboard
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="admin.html">
-                            <i class="fas fa-user-shield me-1"></i>Admin
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="clearSession()">
-                            <i class="fas fa-sign-out-alt me-1"></i>Logout
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-
-
-
-
-
-
-
-    
-    <!-- Hero Section with Particles -->
- <!-- Hero Section with Bubble Effects -->
-<header class="hero-section position-relative overflow-hidden">
-    <!-- Particles Container -->
-    <div id="particles-js" class="particles-bg"></div>
-    
-    <!-- Dark Overlay -->
-    <div class="hero-overlay"></div>
-    
-    <!-- Hero Content -->
-    <div class="container hero-content position-relative" data-aos="fade-up">
-        <div class="text-center mb-5">
-            <h1 class="display-2 fw-bold text-white mb-3 hero-title">
-                <i class="fas fa-medal text-warning me-3"></i>
-                Digital Quiz Portal
-            </h1>
-            <p class="lead text-white fs-3 mb-4 fw-semibold hero-subtitle">
-                <i class="fas fa-rocket me-2"></i>Prepare Smart, Score High
-            </p>
-            <div class="hero-badges d-flex justify-content-center gap-3 flex-wrap">
-                <span class="badge bg-light text-dark fs-6 px-4 py-2">
-                    <i class="fas fa-check-circle text-success me-2"></i>Free Practice Tests
-                </span>
-                <span class="badge bg-light text-dark fs-6 px-4 py-2">
-                    <i class="fas fa-chart-line text-primary me-2"></i>Live Rankings
-                </span>
-                <span class="badge bg-light text-dark fs-6 px-4 py-2">
-                    <i class="fas fa-brain text-warning me-2"></i>Smart Learning
-                </span>
-            </div>
-        </div>
-
-        <div class="hero-stats-row row justify-content-center g-4 mt-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card glass-card text-center p-4">
-                    <div class="stat-icon mb-3">
-                        <i class="fas fa-users fa-3x text-white"></i>
-                    </div>
-                    <h3 class="text-white fw-bold mb-1" id="totalUsers">1000+</h3>
-                    <p class="text-white-50 mb-0">Active Users</p>
+    <!-- Hero Section -->
+    <header class="hero-section position-relative overflow-hidden">
+        <!-- Particles Container -->
+        <div id="particles-js" class="particles-bg"></div>
+        
+        <!-- Dark Overlay -->
+        <div class="hero-overlay"></div>
+        
+        <!-- Hero Content -->
+        <div class="container hero-content position-relative" data-aos="fade-up">
+            <div class="text-center mb-5">
+                <h1 class="display-2 fw-bold text-white mb-3">
+                    <i class="fas fa-medal text-warning me-3"></i>
+                    Digital Quiz Portal
+                </h1>
+                <p class="lead text-white fs-3 mb-4 fw-semibold">
+                    <i class="fas fa-rocket me-2"></i>Prepare Smart, Score High
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <span class="badge bg-light text-dark fs-6 px-4 py-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>Free Practice Tests
+                    </span>
+                    <span class="badge bg-light text-dark fs-6 px-4 py-2">
+                        <i class="fas fa-chart-line text-primary me-2"></i>Live Rankings
+                    </span>
+                    <span class="badge bg-light text-dark fs-6 px-4 py-2">
+                        <i class="fas fa-brain text-warning me-2"></i>Smart Learning
+                    </span>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card glass-card text-center p-4">
-                    <div class="stat-icon mb-3">
-                        <i class="fas fa-clipboard-list fa-3x text-white"></i>
+
+            <!-- Stats Cards -->
+            <div class="row justify-content-center g-4 hero-stats-row" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg-3 col-md-6 col-6">
+                    <div class="stat-card text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-users fa-3x text-white"></i>
+                        </div>
+                        <h3 class="text-white fw-bold mb-1" id="totalUsers">1000+</h3>
+                        <p class="text-white-50 mb-0">Active Users</p>
                     </div>
-                    <h3 class="text-white fw-bold mb-1" id="totalQuizzes">50+</h3>
-                    <p class="text-white-50 mb-0">Quizzes Available</p>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card glass-card text-center p-4">
-                    <div class="stat-icon mb-3">
-                        <i class="fas fa-trophy fa-3x text-white"></i>
+                <div class="col-lg-3 col-md-6 col-6">
+                    <div class="stat-card text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-clipboard-list fa-3x text-white"></i>
+                        </div>
+                        <h3 class="text-white fw-bold mb-1" id="totalQuizzes">50+</h3>
+                        <p class="text-white-50 mb-0">Quizzes Available</p>
                     </div>
-                    <h3 class="text-white fw-bold mb-1" id="totalAttempts">5000+</h3>
-                    <p class="text-white-50 mb-0">Quiz Attempts</p>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card glass-card text-center p-4">
-                    <div class="stat-icon mb-3">
-                        <i class="fas fa-star fa-3x text-white"></i>
+                <div class="col-lg-3 col-md-6 col-6">
+                    <div class="stat-card text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-trophy fa-3x text-white"></i>
+                        </div>
+                        <h3 class="text-white fw-bold mb-1" id="totalAttempts">5000+</h3>
+                        <p class="text-white-50 mb-0">Quiz Attempts</p>
                     </div>
-                    <h3 class="text-white fw-bold mb-1">4.8/5</h3>
-                    <p class="text-white-50 mb-0">User Rating</p>
+                </div>
+                <div class="col-lg-3 col-md-6 col-6">
+                    <div class="stat-card text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-star fa-3x text-white"></i>
+                        </div>
+                        <h3 class="text-white fw-bold mb-1" id="userRating">4.8/5</h3>
+                        <p class="text-white-50 mb-0">User Rating</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Wave Shape Divider -->
-    <div class="hero-wave">
-        <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#f9fafb" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
-        </svg>
-    </div>
-</header>
+        
+        <!-- Wave Shape Divider -->
+        <div class="hero-wave">
+            <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#f9fafb" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+            </svg>
+        </div>
+    </header>
 
-
-
-
-
-
-
-
-
-
-
-    
     <!-- Main Content -->
     <main class="container my-5">
         <!-- Registration Form Section -->
@@ -228,27 +319,21 @@
                                 <label class="form-label fw-semibold">
                                     <i class="fas fa-user text-primary me-2"></i>Full Name *
                                 </label>
-                                <input type="text" class="form-control modern-input" id="fullName" name="fullName" 
+                                <input type="text" class="form-control" id="fullName" name="fullName" 
                                        required minlength="3" placeholder="Enter your full name" />
-                                <div class="invalid-feedback">
-                                    <i class="fas fa-exclamation-circle me-1"></i>Please enter at least 3 characters
-                                </div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">
                                     <i class="fas fa-envelope text-primary me-2"></i>Email ID *
                                 </label>
-                                <input type="email" class="form-control modern-input" id="email" name="email" 
+                                <input type="email" class="form-control" id="email" name="email" 
                                        required placeholder="your.email@example.com" />
-                                <div class="invalid-feedback">
-                                    <i class="fas fa-exclamation-circle me-1"></i>Please enter a valid email
-                                </div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">
                                     <i class="fas fa-calendar-alt text-primary me-2"></i>Quiz Date *
                                 </label>
-                                <select class="form-select modern-input" id="quizDate" name="quizDate" required>
+                                <select class="form-select" id="quizDate" name="quizDate" required>
                                     <option value="">Choose date...</option>
                                 </select>
                             </div>
@@ -260,39 +345,18 @@
                                 <i class="fas fa-books me-2 text-primary"></i>Select Your Subject
                             </h5>
                             <div class="subject-cards-grid">
-                                <div class="subject-card modern-subject-card" data-subject="General Knowledge" data-aos="flip-left" data-aos-delay="100">
+                                <div class="subject-card" data-subject="General Knowledge" data-aos="flip-left" data-aos-delay="100">
                                     <div class="subject-icon">
                                         <i class="fas fa-brain"></i>
                                     </div>
                                     <h6 class="mt-3 mb-0 fw-semibold">General Knowledge</h6>
                                     <div class="checkmark"><i class="fas fa-check"></i></div>
                                 </div>
-                                <div class="subject-card modern-subject-card" data-subject="English" data-aos="flip-left" data-aos-delay="200">
+                                <div class="subject-card" data-subject="English" data-aos="flip-left" data-aos-delay="200">
                                     <div class="subject-icon">
                                         <i class="fas fa-book"></i>
                                     </div>
                                     <h6 class="mt-3 mb-0 fw-semibold">English</h6>
-                                    <div class="checkmark"><i class="fas fa-check"></i></div>
-                                </div>
-                                <div class="subject-card modern-subject-card" data-subject="Mathematics" data-aos="flip-left" data-aos-delay="300">
-                                    <div class="subject-icon">
-                                        <i class="fas fa-calculator"></i>
-                                    </div>
-                                    <h6 class="mt-3 mb-0 fw-semibold">Mathematics</h6>
-                                    <div class="checkmark"><i class="fas fa-check"></i></div>
-                                </div>
-                                <div class="subject-card modern-subject-card" data-subject="Reasoning" data-aos="flip-left" data-aos-delay="400">
-                                    <div class="subject-icon">
-                                        <i class="fas fa-puzzle-piece"></i>
-                                    </div>
-                                    <h6 class="mt-3 mb-0 fw-semibold">Reasoning</h6>
-                                    <div class="checkmark"><i class="fas fa-check"></i></div>
-                                </div>
-                                <div class="subject-card modern-subject-card" data-subject="Current Affairs" data-aos="flip-left" data-aos-delay="500">
-                                    <div class="subject-icon">
-                                        <i class="fas fa-newspaper"></i>
-                                    </div>
-                                    <h6 class="mt-3 mb-0 fw-semibold">Current Affairs</h6>
                                     <div class="checkmark"><i class="fas fa-check"></i></div>
                                 </div>
                             </div>
@@ -300,7 +364,7 @@
                         </div>
 
                         <div class="text-center mt-5">
-                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 modern-btn" id="startQuizBtn" disabled>
+                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3" id="startQuizBtn" disabled>
                                 <i class="fas fa-play-circle me-2"></i>Start Quiz Now
                                 <i class="fas fa-arrow-right ms-2"></i>
                             </button>
@@ -321,18 +385,10 @@
 
             <div class="filter-bar d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                 <div class="filter-group d-flex gap-2 flex-wrap">
-                    <select class="form-select form-select-sm modern-select" id="filterSubject" style="width: auto;">
-                        <option value=""><i class="fas fa-filter"></i> All Subjects</option>
+                    <select class="form-select form-select-sm" id="filterSubject" style="width: auto;">
+                        <option value="">All Subjects</option>
                         <option value="General Knowledge">General Knowledge</option>
                         <option value="English">English</option>
-                        <option value="Mathematics">Mathematics</option>
-                        <option value="Reasoning">Reasoning</option>
-                        <option value="Current Affairs">Current Affairs</option>
-                    </select>
-                    <select class="form-select form-select-sm modern-select" id="filterStatus" style="width: auto;">
-                        <option value="">All Status</option>
-                        <option value="attempted">Attempted</option>
-                        <option value="pending">Not Attempted</option>
                     </select>
                 </div>
                 <div class="quiz-count badge bg-primary fs-6 px-3 py-2">
@@ -351,8 +407,22 @@
         </section>
     </main>
 
+    <!-- Banner Ad Section -->
+    <section class="banner-ad-section">
+        <div class="container">
+            <div class="banner-ad">
+                <i class="fas fa-bullhorn fa-3x mb-3 text-primary"></i>
+                <h3 class="mb-3">Advertisement Space</h3>
+                <p class="mb-0">Premium ad placement available - Contact us for advertising opportunities</p>
+                <div class="mt-3">
+                    <small class="text-muted">728x90 Banner Advertisement</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-dark text-white py-5 mt-5">
+    <footer class="bg-dark text-white py-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4 mb-md-0">
@@ -372,7 +442,6 @@
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="index.html" class="text-white-50 text-decoration-none"><i class="fas fa-angle-right me-2"></i>Home</a></li>
                         <li class="mb-2"><a href="leaderboard.html" class="text-white-50 text-decoration-none"><i class="fas fa-angle-right me-2"></i>Leaderboard</a></li>
-                        <li class="mb-2"><a href="admin.html" class="text-white-50 text-decoration-none"><i class="fas fa-angle-right me-2"></i>Admin Panel</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -414,363 +483,197 @@
             duration: 800,
             once: true
         });
-    </script>
 
-<script>
-// Enhanced Interactive Bubble Particles Effect
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('particles-js') && typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 120,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: ['#ffffff', '#ffd700', '#ff69b4', '#00ffff', '#90ee90']
-                },
-                shape: {
-                    type: 'circle',
-                    stroke: {
-                        width: 0,
-                        color: '#000000'
-                    }
-                },
-                opacity: {
-                    value: 0.7,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 1.5,
-                        opacity_min: 0.2,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 6,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 5,
-                        size_min: 1,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#ffffff',
-                    opacity: 0.4,
-                    width: 1.5
-                },
-                move: {
-                    enable: true,
-                    speed: 2.5,
-                    direction: 'top',
-                    random: true,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false,
-                    attract: {
-                        enable: true,
-                        rotateX: 600,
-                        rotateY: 1200
-                    }
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: 'bubble'
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: 'push'
-                    },
-                    resize: true
-                },
-                modes: {
-                    bubble: {
-                        distance: 250,
-                        size: 20,
-                        duration: 2,
-                        opacity: 1,
-                        speed: 3
-                    },
-                    push: {
-                        particles_nb: 6
-                    },
-                    grab: {
-                        distance: 400,
-                        line_linked: {
-                            opacity: 1
+        // Initialize Particles
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS('particles-js', {
+                particles: {
+                    number: {
+                        value: 80,
+                        density: {
+                            enable: true,
+                            value_area: 800
                         }
                     },
-                    repulse: {
-                        distance: 200,
-                        duration: 0.4
+                    color: {
+                        value: ['#ffffff', '#ffd700', '#ff69b4', '#87ceeb']
+                    },
+                    shape: {
+                        type: 'circle'
+                    },
+                    opacity: {
+                        value: 0.6,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 1,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 5,
+                        random: true
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: '#ffffff',
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: 'top',
+                        random: true
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: 'bubble'
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: 'push'
+                        }
+                    },
+                    modes: {
+                        bubble: {
+                            distance: 200,
+                            size: 15,
+                            duration: 2
+                        },
+                        push: {
+                            particles_nb: 4
+                        }
                     }
                 }
-            },
-            retina_detect: true
-        });
-        
-        console.log('✨ Bubble particles initialized');
-    } else {
-        console.warn('⚠️ Particles.js not loaded or container not found');
-    }
-});
-
-// Initialize AOS Animations
-if (typeof AOS !== 'undefined') {
-    AOS.init({
-        duration: 800,
-        once: true,
-        offset: 100
-    });
-}
-</script>
-
-
-
-
-
-
-<script>
-// Generate Random Floating Bubbles
-function createBubbles() {
-    const heroSection = document.querySelector('.hero-section');
-    if (!heroSection) return;
-    
-    const bubbleCount = 15;
-    
-    for (let i = 0; i < bubbleCount; i++) {
-        const bubble = document.createElement('div');
-        bubble.classList.add('bubble');
-        
-        // Random size between 20-80px
-        const size = Math.random() * 60 + 20;
-        bubble.style.width = size + 'px';
-        bubble.style.height = size + 'px';
-        
-        // Random horizontal position
-        bubble.style.left = Math.random() * 100 + '%';
-        
-        // Random animation delay
-        bubble.style.animationDelay = Math.random() * 15 + 's';
-        
-        // Random animation duration
-        bubble.style.animationDuration = (Math.random() * 10 + 10) + 's';
-        
-        heroSection.appendChild(bubble);
-    }
-    
-    console.log('🫧 CSS bubbles created');
-}
-
-// Create bubbles after page loads
-window.addEventListener('load', createBubbles);
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-<script>
-// Debug: Check API Status
-window.addEventListener('DOMContentLoaded', async function() {
-    console.log('🔍 Checking Google Sheets API Connection...');
-    
-    if (window.QuizAPI) {
-        console.log('✅ QuizAPI object found');
-        
-        try {
-            const status = await window.QuizAPI.checkStatus();
-            if (status) {
-                console.log('✅ Google Sheets API is CONNECTED and working');
-            } else {
-                console.warn('⚠️ Google Sheets API connection failed');
-            }
-        } catch (error) {
-            console.error('❌ API Status Check Error:', error);
-            console.log('📝 Data will be saved locally only');
+            });
         }
-    } else {
-        console.error('❌ QuizAPI not loaded. Check if api.js is included');
-    }
-});
-</script>
 
-
-
-
-
-
-
-<!-- Particles.js Library -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-<!-- Initialize Bubble Particles -->
-<script>
-(function() {
-    'use strict';
-    
-    // Wait for DOM and particles.js to load
-    function initParticles() {
-        console.log('🔍 Initializing particles...');
-        
-        // Check if container exists
-        const container = document.getElementById('particles-js');
-        if (!container) {
-            console.error('❌ particles-js container not found!');
-            return;
-        }
-        
-        // Check if library loaded
-        if (typeof particlesJS === 'undefined') {
-            console.error('❌ particlesJS library not loaded!');
-            return;
-        }
-        
-        console.log('✅ Container and library found, starting particles...');
-        
-        // Initialize particles with bubble effect
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 80,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: ['#ffffff', '#ffd700', '#ff69b4', '#87ceeb']
-                },
-                shape: {
-                    type: 'circle'
-                },
-                opacity: {
-                    value: 0.6,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 1,
-                        opacity_min: 0.1,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 5,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 4,
-                        size_min: 0.5,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#ffffff',
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: 'top',
-                    random: true,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: 'bubble'
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: 'push'
-                    },
-                    resize: true
-                },
-                modes: {
-                    bubble: {
-                        distance: 200,
-                        size: 15,
-                        duration: 2,
-                        opacity: 0.8,
-                        speed: 3
-                    },
-                    push: {
-                        particles_nb: 4
-                    }
-                }
-            },
-            retina_detect: true
-        });
-        
-        console.log('✨ Particles initialized successfully!');
-    }
-    
-    // Run after page fully loads
-    if (document.readyState === 'loading') {
+        // Subject Card Selection
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(initParticles, 500);
+            const subjectCards = document.querySelectorAll('.subject-card');
+            const selectedSubjectInput = document.getElementById('selectedSubject');
+            const startQuizBtn = document.getElementById('startQuizBtn');
+
+            subjectCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove active class from all cards
+                    subjectCards.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked card
+                    this.classList.add('active');
+                    
+                    // Set selected subject
+                    const subject = this.dataset.subject;
+                    selectedSubjectInput.value = subject;
+                    
+                    // Check if form is ready
+                    checkFormReady();
+                });
+            });
+
+            function checkFormReady() {
+                const name = document.getElementById('fullName').value;
+                const email = document.getElementById('email').value;
+                const date = document.getElementById('quizDate').value;
+                const subject = selectedSubjectInput.value;
+
+                if (name && email && date && subject) {
+                    startQuizBtn.disabled = false;
+                } else {
+                    startQuizBtn.disabled = true;
+                }
+            }
+
+            // Check form readiness on input changes
+            ['fullName', 'email', 'quizDate'].forEach(id => {
+                document.getElementById(id).addEventListener('input', checkFormReady);
+            });
+
+            // Load available quiz dates
+            loadQuizDates();
+            
+            // Load admin stats
+            loadAdminStats();
         });
-    } else {
-        setTimeout(initParticles, 500);
-    }
-})();
-</script>
 
+        async function loadQuizDates() {
+            try {
+                // Get quizzes from API
+                const quizzes = await QuizAPI.getQuizzes();
+                const dateSelect = document.getElementById('quizDate');
+                
+                // Get unique dates from quizzes
+                const dates = [...new Set(quizzes.map(quiz => {
+                    if (quiz.scheduledDate) {
+                        return quiz.scheduledDate;
+                    }
+                    return new Date().toISOString().split('T')[0]; // Today as default
+                }))].sort().reverse();
 
+                // Add date options
+                dates.forEach(date => {
+                    const option = document.createElement('option');
+                    const dateObj = new Date(date);
+                    const today = new Date();
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
 
+                    if (dateObj.toDateString() === today.toDateString()) {
+                        option.text = 'Today';
+                    } else if (dateObj.toDateString() === yesterday.toDateString()) {
+                        option.text = 'Yesterday';
+                    } else {
+                        option.text = dateObj.toLocaleDateString('en-IN', {
+                            day: 'numeric',
+                            month: 'short'
+                        });
+                    }
+                    option.value = date;
+                    dateSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading quiz dates:', error);
+                // Add default dates if API fails
+                const dateSelect = document.getElementById('quizDate');
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
 
+                [today, yesterday].forEach((date, index) => {
+                    const option = document.createElement('option');
+                    option.text = index === 0 ? 'Today' : 'Yesterday';
+                    option.value = date.toISOString().split('T')[0];
+                    dateSelect.appendChild(option);
+                });
+            }
+        }
 
+        async function loadAdminStats() {
+            try {
+                // This will be connected to admin panel data in future
+                // For now, using static data that can be updated via admin
+                const stats = {
+                    totalUsers: '1000+',
+                    totalQuizzes: '50+',
+                    totalAttempts: '5000+',
+                    userRating: '4.8/5'
+                };
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-    
+                document.getElementById('totalUsers').textContent = stats.totalUsers;
+                document.getElementById('totalQuizzes').textContent = stats.totalQuizzes;
+                document.getElementById('totalAttempts').textContent = stats.totalAttempts;
+                document.getElementById('userRating').textContent = stats.userRating;
+            } catch (error) {
+                console.error('Error loading admin stats:', error);
+            }
+        }
+    </script>
 </body>
 </html>
