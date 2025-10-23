@@ -57,9 +57,23 @@ class QuizAPI {
     return await this.makeRequest('initDatabase');
   }
 
-  async saveQuiz(quiz) {
-    return await this.makeRequest('saveQuiz', { quiz });
+ async saveQuiz(quiz) {
+  try {
+    // Convert quiz data to URL-safe string
+    const quizString = encodeURIComponent(JSON.stringify(quiz));
+    
+    // Use GET request instead of POST
+    const url = `${this.baseUrl}?action=saveQuiz&quizData=${quizString}`;
+    const response = await fetch(url);
+    const result = await response.json();
+    
+    return result;
+  } catch (error) {
+    console.error('❌ Save quiz failed:', error);
+    return { success: false, error: error.message };
   }
+}
+
 
   async getQuizzes() {
     try {
