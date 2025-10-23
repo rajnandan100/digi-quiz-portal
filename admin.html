@@ -911,27 +911,25 @@
 
       try {
         const res = await window.QuizAPI.saveQuiz(payload);
-        if (res && res.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Quiz Created',
-            text: `Saved ${questions.length} questions to Google Sheets`,
-            timer: 2500,
-          });
-          quizCreationForm.reset();
-          updateQuestionStats();
-          const saved = JSON.parse(localStorage.getItem('adminQuizzes') || '[]');
-          saved.push({
-            id: res.quizId || 'quiz_' + Date.now(),
-            title: payload.title,
-            subject,
-            date,
-            questions,
-            createdAt: new Date().toISOString(),
-          });
-          localStorage.setItem('adminQuizzes', JSON.stringify(saved));
-          loadAllQuizzes();
-        } else {
+
+if (res && res.success) {
+  Swal.fire({
+    icon: 'success',
+    title: 'Quiz Created',
+    text: `Saved ${questions.length} questions to Google Sheets`,
+    timer: 2500,
+  });
+  quizCreationForm.reset();
+  updateQuestionStats();
+  loadAllQuizzes();
+}
+
+
+
+
+
+        
+         else {
           Swal.fire({
             icon: 'error',
             title: 'Save failed',
