@@ -111,11 +111,5 @@ class QuizAPI {
 window.QuizAPI = new QuizAPI();
 console.log('✅ Digi Quiz Portal API loaded');
 
-// Optional: Check API status on load
-QuizAPI.checkStatus().then(status => {
-  if (status) {
-    console.log('🟢 API connection successful');
-  } else {
-    console.log('🔴 API connection failed');
-  }
-});
+// Don't auto-check status - let admin panel do it when ready
+console.log('🔗 API URL:', window.QuizAPI.baseUrl);
