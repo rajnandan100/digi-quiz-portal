@@ -184,6 +184,31 @@
             margin-bottom: 1.5rem;
         }
         
+        /* Banner Advertisement */
+        .banner-ad-section {
+            background: linear-gradient(45deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            border: 2px dashed #cbd5e1;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .banner-ad-section h4 {
+            color: #64748b;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .banner-ad-section i {
+            color: #6366f1;
+        }
+        
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
@@ -227,31 +252,6 @@
             color: white;
         }
         
-        /* Banner Advertisement */
-        .banner-ad-section {
-            background: linear-gradient(45deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            margin: 3rem 0;
-            text-align: center;
-            border: 2px dashed #cbd5e1;
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .banner-ad-section h4 {
-            color: #64748b;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .banner-ad-section i {
-            color: #6366f1;
-        }
-        
         /* Footer */
         .footer {
             background: #1f2937;
@@ -290,6 +290,23 @@
             color: #6366f1;
         }
         
+        .footer .text-muted {
+            color: #9ca3af !important;
+        }
+        
+        .footer .fas.fa-heart {
+            color: #ef4444 !important;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.2); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.2); }
+            70% { transform: scale(1); }
+        }
+        
         @media (max-width: 768px) {
             .main-container {
                 margin: 1rem;
@@ -311,6 +328,10 @@
             .sticky-bottom-ad {
                 padding: 12px;
                 font-size: 0.9rem;
+            }
+            
+            .banner-ad-section {
+                margin: 1rem 0;
             }
         }
     </style>
@@ -448,13 +469,26 @@
                 </div>
             </div>
 
+            <!-- Banner Advertisement Section -->
+            <div class="banner-ad-section">
+                <i class="fas fa-bullhorn fa-3x mb-3"></i>
+                <h4>Premium Advertisement Space</h4>
+                <p>728x90 Banner Advertisement - Perfect for Brand Promotion</p>
+                <small class="text-muted">Contact us for advertising opportunities</small>
+            </div>
+
             <!-- Search and Download -->
             <div class="search-download-section">
                 <div class="d-flex justify-content-between mb-3 flex-wrap gap-2">
                     <input type="text" id="searchUser" class="form-control" style="max-width: 400px;" placeholder="🔍 Search by name...">
-                    <button class="btn btn-danger" onclick="downloadPDF()">
-                        <i class="fas fa-file-pdf me-2"></i>Download PDF
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-success" onclick="downloadCertificate()">
+                            <i class="fas fa-certificate me-2"></i>Download Certificate
+                        </button>
+                        <button class="btn btn-danger" onclick="downloadPDF()">
+                            <i class="fas fa-file-pdf me-2"></i>Download PDF
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -485,14 +519,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Banner Advertisement Section -->
-        <div class="banner-ad-section">
-            <i class="fas fa-bullhorn fa-3x mb-3"></i>
-            <h4>Premium Advertisement Space</h4>
-            <p>728x90 Banner Advertisement - Perfect for Brand Promotion</p>
-            <small class="text-muted">Contact us for advertising opportunities</small>
         </div>
     </div>
 
@@ -569,7 +595,7 @@
                 </div>
                 <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
                     <small class="text-muted">
-                        Made with <i class="fas fa-heart text-danger"></i> for Students
+                        Made with <i class="fas fa-heart"></i> for Students
                     </small>
                 </div>
             </div>
@@ -992,6 +1018,176 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        // Download Certificate
+        function downloadCertificate() {
+            // Get user's best attempt
+            const session = JSON.parse(localStorage.getItem('userSession') || '{}');
+            
+            if (!session.email) {
+                Swal.fire({
+                    title: 'Login Required',
+                    text: 'Please complete a quiz first to generate certificate',
+                    icon: 'warning'
+                });
+                return;
+            }
+
+            const userAttempts = allLeaderboardData.filter(a => a.email === session.email);
+            
+            if (userAttempts.length === 0) {
+                Swal.fire({
+                    title: 'No Quiz Attempts',
+                    text: 'Complete a quiz to generate your certificate',
+                    icon: 'info'
+                }).then(() => {
+                    window.location.href = 'index.html';
+                });
+                return;
+            }
+
+            // Get best attempt
+            const bestAttempt = userAttempts.sort((a, b) => b.accuracy - a.accuracy)[0];
+            
+            generateCertificate(bestAttempt);
+        }
+
+        // Generate Professional Certificate
+        function generateCertificate(attempt) {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('landscape', 'mm', 'a4');
+
+                const pageWidth = 297;
+                const pageHeight = 210;
+                
+                // Background color
+                doc.setFillColor(249, 250, 251);
+                doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+                // Border
+                doc.setDrawColor(99, 102, 241);
+                doc.setLineWidth(3);
+                doc.rect(10, 10, pageWidth-20, pageHeight-20);
+
+                // Inner border
+                doc.setDrawColor(139, 92, 246);
+                doc.setLineWidth(1);
+                doc.rect(15, 15, pageWidth-30, pageHeight-30);
+
+                // Header
+                doc.setTextColor(99, 102, 241);
+                doc.setFontSize(28);
+                doc.setFont('helvetica', 'bold');
+                doc.text('CERTIFICATE OF ACHIEVEMENT', pageWidth/2, 40, { align: 'center' });
+
+                // Subtitle
+                doc.setTextColor(75, 85, 99);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Digi Quiz Portal', pageWidth/2, 50, { align: 'center' });
+
+                // Main content
+                doc.setTextColor(31, 41, 55);
+                doc.setFontSize(16);
+                doc.text('This is to certify that', pageWidth/2, 70, { align: 'center' });
+
+                // Name
+                doc.setTextColor(99, 102, 241);
+                doc.setFontSize(24);
+                doc.setFont('helvetica', 'bold');
+                doc.text(attempt.userName || attempt.name, pageWidth/2, 85, { align: 'center' });
+
+                // Achievement text
+                doc.setTextColor(31, 41, 55);
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'normal');
+                doc.text('has successfully completed the quiz', pageWidth/2, 100, { align: 'center' });
+
+                // Quiz details
+                const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+                const quiz = quizzes.find(q => q.quizId === attempt.quizId);
+                const quizTitle = quiz ? quiz.subject : 'Quiz';
+                
+                doc.setTextColor(99, 102, 241);
+                doc.setFontSize(20);
+                doc.setFont('helvetica', 'bold');
+                doc.text(`"${quizTitle}"`, pageWidth/2, 115, { align: 'center' });
+
+                // Performance details
+                doc.setTextColor(31, 41, 55);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'normal');
+                
+                const accuracy = attempt.accuracy || 0;
+                doc.text(`with a score of ${attempt.score}/${attempt.total || 30} (${accuracy.toFixed(1)}%)`, pageWidth/2, 130, { align: 'center' });
+
+                // Motivational quote based on performance
+                let quote = '';
+                if (accuracy >= 50) {
+                    quote = '"Excellence is not a skill, it\'s an attitude. Keep up the great work!"';
+                } else {
+                    quote = '"Every expert was once a beginner. Keep learning and improving!"';
+                }
+                
+                doc.setTextColor(75, 85, 99);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'italic');
+                doc.text(quote, pageWidth/2, 145, { align: 'center' });
+
+                // Date and time
+                doc.setTextColor(107, 114, 128);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'normal');
+                
+                const attemptDate = new Date(attempt.date);
+                const dateStr = attemptDate.toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                
+                doc.text(`Date of Achievement: ${dateStr}`, pageWidth/2, 160, { align: 'center' });
+                doc.text(`Certificate Generated: ${new Date().toLocaleDateString('en-IN')}`, pageWidth/2, 170, { align: 'center' });
+
+                // Signature area
+                doc.setDrawColor(156, 163, 175);
+                doc.setLineWidth(0.5);
+                doc.line(50, 185, 120, 185);
+                doc.line(177, 185, 247, 185);
+
+                doc.setTextColor(107, 114, 128);
+                doc.setFontSize(10);
+                doc.text('Digital Signature', 85, 192, { align: 'center' });
+                doc.text('Digi Quiz Portal', 212, 192, { align: 'center' });
+
+                // Certificate ID
+                const certificateId = `DQP-${Date.now()}-${attempt.email.substring(0,3).toUpperCase()}`;
+                doc.setTextColor(156, 163, 175);
+                doc.setFontSize(8);
+                doc.text(`Certificate ID: ${certificateId}`, pageWidth/2, 200, { align: 'center' });
+
+                // Save the PDF
+                const fileName = `Certificate-${attempt.userName || 'Student'}-${quizTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
+                doc.save(fileName);
+
+                Swal.fire({
+                    title: 'Certificate Generated!',
+                    text: 'Your certificate has been downloaded successfully',
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+
+            } catch (error) {
+                console.error('Certificate generation error:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to generate certificate. Please try again.',
+                    icon: 'error'
+                });
+            }
         }
 
         // Reset filters
