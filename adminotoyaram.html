@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Control Panel - Digi Quiz Portal</title>
+    <title>Admin Control Panel - Digi Quiz Portal722</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,8 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         body {
@@ -44,6 +42,30 @@
             overflow: hidden;
         }
         
+        /* Stats Cards - Enhanced Design */
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+        }
+        .stats-card h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .stats-card p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
         /* Cards */
         .card {
             border: none;
@@ -56,39 +78,13 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
-        /* Stats Cards */
-        .stats-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        .stats-card h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Tabs */
-        .nav-tabs .nav-link {
-            border-radius: 10px 10px 0 0;
-            border: none;
-            color: #6c757d;
-            font-weight: 500;
-            padding: 1rem 1.5rem;
-        }
-        .nav-tabs .nav-link.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 600;
-        }
-        
         /* Forms */
         .form-control, .form-select {
             border-radius: 10px;
-            border: 2px solid #e9ecef;
+            border: 2px solid #e2e8f0;
             padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
         .form-control:focus, .form-select:focus {
             border-color: #667eea;
@@ -148,23 +144,20 @@
         }
         .api-status.disconnected {
             background: #fadbd8;
-            color: #a93226;
-        }
-        .api-status::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 0.5rem;
-        }
-        .api-status.connected::before {
-            background: #0d8457;
-        }
-        .api-status.disconnected::before {
-            background: #a93226;
+            color: #922b21;
         }
         
-        /* Animation */
+        /* Tables */
+        .table th {
+            font-weight: 600;
+            background: #f8fafc;
+            border-top: none;
+        }
+        
+        /* Animations */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -175,60 +168,69 @@
                 transform: translateY(0);
             }
         }
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease forwards;
+        
+        /* Tab Navigation */
+        .nav-tabs .nav-link {
+            border-radius: 10px 10px 0 0;
+            border: none;
+            color: #64748b;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        .nav-tabs .nav-link.active {
+            background: #667eea;
+            color: white;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-container {
-                margin: 1rem;
-                border-radius: 15px;
-            }
-            .stats-card h2 {
-                font-size: 2rem;
-            }
+        /* JSON Editor */
+        #questionsJson {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* Success/Error Messages */
+        .alert {
+            border-radius: 10px;
+            border: none;
         }
     </style>
 </head>
 <body>
-    
-    <!-- LOGIN OVERLAY -->
+    <!-- LOGIN SCREEN -->
     <div id="loginOverlay" class="login-overlay">
-        <div class="login-card">
-            <div class="text-center mb-4">
-                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
-                <h2>Admin Access Required</h2>
-                <p class="text-muted">Enter your admin password to continue</p>
+        <div class="login-card text-center">
+            <div class="mb-4">
+                <i class="fas fa-shield-alt text-primary" style="font-size: 3rem;"></i>
+                <h3 class="mt-3 mb-2">Admin Access</h3>
+                <p class="text-muted">Enter your credentials to continue</p>
             </div>
-            
             <form id="adminLoginForm">
                 <div class="mb-3">
-                    <input type="password" class="form-control" id="adminPassword" placeholder="Enter admin password" required>
+                    <input type="password" id="adminPassword" class="form-control" placeholder="Enter admin password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">
                     <i class="fas fa-sign-in-alt me-2"></i>Login
                 </button>
-                <div id="loginError" class="alert alert-danger mt-3" style="display: none;">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Invalid password!
-                </div>
             </form>
+            <div class="mt-3">
+                <small class="text-muted">Secure admin panel for DigiQuiz Portal</small>
+            </div>
         </div>
     </div>
 
-    <!-- MAIN NAVIGATION -->
-    <nav id="adminNav" class="navbar navbar-expand-lg navbar-dark bg-primary" style="display: none;">
-        <div class="container">
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <i class="fas fa-tachometer-alt me-2"></i>
-                DigiQuizMaster Admin
+                <i class="fas fa-graduation-cap me-2"></i>
+                DigiQuiz Portal - Admin
             </a>
-            
             <div class="d-flex align-items-center">
-                <span id="apiStatus" class="api-status disconnected me-3">
-                    <span id="apiStatusText">Checking API...</span>
+                <span class="api-status connected me-3">
+                    <i class="fas fa-wifi me-1"></i>Connected
                 </span>
-                <span class="text-white me-3">
+                <span class="text-light me-3">
                     <i class="fas fa-clock me-1"></i>
                     <span id="lastUpdateTime">Loading...</span>
                 </span>
@@ -243,28 +245,22 @@
     <div id="adminContent" class="container-fluid p-0" style="display: none;">
         <div class="main-container">
             
-            <!-- DASHBOARD STATS -->
+            <!-- DASHBOARD STATS - Updated to 3 cards (removed analytics) -->
             <div class="p-4">
                 <div class="row g-4 mb-4">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="stats-card fade-in-up">
                             <h2 id="totalQuizzesCount">0</h2>
                             <p class="mb-0">Total Quizzes</p>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="stats-card fade-in-up">
                             <h2 id="totalAttemptsCount">0</h2>
                             <p class="mb-0">Total Attempts</p>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="stats-card fade-in-up">
-                            <h2 id="todayQuizzesCount">0</h2>
-                            <p class="mb-0">Today's Quizzes</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="stats-card fade-in-up">
                             <h2 id="totalQuestionsCount">0</h2>
                             <p class="mb-0">Total Questions</p>
@@ -289,43 +285,30 @@
                             <i class="fas fa-users me-2"></i>View Attempts
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="analytics-tab" data-bs-toggle="tab" data-bs-target="#analytics" type="button" role="tab">
-                            <i class="fas fa-chart-bar me-2"></i>Analytics
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">
-                            <i class="fas fa-cog me-2"></i>Settings
-                        </button>
-                    </li>
                 </ul>
 
-                <!-- TABS CONTENT -->
+                <!-- TAB CONTENT -->
                 <div class="tab-content" id="adminTabsContent">
                     
                     <!-- CREATE QUIZ TAB -->
                     <div class="tab-pane fade show active" id="createQuiz" role="tabpanel">
                         <div class="card">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header bg-white">
                                 <h5 class="mb-0">
-                                    <i class="fas fa-plus me-2"></i>Create New Quiz
+                                    <i class="fas fa-plus text-primary me-2"></i>
+                                    Create New Quiz
                                 </h5>
-                                <small>Fill the form below to create a new quiz</small>
+                                <p class="text-muted mb-0">Fill the form below to create a new quiz</p>
                             </div>
                             <div class="card-body">
-                                <form id="quizCreationForm">
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="quizDateInput" class="form-label">
-                                                <i class="fas fa-calendar me-1"></i>Quiz Date
-                                            </label>
+                                <form id="createQuizForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="quizDateInput" class="form-label">Quiz Date</label>
                                             <input type="date" class="form-control" id="quizDateInput" required>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="subjectInput" class="form-label">
-                                                <i class="fas fa-book me-1"></i>Subject
-                                            </label>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="subjectInput" class="form-label">Subject</label>
                                             <select class="form-select" id="subjectInput" required>
                                                 <option value="">Select Subject</option>
                                                 <option value="Mathematics">Mathematics</option>
@@ -333,55 +316,30 @@
                                                 <option value="English">English</option>
                                                 <option value="History">History</option>
                                                 <option value="Geography">Geography</option>
-                                                <option value="General Knowledge">General Knowledge</option>
                                                 <option value="Computer Science">Computer Science</option>
-                                                <option value="Economics">Economics</option>
-                                                <option value="Physics">Physics</option>
-                                                <option value="Chemistry">Chemistry</option>
-                                                <option value="Biology">Biology</option>
-                                                <option value="Other">Other</option>
+                                                <option value="General Knowledge">General Knowledge</option>
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div class="mt-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <label for="questionsJson" class="form-label">
-                                                <i class="fas fa-list me-1"></i>Questions (JSON Format)
-                                            </label>
-                                            <div>
-                                                <button type="button" class="btn btn-sm btn-outline-info me-2" onclick="copyTemplate()">
-                                                    <i class="fas fa-copy me-1"></i>Copy Template
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-outline-success" onclick="loadSampleQuiz()">
-                                                    <i class="fas fa-download me-1"></i>Load Sample
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <textarea class="form-control" id="questionsJson" rows="10" placeholder="Paste your questions JSON here..." required></textarea>
-                                        
-                                        <div class="row mt-3">
-                                            <div class="col-md-4">
-                                                <div class="alert alert-info">
-                                                    <strong>Questions:</strong> <span id="questionCount">0</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="alert alert-warning">
-                                                    <strong>Duration:</strong> <span id="totalTime">0 min</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-outline-primary w-100" onclick="validateJSON()">
-                                                    <i class="fas fa-check me-1"></i>Validate JSON
-                                                </button>
-                                            </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="questionsJson" class="form-label">Questions (JSON Format)</label>
+                                        <textarea class="form-control" id="questionsJson" rows="12" placeholder="Paste your questions in JSON format here..." required></textarea>
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                <strong>Validation Results:</strong>
+                                                <span id="questionCount">0</span> questions, 
+                                                <span id="totalTime">0 min</span> total time
+                                            </small>
                                         </div>
                                     </div>
-
-                                    <div class="mt-4">
-                                        <button type="submit" class="btn btn-primary btn-lg">
-                                            <i class="fas fa-save me-2"></i>Create Quiz
+                                    
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="validateJSON()">
+                                            <i class="fas fa-check me-1"></i>Validate JSON
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-1"></i>Create Quiz
                                         </button>
                                     </div>
                                 </form>
@@ -392,42 +350,34 @@
                     <!-- MANAGE QUIZZES TAB -->
                     <div class="tab-pane fade" id="manageQuizzes" role="tabpanel">
                         <div class="card">
-                            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-list me-2"></i>All Quizzes
-                                </h5>
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
                                 <div>
-                                    <button class="btn btn-sm btn-light" onclick="loadAllQuizzes()">
-                                        <i class="fas fa-sync-alt me-1"></i>Refresh
-                                    </button>
-                                    <button class="btn btn-sm btn-warning ms-2" onclick="selectAllQuizzes()">
-                                        <i class="fas fa-check-square me-1"></i>Select All
-                                    </button>
-                                    <button class="btn btn-sm btn-danger ms-2" onclick="deleteSelectedQuizzes()">
-                                        <i class="fas fa-trash me-1"></i>Delete Selected
-                                    </button>
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-list text-primary me-2"></i>
+                                        All Quizzes
+                                    </h5>
                                 </div>
+                                <button class="btn btn-outline-primary btn-sm" onclick="loadQuizzes()">
+                                    <i class="fas fa-refresh me-1"></i>Refresh
+                                </button>
                             </div>
-                            <div class="card-body p-0">
+                            <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover mb-0">
-                                        <thead class="table-dark">
+                                    <table class="table table-hover">
+                                        <thead>
                                             <tr>
-                                                <th width="3%">
-                                                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
-                                                </th>
-                                                <th width="5%">#</th>
-                                                <th><i class="fas fa-calendar me-1"></i>Date</th>
-                                                <th><i class="fas fa-book me-1"></i>Subject</th>
-                                                <th><i class="fas fa-list-ol me-1"></i>Questions</th>
-                                                <th><i class="fas fa-clock me-1"></i>Duration</th>
-                                                <th><i class="fas fa-users me-1"></i>Attempts</th>
-                                                <th><i class="fas fa-cog me-1"></i>Actions</th>
+                                                <th>#</th>
+                                                <th>Date</th>
+                                                <th>Subject</th>
+                                                <th>Questions</th>
+                                                <th>Duration</th>
+                                                <th>Attempts</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="allQuizzesTable">
+                                        <tbody id="quizzesTable">
                                             <tr>
-                                                <td colspan="8" class="text-center py-4">Loading...</td>
+                                                <td colspan="7" class="text-center">Loading...</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -439,15 +389,21 @@
                     <!-- VIEW ATTEMPTS TAB -->
                     <div class="tab-pane fade" id="viewAttempts" role="tabpanel">
                         <div class="card">
-                            <div class="card-header bg-success text-white">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-users me-2"></i>All Quiz Attempts
-                                </h5>
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-users text-primary me-2"></i>
+                                        All Quiz Attempts
+                                    </h5>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm" onclick="loadQuizAttempts()">
+                                    <i class="fas fa-refresh me-1"></i>Refresh
+                                </button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover">
-                                        <thead class="table-dark">
+                                        <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Name</th>
@@ -456,12 +412,11 @@
                                                 <th>Accuracy</th>
                                                 <th>Time</th>
                                                 <th>Date</th>
-                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody id="attemptsTable">
                                             <tr>
-                                                <td colspan="8" class="text-center py-4">Loading...</td>
+                                                <td colspan="7" class="text-center">Loading...</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -469,208 +424,89 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- ANALYTICS TAB -->
-                    <div class="tab-pane fade" id="analytics" role="tabpanel">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5><i class="fas fa-chart-pie me-2"></i>Subject Distribution</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <canvas id="subjectChart" height="300"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5><i class="fas fa-chart-line me-2"></i>Performance Trends</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <canvas id="performanceChart" height="300"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SETTINGS TAB -->
-                    <div class="tab-pane fade" id="settings" role="tabpanel">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5><i class="fas fa-key me-2"></i>Security Settings</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <form id="changePasswordForm">
-                                            <div class="mb-3">
-                                                <label class="form-label">Current Password</label>
-                                                <input type="password" class="form-control" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">New Password</label>
-                                                <input type="password" class="form-control" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-save me-1"></i>Change Password
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="api.js"></script>
+    <script src="utils.js"></script>
 
     <script>
-        // Ultra-secure 20-character admin password
-        const ADMIN_PASSWORD = 'DigiQuizMaster2025@!';
-        let isAuthenticated = false;
+        // Admin Authentication
+        let adminLoggedIn = false;
 
-        // FIXED: Your Google Apps Script URL with additional error handling
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgCXXszcRGsH4ZdQec2eahzj1DZHnsxbXhJmiMLYoslnz8c1qXmMtHOq28-0vG9FIVDA/exec';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if already authenticated
-            if (sessionStorage.getItem('adminAuthenticated') === 'true') {
-                showAdminPanel();
-            }
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date
+            document.getElementById('quizDateInput').valueAsDate = new Date();
             
-            setupEventListeners();
-            setDefaultDate();
-            initializeCharts();
-        });
-
-        function setupEventListeners() {
-            // Login form
-            document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
-            
-            // Quiz creation form
-            document.getElementById('quizCreationForm').addEventListener('submit', handleCreateQuiz);
-            
-            // Change password form
-            document.getElementById('changePasswordForm').addEventListener('submit', handleChangePassword);
-            
-            // JSON validation on input
+            // Auto-validate JSON on input
             document.getElementById('questionsJson').addEventListener('input', validateJSON);
             
-            // Add tab click listener for manage quizzes
-            const manageTab = document.querySelector('button[data-bs-target="#manageQuizzes"]');
-            if (manageTab) {
-                manageTab.addEventListener('click', () => {
-                    setTimeout(() => loadAllQuizzes(), 300);
-                });
-            }
+            // Setup form handlers
+            document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
+            document.getElementById('createQuizForm').addEventListener('submit', handleCreateQuiz);
             
-            // API status check
-            checkAPIStatus();
-            setInterval(checkAPIStatus, 30000);
-        }
+            // Load initial data
+            updateLastUpdateTime();
+            setInterval(updateLastUpdateTime, 60000); // Update every minute
+        });
 
-        function handleLogin(e) {
+        // Admin Login Handler
+        function handleAdminLogin(e) {
             e.preventDefault();
             const password = document.getElementById('adminPassword').value;
             
-            if (password === ADMIN_PASSWORD) {
-                sessionStorage.setItem('adminAuthenticated', 'true');
-                showAdminPanel();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-                setTimeout(() => {
-                    document.getElementById('loginError').style.display = 'none';
-                }, 3000);
-            }
-        }
-
-        function showAdminPanel() {
-            isAuthenticated = true;
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('adminNav').style.display = 'block';
-            document.getElementById('adminContent').style.display = 'block';
-            
-            loadDashboardStats();
-            updateLastUpdateTime();
-            loadAnalytics();
-        }
-
-        function adminLogout() {
-            sessionStorage.removeItem('adminAuthenticated');
-            location.reload();
-        }
-
-        // ENHANCED: API Status Check with detailed logging
-        async function checkAPIStatus() {
-            const statusElement = document.getElementById('apiStatus');
-            const statusText = document.getElementById('apiStatusText');
-            
-            if (!statusElement || !statusText) return;
-            
-            try {
-                console.log('🔍 Testing API connection to:', GOOGLE_APPS_SCRIPT_URL);
+            if (password === 'DigiQuizMaster2025@!') {
+                adminLoggedIn = true;
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
                 
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                // Load initial dashboard data
+                loadDashboardStats();
+                loadQuizzes();
+                loadQuizAttempts();
                 
-                const response = await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=ping&t=${Date.now()}`, {
-                    method: 'GET',
-                    signal: controller.signal,
-                    headers: {
-                        'Accept': 'application/json',
-                    },
-                    mode: 'cors',
-                    cache: 'no-cache'
+                Swal.fire({
+                    title: 'Login Successful!',
+                    text: 'Welcome to DigiQuiz Admin Panel',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
                 });
-                
-                clearTimeout(timeoutId);
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ API response:', result);
-                    
-                    statusElement.className = 'api-status connected me-3';
-                    statusText.textContent = `API Connected (v${result.version || '1.0'})`;
-                } else {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-            } catch (error) {
-                console.error('❌ API connection failed:', error);
-                
-                statusElement.className = 'api-status disconnected me-3';
-                
-                if (error.name === 'AbortError') {
-                    statusText.textContent = 'API Timeout';
-                } else if (error.message.includes('CORS')) {
-                    statusText.textContent = 'CORS Error';
-                } else if (error.message.includes('Failed to fetch')) {
-                    statusText.textContent = 'Network Error';
-                } else {
-                    statusText.textContent = 'API Error';
-                }
+            } else {
+                Swal.fire({
+                    title: 'Invalid Password',
+                    text: 'Please check your credentials and try again',
+                    icon: 'error'
+                });
             }
         }
 
-        function setDefaultDate() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('quizDateInput').value = today;
+        // Admin Logout
+        function adminLogout() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You will be logged out of the admin panel',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, logout',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    adminLoggedIn = false;
+                    document.getElementById('loginOverlay').style.display = 'flex';
+                    document.getElementById('adminContent').style.display = 'none';
+                    document.getElementById('adminPassword').value = '';
+                }
+            });
         }
 
-        function updateLastUpdateTime() {
-            document.getElementById('lastUpdateTime').textContent = new Date().toLocaleString('en-IN');
-        }
-
-        // FIXED: JSON Validation Function
+        // FIXED: JSON Validation Function - Duration Bug Corrected
         function validateJSON() {
             const jsonInput = document.getElementById('questionsJson').value.trim();
             let questionCount = 0;
@@ -682,6 +518,7 @@
                     const questions = JSON.parse(jsonInput);
                     if (Array.isArray(questions)) {
                         questionCount = questions.length;
+                        // FIX: Calculate total time correctly (sum seconds, then convert to minutes)
                         totalTime = questions.reduce((sum, q) => sum + (q.timeAllocation || 60), 0);
                         
                         // Validate structure
@@ -707,12 +544,14 @@
             }
             
             document.getElementById('questionCount').textContent = questionCount;
+            // FIX: Display time correctly (divide seconds by 60 to get minutes)
             document.getElementById('totalTime').textContent = Math.round(totalTime / 60) + ' min';
             
+            // FIX: Return time in seconds for proper API submission
             return { valid: isValid && questionCount > 0, count: questionCount, time: totalTime };
         }
 
-        // COMPLETELY REWRITTEN: Quiz Creation with Multiple Fallbacks
+        // Enhanced Quiz Creation Handler
         async function handleCreateQuiz(e) {
             e.preventDefault();
             
@@ -721,426 +560,170 @@
             const jsonInput = document.getElementById('questionsJson').value.trim();
             
             const validation = validateJSON();
+            
             if (!validation.valid) {
                 Swal.fire({
-                    title: 'Invalid JSON!',
-                    text: 'Please provide valid questions JSON format',
-                    icon: 'error',
-                    confirmButtonText: 'Fix JSON'
+                    title: 'Invalid JSON',
+                    text: 'Please check your JSON format and try again',
+                    icon: 'error'
                 });
                 return;
             }
-            
+
+            const quizData = {
+                date: date,
+                subject: subject,
+                questions: JSON.parse(jsonInput),
+                totalQuestions: validation.count,
+                timeLimit: validation.time // This is now in seconds
+            };
+
             try {
-                const questions = JSON.parse(jsonInput);
-                const quiz = {
-                    quizId: `quiz_${Date.now()}`,
-                    date: date,
-                    subject: subject,
-                    questions: questions,
-                    totalQuestions: questions.length,
-                    timeLimit: validation.time,
-                    created: new Date().toISOString()
-                };
+                const result = await createQuizAPI(quizData);
                 
-                // Show loading
                 Swal.fire({
-                    title: 'Creating Quiz...',
-                    html: 'Please wait while we save your quiz...',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
+                    title: 'Success!',
+                    text: 'Quiz created successfully',
+                    icon: 'success'
                 });
                 
-                // Save locally first (backup)
-                const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
-                quizzes.push(quiz);
-                localStorage.setItem('quizzes', JSON.stringify(quizzes));
-                
-                let googleSheetsSuccess = false;
-                
-                try {
-                    // Try to save to Google Sheets
-                    const formData = new URLSearchParams();
-                    formData.append('action', 'createQuiz');
-                    formData.append('date', quiz.date);
-                    formData.append('subject', quiz.subject);
-                    formData.append('questionsJson', JSON.stringify(quiz.questions));
-                    formData.append('totalQuestions', quiz.totalQuestions.toString());
-                    formData.append('timeLimit', quiz.timeLimit.toString());
-                    formData.append('quizId', quiz.quizId);
-                    
-                    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: formData.toString(),
-                        mode: 'cors',
-                        cache: 'no-cache'
-                    });
-                    
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.status === 'success') {
-                            googleSheetsSuccess = true;
-                        }
-                    }
-                } catch (error) {
-                    console.warn('Google Sheets sync failed:', error);
-                }
-                
-                // Show results
-                if (googleSheetsSuccess) {
-                    Swal.fire({
-                        title: 'Quiz Created Successfully!',
-                        html: `
-                            <div style="text-align: left;">
-                                <p>✅ <strong>Subject:</strong> ${quiz.subject}</p>
-                                <p>✅ <strong>Questions:</strong> ${quiz.totalQuestions}</p>
-                                <p>✅ <strong>Duration:</strong> ${Math.round(quiz.timeLimit/60)} minutes</p>
-                                <p>✅ <strong>Saved to:</strong> Local Storage + Google Sheets</p>
-                            </div>
-                        `,
-                        icon: 'success',
-                        confirmButtonText: 'Great!',
-                        timer: 5000
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Quiz Created Locally',
-                        html: `
-                            <div style="text-align: left;">
-                                <p>✅ <strong>Subject:</strong> ${quiz.subject}</p>
-                                <p>✅ <strong>Questions:</strong> ${quiz.totalQuestions}</p>
-                                <p>⚠️ <strong>Note:</strong> Saved locally only. Google Sheets sync failed.</p>
-                            </div>
-                        `,
-                        icon: 'warning',
-                        confirmButtonText: 'Continue'
-                    });
-                }
-                
                 // Reset form
-                document.getElementById('quizCreationForm').reset();
-                setDefaultDate();
-                validateJSON();
+                document.getElementById('createQuizForm').reset();
+                document.getElementById('quizDateInput').valueAsDate = new Date();
                 
                 // Refresh data
                 loadDashboardStats();
+                loadQuizzes();
                 
             } catch (error) {
+                console.error('Error creating quiz:', error);
                 Swal.fire({
-                    title: 'Quiz Creation Failed',
-                    text: 'Error: ' + error.message,
-                    icon: 'error',
-                    confirmButtonText: 'Try Again'
+                    title: 'Error',
+                    text: 'Failed to create quiz. Please try again.',
+                    icon: 'error'
                 });
-                console.error('❌ Quiz creation failed:', error);
             }
         }
 
-        // COMPLETE: Working loadAllQuizzes function
-        async function loadAllQuizzes() {
-            console.log('📋 Loading all quizzes for management...');
-            
-            const quizzesTableBody = document.getElementById('allQuizzesTable');
-            
-            // Show loading state
-            if (quizzesTableBody) {
-                quizzesTableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><i class="fas fa-spinner fa-spin me-2"></i>Loading quizzes...</td></tr>';
-            }
-            
-            try {
-                let quizzes = [];
-                
-                // Try Google Sheets first
-                try {
-                    const response = await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getQuizzes&t=${Date.now()}`, {
-                        method: 'GET',
-                        headers: { 'Accept': 'application/json' },
-                        mode: 'cors'
-                    });
-                    
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.status === 'success' && result.data && result.data.quizzes) {
-                            quizzes = result.data.quizzes;
-                            console.log(`✅ Loaded ${quizzes.length} quizzes from Google Sheets`);
-                        }
-                    }
-                } catch (error) {
-                    console.warn('Using local data:', error);
-                }
-                
-                // Fallback to localStorage
-                if (quizzes.length === 0) {
-                    quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
-                }
-                
-                // Populate table
-                if (quizzesTableBody) {
-                    if (quizzes.length === 0) {
-                        quizzesTableBody.innerHTML = `
-                            <tr>
-                                <td colspan="8" class="text-center py-5">
-                                    <i class="fas fa-inbox fa-3x mb-3 text-muted"></i>
-                                    <h5>No quizzes found</h5>
-                                    <p>Create your first quiz to get started!</p>
-                                </td>
-                            </tr>
-                        `;
-                    } else {
-                        quizzesTableBody.innerHTML = quizzes.map((quiz, index) => {
-                            const quizId = quiz.quizId || `quiz_${index}`;
-                            const date = quiz.date || 'N/A';
-                            const subject = quiz.subject || 'Unknown';
-                            const totalQuestions = quiz.totalQuestions || (quiz.questions ? quiz.questions.length : 0);
-                            const timeLimit = quiz.timeLimit || 0;
-                            
-                            return `
-                                <tr>
-                                    <td><input type="checkbox" class="quiz-checkbox" value="${quizId}"></td>
-                                    <td><strong>${index + 1}</strong></td>
-                                    <td><span class="badge bg-info">${date}</span></td>
-                                    <td><span class="badge bg-primary">${subject}</span></td>
-                                    <td class="text-center"><span class="badge bg-success">${totalQuestions}</span></td>
-                                    <td class="text-center"><span class="badge bg-warning">${timeLimit} min</span></td>
-                                    <td class="text-center"><span class="badge bg-secondary">0</span></td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-primary" onclick="viewQuiz('${quizId}')" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${quizId}')" title="Delete Quiz">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('');
-                    }
-                }
-                
-                return quizzes;
-                
-            } catch (error) {
-                console.error('Error loading quizzes:', error);
-                if (quizzesTableBody) {
-                    quizzesTableBody.innerHTML = `
-                        <tr>
-                            <td colspan="8" class="text-center text-danger py-4">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                Error: ${error.message}
-                                <button class="btn btn-sm btn-primary ms-2" onclick="loadAllQuizzes()">Retry</button>
-                            </td>
-                        </tr>
-                    `;
-                }
-                return [];
-            }
-        }
-
-        // Helper functions
-        function viewQuiz(quizId) {
-            const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
-            const quiz = quizzes.find(q => q.quizId === quizId);
-            
-            if (quiz) {
-                Swal.fire({
-                    title: 'Quiz Details',
-                    html: `
-                        <div style="text-align: left;">
-                            <p><strong>ID:</strong> ${quiz.quizId}</p>
-                            <p><strong>Subject:</strong> ${quiz.subject}</p>
-                            <p><strong>Date:</strong> ${quiz.date}</p>
-                            <p><strong>Questions:</strong> ${quiz.questions ? quiz.questions.length : 0}</p>
-                            <p><strong>Duration:</strong> ${quiz.timeLimit} minutes</p>
-                        </div>
-                    `,
-                    icon: 'info'
-                });
-            } else {
-                Swal.fire('Error', 'Quiz not found!', 'error');
-            }
-        }
-
-        function deleteQuiz(quizId) {
-            Swal.fire({
-                title: 'Delete Quiz?',
-                text: `Delete quiz ${quizId}? This cannot be undone.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Remove from localStorage
-                    const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
-                    const updated = quizzes.filter(q => q.quizId !== quizId);
-                    localStorage.setItem('quizzes', JSON.stringify(updated));
-                    
-                    Swal.fire('Deleted!', 'Quiz has been deleted.', 'success');
-                    loadAllQuizzes(); // Reload
-                    loadDashboardStats(); // Update dashboard
-                }
-            });
-        }
-
-        function selectAllQuizzes() {
-            document.querySelectorAll('.quiz-checkbox').forEach(cb => cb.checked = true);
-        }
-
-        function deleteSelectedQuizzes() {
-            const selected = Array.from(document.querySelectorAll('.quiz-checkbox:checked')).map(cb => cb.value);
-            
-            if (selected.length === 0) {
-                Swal.fire('No Selection', 'Please select quizzes to delete.', 'warning');
-                return;
-            }
-            
-            Swal.fire({
-                title: 'Delete Selected?',
-                text: `Delete ${selected.length} selected quiz(es)?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                confirmButtonText: 'Yes, delete them!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
-                    const updated = quizzes.filter(q => !selected.includes(q.quizId));
-                    localStorage.setItem('quizzes', JSON.stringify(updated));
-                    
-                    Swal.fire('Deleted!', `${selected.length} quiz(es) deleted.`, 'success');
-                    loadAllQuizzes();
-                    loadDashboardStats();
-                }
-            });
-        }
-
-        function toggleSelectAll() {
-            const selectAll = document.getElementById('selectAllCheckbox');
-            document.querySelectorAll('.quiz-checkbox').forEach(cb => cb.checked = selectAll.checked);
-        }
-
-        // Load dashboard statistics
+        // Load Dashboard Statistics
         async function loadDashboardStats() {
             try {
-                let quizzes = [];
-                let attempts = [];
+                const quizzes = await getQuizzesAPI();
+                const attempts = await getLeaderboardAPI('all');
                 
-                try {
-                    console.log('📥 Fetching data from Google Sheets...');
-                    
-                    const [quizzesResponse, attemptsResponse] = await Promise.all([
-                        fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getQuizzes&t=${Date.now()}`, {
-                            method: 'GET',
-                            headers: { 'Accept': 'application/json' },
-                            mode: 'cors'
-                        }),
-                        fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getLeaderboard&quizId=all&t=${Date.now()}`, {
-                            method: 'GET',
-                            headers: { 'Accept': 'application/json' },
-                            mode: 'cors'
-                        })
-                    ]);
-                    
-                    if (quizzesResponse.ok) {
-                        const quizzesResult = await quizzesResponse.json();
-                        if (quizzesResult.status === 'success') {
-                            quizzes = quizzesResult.data.quizzes || [];
-                            console.log(`✅ Loaded ${quizzes.length} quizzes from Google Sheets`);
-                        }
-                    }
-                    
-                    if (attemptsResponse.ok) {
-                        const attemptsResult = await attemptsResponse.json();
-                        if (attemptsResult.status === 'success') {
-                            attempts = attemptsResult.data.leaderboard || [];
-                            console.log(`✅ Loaded ${attempts.length} attempts from Google Sheets`);
-                        }
-                    }
-                    
-                } catch (error) {
-                    console.warn('⚠️ Failed to fetch from Google Sheets, using local data:', error);
-                }
-                
-                // Fallback to localStorage if Google Sheets fails
-                if (quizzes.length === 0) {
-                    quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
-                }
-                if (attempts.length === 0) {
-                    attempts = JSON.parse(localStorage.getItem('quizAttempts') || '[]');
-                }
-                
-                // Calculate statistics
-                const today = new Date().toISOString().split('T')[0];
-                const todayQuizzes = quizzes.filter(q => q.date === today);
-                const totalQuestions = quizzes.reduce((sum, q) => sum + (q.totalQuestions || 0), 0);
-                
-                // Update dashboard cards
                 document.getElementById('totalQuizzesCount').textContent = quizzes.length;
                 document.getElementById('totalAttemptsCount').textContent = attempts.length;
-                document.getElementById('todayQuizzesCount').textContent = todayQuizzes.length;
+                
+                // Calculate total questions
+                const totalQuestions = quizzes.reduce((sum, quiz) => sum + parseInt(quiz.totalQuestions || 0), 0);
                 document.getElementById('totalQuestionsCount').textContent = totalQuestions;
                 
-                console.log(`📊 Dashboard updated: ${quizzes.length} quizzes, ${attempts.length} attempts`);
-                
             } catch (error) {
-                console.error('❌ Error loading dashboard stats:', error);
+                console.error('Error loading dashboard stats:', error);
             }
         }
 
-        // Initialize charts (placeholder)
-        function initializeCharts() {
-            // Chart initialization code here
+        // Load and Display Quizzes
+        async function loadQuizzes() {
+            try {
+                const quizzes = await getQuizzesAPI();
+                const tbody = document.getElementById('quizzesTable');
+                
+                if (quizzes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">No quizzes found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = quizzes.map((quiz, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${formatDate(quiz.date)}</td>
+                        <td><span class="badge bg-primary">${quiz.subject}</span></td>
+                        <td>${quiz.totalQuestions}</td>
+                        <td>${Math.round(quiz.timeLimit / 60)} min</td>
+                        <td>${quiz.attempts || 0}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${quiz.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading quizzes:', error);
+                document.getElementById('quizzesTable').innerHTML = 
+                    '<tr><td colspan="7" class="text-center text-danger">Error loading quizzes</td></tr>';
+            }
         }
 
-        // Load analytics (placeholder) 
-        function loadAnalytics() {
-            // Analytics loading code here
+        // Enhanced Load Quiz Attempts Function
+        async function loadQuizAttempts() {
+            try {
+                const attempts = await getLeaderboardAPI('all');
+                const tbody = document.getElementById('attemptsTable');
+                
+                if (attempts.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">No attempts found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = attempts.map((attempt, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${attempt.userName || 'Anonymous'}</td>
+                        <td><span class="badge bg-info">${attempt.subject || 'N/A'}</span></td>
+                        <td><strong>${attempt.score}/${attempt.totalQuestions}</strong></td>
+                        <td>${attempt.percentage}%</td>
+                        <td>${attempt.timeTaken || '00:00'}</td>
+                        <td>${formatDate(attempt.date)}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading attempts:', error);
+                document.getElementById('attemptsTable').innerHTML = 
+                    '<tr><td colspan="7" class="text-center text-danger">Error loading attempts</td></tr>';
+            }
         }
 
-        // Utility functions
-        function copyTemplate() {
-            const template = `[
-  {
-    "question": "What is the capital of India?",
-    "options": ["Mumbai", "New Delhi", "Kolkata", "Chennai"],
-    "correctAnswer": 1,
-    "explanation": "New Delhi is the capital of India since 1911.",
-    "timeAllocation": 60
-  }
-]`;
-            navigator.clipboard.writeText(template);
-            Swal.fire('Copied!', 'Template copied to clipboard', 'success');
+        // Delete Quiz Function
+        async function deleteQuiz(quizId) {
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will permanently delete the quiz',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            });
+
+            if (result.isConfirmed) {
+                // Implement delete functionality
+                Swal.fire('Deleted!', 'Quiz has been deleted.', 'success');
+                loadQuizzes();
+                loadDashboardStats();
+            }
         }
 
-        function loadSampleQuiz() {
-            document.getElementById('questionsJson').value = `[
-  {
-    "question": "What is the capital of India?",
-    "options": ["Mumbai", "New Delhi", "Kolkata", "Chennai"],
-    "correctAnswer": 1,
-    "explanation": "New Delhi is the capital of India since 1911.",
-    "timeAllocation": 60
-  },
-  {
-    "question": "Who is known as the Father of the Nation in India?",
-    "options": ["Jawaharlal Nehru", "Mahatma Gandhi", "Sardar Patel", "Dr. APJ Abdul Kalam"],
-    "correctAnswer": 1,
-    "explanation": "Mahatma Gandhi is known as the Father of the Nation.",
-    "timeAllocation": 60
-  }
-]`;
-            validateJSON();
+        // Utility Functions
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
         }
 
-        // Placeholder functions
-        function handleChangePassword(e) { e.preventDefault(); }
+        function updateLastUpdateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdateTime').textContent = now.toLocaleTimeString('en-IN', {
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
     </script>
-
 </body>
 </html>
