@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DigiQuiz Portal - English & General Knowledge Quiz Platform</title>
+    <title>Daily Exam Quiz Portal - Test Your Knowledge</title>
     
-    <!-- Meta Tags -->
-    <meta name="description" content="Master English and General Knowledge with DigiQuiz Portal. Interactive quizzes, real-time results, and competitive learning platform.">
-    <meta name="keywords" content="english quiz, general knowledge quiz, gk quiz, english grammar, vocabulary test">
-    <meta name="author" content="DigiQuiz Portal Team">
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Daily Exam Quiz Portal - Practice with curated questions, track your progress, and improve your skills with our comprehensive quiz platform.">
+    <meta name="keywords" content="quiz, daily exam, practice test, online quiz, education, learning">
+    <meta name="author" content="Daily Exam Quiz Portal">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,247 +20,22 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Particles.js -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
-    <!-- Custom CSS (Keep your existing style.css) -->
+    <!-- Custom CSS - Your Existing Design -->
     <link rel="stylesheet" href="style.css">
     
-    <style>
-        /* Enhanced styles matching your original repo design */
-        
-        /* Bubble Animation Effects */
-        .bubbles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .bubble {
-            position: absolute;
-            bottom: -100px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: bubble-rise 15s infinite linear;
-        }
-
-        .bubble:nth-child(1) {
-            width: 40px;
-            height: 40px;
-            left: 10%;
-            animation-duration: 8s;
-            animation-delay: 0s;
-        }
-
-        .bubble:nth-child(2) {
-            width: 20px;
-            height: 20px;
-            left: 20%;
-            animation-duration: 5s;
-            animation-delay: 1s;
-        }
-
-        .bubble:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            left: 35%;
-            animation-duration: 10s;
-            animation-delay: 2s;
-        }
-
-        .bubble:nth-child(4) {
-            width: 80px;
-            height: 80px;
-            left: 50%;
-            animation-duration: 12s;
-            animation-delay: 0s;
-        }
-
-        .bubble:nth-child(5) {
-            width: 30px;
-            height: 30px;
-            left: 70%;
-            animation-duration: 6s;
-            animation-delay: 3s;
-        }
-
-        .bubble:nth-child(6) {
-            width: 50px;
-            height: 50px;
-            left: 85%;
-            animation-duration: 9s;
-            animation-delay: 1s;
-        }
-
-        .bubble:nth-child(7) {
-            width: 25px;
-            height: 25px;
-            left: 65%;
-            animation-duration: 7s;
-            animation-delay: 4s;
-        }
-
-        @keyframes bubble-rise {
-            0% {
-                bottom: -100px;
-                transform: translateX(0);
-                opacity: 0.6;
-            }
-            50% {
-                opacity: 0.8;
-                transform: translateX(100px);
-            }
-            100% {
-                bottom: 1080px;
-                transform: translateX(-200px);
-                opacity: 0;
-            }
-        }
-
-        /* Enhanced Quiz Cards for English (Green) and GK (Blue) */
-        .quiz-card.english-card {
-            border-left: 6px solid #10b981;
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .quiz-card.english-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
-            border-left-color: #059669;
-        }
-
-        .quiz-card.english-card .start-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            border: none;
-            color: white;
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-card.english-card .start-btn:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            transform: translateY(-2px);
-        }
-
-        .quiz-card.gk-card {
-            border-left: 6px solid #3b82f6;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .quiz-card.gk-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
-            border-left-color: #2563eb;
-        }
-
-        .quiz-card.gk-card .start-btn {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            border: none;
-            color: white;
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-card.gk-card .start-btn:hover {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            transform: translateY(-2px);
-        }
-
-        /* Simple Advertisement Banner */
-        .advertisement-banner {
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            border: 2px dashed #9ca3af;
-            border-radius: 15px;
-            padding: 3rem 2rem;
-            text-align: center;
-            margin: 3rem 0;
-            transition: all 0.3s ease;
-        }
-
-        .advertisement-banner:hover {
-            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-            transform: translateY(-2px);
-        }
-
-        .ad-text {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #6b7280;
-            margin: 0;
-        }
-
-        .ad-subtext {
-            font-size: 1rem;
-            color: #9ca3af;
-            margin-top: 0.5rem;
-        }
-
-        /* Load More Section */
-        .load-more-section {
-            text-align: center;
-            padding: 3rem 0;
-        }
-
-        .load-more-btn {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 1rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .load-more-btn:hover {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Remove any sign-in promotion styles */
-        .no-auth-promotion {
-            display: none !important;
-        }
-
-        /* Enhanced responsive design */
-        @media (max-width: 768px) {
-            .bubble {
-                display: none; /* Hide bubbles on mobile for performance */
-            }
-            
-            .advertisement-banner {
-                padding: 2rem 1rem;
-            }
-            
-            .ad-text {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
+    <!-- Particles.js for Background Animation -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- Firebase SDK v10 - Modern Modular -->
+    <script type="module" src="firebase-config.js"></script>
 </head>
+
 <body>
-    <!-- Navigation Bar (Keep Sign-in here as requested) -->
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary" href="index.html">
-                <i class="fas fa-graduation-cap me-2"></i>DigiQuiz Portal
+                <i class="fas fa-graduation-cap me-2"></i>Daily Quiz Portal
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -279,220 +54,242 @@
                             <i class="fas fa-trophy me-1"></i>Leaderboard
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adminotoyaram.html">
+                            <i class="fas fa-cog me-1"></i>Admin
+                        </a>
+                    </li>
                     
-                    <!-- Authentication in Navigation (This is OK as requested) -->
-                    <li class="nav-item" id="authNavSection">
-                        <!-- Will be populated by JavaScript -->
+                    <!-- Firebase Auth Section -->
+                    <li class="nav-item ms-2" id="authNavItem">
+                        <!-- Will be populated by Firebase Auth -->
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section with Bubble Effects (Based on your original repo) -->
+    <!-- Hero Section with Particles Background -->
     <section class="hero-section">
-        <!-- Particles.js Background -->
         <div id="particles-js"></div>
-        
-        <!-- Animated Bubbles -->
-        <div class="bubbles">
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-        </div>
-        
-        <!-- Hero Overlay -->
         <div class="hero-overlay"></div>
         
-        <!-- Hero Content (No authentication promotion here) -->
         <div class="container hero-content">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
                     <h1 class="hero-title display-3 fw-bold mb-4">
-                        Master English & General Knowledge
+                        Start Your Quiz Journey
                     </h1>
                     <p class="hero-subtitle lead mb-5">
-                        Excel in competitive exams with comprehensive quizzes designed for English language skills and General Knowledge mastery
+                        Fill in your details to begin
                     </p>
                     
-                    <!-- Simple Call-to-Action (No pushy sign-in) -->
-                    <div class="mb-5">
-                        <a href="#quizzes" class="btn btn-light btn-lg px-5 py-3 modern-btn">
-                            <i class="fas fa-play-circle me-2"></i>Explore Quizzes
-                        </a>
+                    <!-- Firebase Authentication Card -->
+                    <div id="authCard" class="glass-card p-4 mb-4" style="max-width: 500px; margin: 0 auto;">
+                        <!-- Before Login: Google Sign-in Button -->
+                        <div id="beforeLogin">
+                            <div class="mb-3">
+                                <i class="fas fa-user-graduate fa-3x mb-3 text-white"></i>
+                                <h4 class="text-white mb-3">Welcome to Daily Quiz Portal</h4>
+                                <p class="text-white-50 mb-4">Sign in with Google to start taking quizzes and track your progress</p>
+                            </div>
+                            <button id="googleSignInBtn" class="btn btn-light btn-lg modern-btn">
+                                <i class="fab fa-google me-2 text-danger"></i>
+                                Continue with Google
+                            </button>
+                            <div class="mt-3">
+                                <small class="text-white-50">
+                                    <i class="fas fa-shield-alt me-1"></i>
+                                    Secure authentication with Google
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- After Login: User Profile -->
+                        <div id="afterLogin" style="display: none;">
+                            <div class="d-flex align-items-center mb-3">
+                                <img id="userPhoto" class="rounded-circle me-3" width="60" height="60" alt="User Photo">
+                                <div class="text-start">
+                                    <h5 id="userName" class="text-white mb-0"></h5>
+                                    <p id="userEmail" class="text-white-50 mb-0 small"></p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button id="continueToQuizzes" class="btn btn-success btn-lg flex-fill">
+                                    <i class="fas fa-play me-2"></i>Continue to Quizzes
+                                </button>
+                                <button id="signOutBtn" class="btn btn-outline-light">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Loading State -->
+                        <div id="authLoading" style="display: none;">
+                            <div class="text-white">
+                                <div class="spinner-border mb-3" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Connecting to Firebase...</p>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Platform Statistics -->
+                    <!-- Hero Stats -->
                     <div class="hero-stats">
                         <div class="stat-card">
                             <i class="fas fa-users fa-2x mb-2"></i>
-                            <h3 id="totalUsers">5,247</h3>
-                            <p>Active Learners</p>
+                            <h3 id="totalUsers">0</h3>
+                            <p>Active Users</p>
                         </div>
                         <div class="stat-card">
                             <i class="fas fa-clipboard-list fa-2x mb-2"></i>
-                            <h3 id="totalQuizzes">156</h3>
-                            <p>English & GK Quizzes</p>
+                            <h3 id="totalQuizzes">0</h3>
+                            <p>Total Quizzes</p>
                         </div>
                         <div class="stat-card">
                             <i class="fas fa-chart-line fa-2x mb-2"></i>
-                            <h3 id="totalAttempts">24,891</h3>
+                            <h3 id="totalAttempts">0</h3>
                             <p>Quiz Attempts</p>
                         </div>
-                        <div class="stat-card">
-                            <i class="fas fa-award fa-2x mb-2"></i>
-                            <h3 id="totalQuestions">4,680</h3>
-                            <p>Practice Questions</p>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Quiz Selection Section -->
-    <section id="quizzes" class="py-5">
+    <!-- Available Quizzes Section (Shown after Authentication) -->
+    <section id="quizSection" class="py-5" style="display: none;">
         <div class="container">
-            <!-- Welcome Message for Authenticated Users -->
-            <div id="userWelcome" class="row mb-5" style="display: none;">
-                <!-- Will be populated for signed-in users -->
-            </div>
-
             <!-- Section Header -->
-            <div class="row mb-5">
-                <div class="col-12 text-center">
-                    <h2 class="display-5 fw-bold mb-3">Available Quizzes</h2>
-                    <p class="lead text-muted">Choose from our collection of English and General Knowledge tests</p>
-                </div>
-            </div>
-
-            <!-- Filters -->
             <div class="row mb-4">
-                <div class="col-lg-8 mx-auto">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <select id="filterSubject" class="form-select">
-                                        <option value="">📚 All Subjects</option>
-                                        <option value="English">📖 English Language</option>
-                                        <option value="General Knowledge">🧠 General Knowledge</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <select id="filterDifficulty" class="form-select">
-                                        <option value="">⚡ All Levels</option>
-                                        <option value="Easy">🟢 Easy</option>
-                                        <option value="Medium">🟡 Medium</option>
-                                        <option value="Hard">🔴 Hard</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-outline-primary w-100" onclick="refreshQuizzes()">
-                                        <i class="fas fa-sync-alt me-2"></i>Refresh
-                                    </button>
-                                </div>
-                            </div>
+                <div class="col-lg-6">
+                    <h2 class="mb-0">
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                        Available Quizzes
+                    </h2>
+                    <p class="text-muted">Choose from our collection of practice tests</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <select id="quizDate" class="form-select">
+                                <option value="">Select Date</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="filterSubject" class="form-select">
+                                <option value="">All Subjects</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Science">Science</option>
+                                <option value="English">English</option>
+                                <option value="History">History</option>
+                                <option value="Geography">Geography</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="General Knowledge">General Knowledge</option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Quiz Cards (Initially show 2) -->
-            <div id="quizCards" class="row g-4">
-                <!-- Loading state -->
+            <!-- Subject Cards (Your Original Design) -->
+            <div class="subject-cards-container mb-4" id="subjectCards">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <!-- Quiz Cards Container -->
+            <div class="row" id="quizCards">
                 <div class="col-12 text-center py-5">
-                    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
-                    <h5>Loading Available Quizzes...</h5>
-                    <p class="text-muted">Fetching English and General Knowledge quizzes</p>
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading available quizzes...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Loading available quizzes...</p>
                 </div>
             </div>
 
-            <!-- Load More Section -->
-            <div class="load-more-section" id="loadMoreSection" style="display: none;">
-                <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreQuizzes()">
-                    <i class="fas fa-plus-circle me-2"></i>Load More Quizzes
-                </button>
-                <p class="mt-3 text-muted">
-                    Showing <span id="quizCount">0</span> of <span id="totalQuizCount">0</span> available quizzes
-                </p>
+            <!-- Quiz Count Display -->
+            <div class="text-center mt-4">
+                <span class="badge bg-primary fs-6 px-3 py-2">
+                    <i class="fas fa-list-ol me-2"></i>
+                    <span id="quizCount">0</span> Quizzes Available
+                </span>
             </div>
         </div>
     </section>
 
-    <!-- Simple Advertisement Banner (Replaces the promotional section) -->
-    <section class="py-4">
-        <div class="container">
-            <div class="advertisement-banner">
-                <div class="ad-text">📢 Advertisement Space Available</div>
-                <div class="ad-subtext">Premium placement for educational content and exam preparation resources</div>
+    <!-- Pre-Quiz Modal (Your Original Design) -->
+    <div class="modal fade" id="preQuizModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-clipboard-check me-2"></i>
+                        Quiz Instructions
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="preQuizForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="studentName" class="form-label">
+                                    <i class="fas fa-user me-1"></i>Full Name
+                                </label>
+                                <input type="text" class="form-control" id="studentName" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="studentEmail" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>Email
+                                </label>
+                                <input type="email" class="form-control" id="studentEmail" readonly>
+                            </div>
+                        </div>
+                        
+                        <div id="quizDetails" class="mb-4">
+                            <!-- Quiz details will be populated here -->
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle me-2"></i>Important Instructions:</h6>
+                            <ul class="mb-0">
+                                <li>Read each question carefully before selecting your answer</li>
+                                <li>You cannot change answers once submitted</li>
+                                <li>The quiz will auto-submit when time expires</li>
+                                <li>Ensure stable internet connection throughout</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                            <label class="form-check-label" for="agreeTerms">
+                                I have read and agree to the quiz instructions
+                            </label>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-play me-1"></i>Start Quiz
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-5 fw-bold mb-3">Why Choose DigiQuiz Portal?</h2>
-                    <p class="lead text-muted">Experience focused learning with our specialized English and GK platform</p>
-                </div>
-            </div>
-            
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm h-100 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-bolt fa-3x text-primary"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Instant Results</h5>
-                            <p class="text-muted">Get immediate feedback and detailed explanations for every question</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm h-100 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-users fa-3x text-success"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Competitive Learning</h5>
-                            <p class="text-muted">Compete with thousands of learners on our global leaderboard</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm h-100 hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-chart-line fa-3x text-info"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Progress Tracking</h5>
-                            <p class="text-muted">Monitor your learning journey with detailed analytics</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-dark text-light py-5">
         <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
                     <h5 class="fw-bold mb-3">
-                        <i class="fas fa-graduation-cap me-2 text-primary"></i>DigiQuiz Portal
+                        <i class="fas fa-graduation-cap me-2"></i>Daily Quiz Portal
                     </h5>
-                    <p class="mb-3">Master English language skills and General Knowledge with our comprehensive quiz platform designed for competitive exam preparation.</p>
+                    <p class="mb-3">Enhance your knowledge with our comprehensive quiz platform. Practice daily, track progress, and excel in your studies.</p>
                     <div class="d-flex gap-3">
                         <a href="#" class="text-light fs-5"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-light fs-5"><i class="fab fa-twitter"></i></a>
@@ -501,417 +298,116 @@
                     </div>
                 </div>
                 
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-2 col-md-6 mb-4">
                     <h6 class="fw-semibold mb-3">Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="index.html" class="text-light text-decoration-none">Home</a></li>
-                        <li class="mb-2"><a href="leaderboard.html" class="text-light text-decoration-none">Leaderboard</a></li>
-                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">Help</a></li>
-                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">Contact</a></li>
+                        <li><a href="index.html" class="text-light text-decoration-none">Home</a></li>
+                        <li><a href="leaderboard.html" class="text-light text-decoration-none">Leaderboard</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Contact</a></li>
                     </ul>
                 </div>
                 
-                <div class="col-lg-2 col-md-6">
-                    <h6 class="fw-semibold mb-3">Subjects</h6>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-semibold mb-3">Categories</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">📖 English Language</a></li>
-                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">🧠 General Knowledge</a></li>
-                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">🌍 Current Affairs</a></li>
-                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">🏛️ History</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Mathematics</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Science</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">English</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">History</a></li>
                     </ul>
                 </div>
                 
                 <div class="col-lg-4">
-                    <h6 class="fw-semibold mb-3">Stay Connected</h6>
-                    <p class="mb-3">Get updates about new quizzes and learning resources</p>
+                    <h6 class="fw-semibold mb-3">Stay Updated</h6>
+                    <p>Get notified about new quizzes and features</p>
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Enter email" id="subscribeEmail">
-                        <button class="btn btn-primary" type="button" onclick="subscribeNewsletter()">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-primary" type="button">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
-                    <small class="text-muted">🔒 We respect your privacy</small>
+                    <small class="text-muted">We respect your privacy. Unsubscribe at any time.</small>
                 </div>
             </div>
             
             <hr class="my-4">
-            
             <div class="row align-items-center">
-                <div class="col-md-8">
-                    <small>&copy; 2025 DigiQuiz Portal. All rights reserved. Built for better education.</small>
+                <div class="col-md-6">
+                    <small>&copy; 2025 Daily Quiz Portal. All rights reserved.</small>
                 </div>
-                <div class="col-md-4 text-md-end">
+                <div class="col-md-6 text-md-end">
                     <small>
-                        <a href="#" class="text-light text-decoration-none me-3">Privacy</a>
-                        <a href="#" class="text-light text-decoration-none">Terms</a>
+                        <a href="#" class="text-light text-decoration-none me-3">Privacy Policy</a>
+                        <a href="#" class="text-light text-decoration-none">Terms of Service</a>
                     </small>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Toast Notifications -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="authToast" class="toast" role="alert">
-            <div class="toast-header">
-                <i id="toastIcon" class="fas fa-info-circle text-primary me-2"></i>
-                <strong id="toastTitle" class="me-auto">DigiQuiz Portal</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-            </div>
-            <div class="toast-body" id="toastMessage"></div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Firebase Scripts -->
-    <script src="firebase-config.js" type="module"></script>
-    <script src="firebase-auth.js" type="module"></script>
-    <script src="firebase-quiz.js" type="module"></script>
+    <!-- Firebase Services -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="firebase-auth.js"></script>
+    <script type="module" src="firebase-quiz.js"></script>
     
-    <!-- Utility Scripts -->
+    <!-- Your Existing Utilities -->
     <script src="utils.js"></script>
+    
+    <!-- Main App Logic with Firebase Integration -->
+    <script type="module" src="app-firebase.js"></script>
 
-    <!-- Main Application Script -->
-    <script type="module">
-        // Import Firebase modules
-        import { onAuthStateChange } from './firebase-auth.js';
-        import { getAvailableQuizzes } from './firebase-quiz.js';
-        
-        // Global state
-        window.currentUser = null;
-        window.availableQuizzes = [];
-        window.displayedQuizzes = 0;
-        window.quizzesPerLoad = 2; // Show 2 initially
-        window.loadIncrement = 4; // Load 4 more each time
-        
-        // Initialize Particles.js (from your original repo style)
-        if (window.particlesJS) {
-            particlesJS('particles-js', {
-                particles: {
-                    number: { value: 80, density: { enable: true, value_area: 800 } },
-                    color: { value: "#ffffff" },
-                    shape: { type: "circle" },
-                    opacity: { value: 0.5, random: false },
-                    size: { value: 3, random: true },
-                    line_linked: { 
-                        enable: true, 
-                        distance: 150, 
-                        color: "#ffffff", 
-                        opacity: 0.4, 
-                        width: 1 
-                    },
-                    move: { 
-                        enable: true, 
-                        speed: 6, 
-                        direction: "none", 
-                        random: false, 
-                        straight: false, 
-                        out_mode: "out", 
-                        bounce: false 
-                    }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: { 
-                        onhover: { enable: true, mode: "repulse" }, 
-                        onclick: { enable: true, mode: "push" }, 
-                        resize: true 
-                    },
-                    modes: { 
-                        repulse: { distance: 200, duration: 0.4 }
-                    }
-                },
-                retina_detect: true
-            });
-        }
-        
-        // Initialize app
+    <!-- Initialize Everything -->
+    <script>
+        // Particles.js Configuration (Your Original)
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DigiQuiz Portal Loading...');
-            
-            // Setup authentication (no pushy prompts)
-            onAuthStateChange((user) => {
-                window.currentUser = user;
-                updateAuthNavigation(user);
-                
-                if (user) {
-                    showUserWelcome(user);
-                }
-                
-                loadQuizzes();
-            });
-            
-            setupFilters();
+            if (window.particlesJS) {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 80, density: { enable: true, value_area: 800 } },
+                        color: { value: "#ffffff" },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.5, random: false },
+                        size: { value: 3, random: true },
+                        line_linked: { 
+                            enable: true, 
+                            distance: 150, 
+                            color: "#ffffff", 
+                            opacity: 0.4, 
+                            width: 1 
+                        },
+                        move: { 
+                            enable: true, 
+                            speed: 6, 
+                            direction: "none", 
+                            random: false, 
+                            straight: false, 
+                            out_mode: "out", 
+                            bounce: false 
+                        }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: { 
+                            onhover: { enable: true, mode: "repulse" }, 
+                            onclick: { enable: true, mode: "push" }, 
+                            resize: true 
+                        },
+                        modes: { 
+                            grab: { distance: 400 }, 
+                            bubble: { distance: 400, size: 40 }, 
+                            repulse: { distance: 200, duration: 0.4 } 
+                        }
+                    },
+                    retina_detect: true
+                });
+            }
+
+            console.log('🚀 Daily Quiz Portal - Firebase Version Loading...');
         });
-        
-        // Update only navigation authentication (no hero section changes)
-        window.updateAuthNavigation = function(user) {
-            const authNavSection = document.getElementById('authNavSection');
-            
-            if (user) {
-                authNavSection.innerHTML = `
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                            <img src="${user.photoURL}" alt="${user.displayName}" 
-                                 style="width: 32px; height: 32px; border-radius: 50%; margin-right: 8px;">
-                            <span class="d-none d-md-inline">${user.displayName.split(' ')[0]}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">${user.displayName}</h6></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Progress</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#" onclick="signOutUser()">
-                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-                            </a></li>
-                        </ul>
-                    </div>
-                `;
-            } else {
-                authNavSection.innerHTML = `
-                    <button class="btn btn-primary" onclick="signInWithGoogle()">
-                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                    </button>
-                `;
-            }
-        };
-        
-        // Show welcome message for signed-in users
-        window.showUserWelcome = function(user) {
-            const userWelcome = document.getElementById('userWelcome');
-            userWelcome.style.display = 'block';
-            userWelcome.innerHTML = `
-                <div class="col-12">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <img src="${user.photoURL}" alt="${user.displayName}" 
-                                         style="width: 60px; height: 60px; border-radius: 50%;">
-                                </div>
-                                <div class="col">
-                                    <h4 class="mb-1">Welcome back, ${user.displayName}! 👋</h4>
-                                    <p class="mb-0">Ready to continue your English and GK mastery journey?</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        };
-        
-        // Load quizzes (English and GK only)
-        window.loadQuizzes = async function() {
-            try {
-                const allQuizzes = await getAvailableQuizzes();
-                window.availableQuizzes = allQuizzes.filter(quiz => 
-                    quiz.subject === 'English' || quiz.subject === 'General Knowledge'
-                );
-                window.displayedQuizzes = 0;
-                displayQuizzes();
-            } catch (error) {
-                console.error('Error loading quizzes:', error);
-                showErrorState();
-            }
-        };
-        
-        // Display quizzes with subject-specific colors
-        window.displayQuizzes = function() {
-            const container = document.getElementById('quizCards');
-            const loadMoreSection = document.getElementById('loadMoreSection');
-            
-            const quizzesToShow = Math.min(
-                window.displayedQuizzes + (window.displayedQuizzes === 0 ? window.quizzesPerLoad : window.loadIncrement),
-                window.availableQuizzes.length
-            );
-            
-            if (window.availableQuizzes.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <i class="fas fa-clipboard-list fa-4x text-muted mb-3"></i>
-                        <h4>No quizzes available</h4>
-                        <p class="text-muted">New quizzes will be available soon!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const quizzesToDisplay = window.availableQuizzes.slice(0, quizzesToShow);
-            
-            container.innerHTML = quizzesToDisplay.map((quiz, index) => {
-                const isEnglish = quiz.subject === 'English';
-                const cardClass = isEnglish ? 'english-card' : 'gk-card';
-                const subjectIcon = isEnglish ? 'fas fa-book-open' : 'fas fa-brain';
-                
-                return `
-                    <div class="col-lg-6">
-                        <div class="card quiz-card ${cardClass} h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h6 class="text-muted mb-0">
-                                        <i class="${subjectIcon} me-2"></i>
-                                        ${quiz.subject}
-                                    </h6>
-                                    <small class="text-muted">${formatDate(quiz.date)}</small>
-                                </div>
-                                
-                                <h5 class="card-title fw-bold">${quiz.subject} Mastery Quiz</h5>
-                                
-                                <div class="row text-center mb-3">
-                                    <div class="col-4">
-                                        <small class="text-muted d-block">Questions</small>
-                                        <strong>${quiz.totalQuestions || 30}</strong>
-                                    </div>
-                                    <div class="col-4">
-                                        <small class="text-muted d-block">Duration</small>
-                                        <strong>${Math.round((quiz.timeLimit || 1800) / 60)}m</strong>
-                                    </div>
-                                    <div class="col-4">
-                                        <small class="text-muted d-block">Level</small>
-                                        <strong>${quiz.difficulty || 'Medium'}</strong>
-                                    </div>
-                                </div>
-                                
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        <i class="fas fa-users me-1"></i>
-                                        ${quiz.attempts || 0} attempts
-                                    </small>
-                                    <button class="btn start-btn" onclick="startQuiz('${quiz.id}')">
-                                        Start Quiz <i class="fas fa-arrow-right ms-2"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-            window.displayedQuizzes = quizzesToShow;
-            
-            // Update counters
-            document.getElementById('quizCount').textContent = window.displayedQuizzes;
-            document.getElementById('totalQuizCount').textContent = window.availableQuizzes.length;
-            
-            // Show/hide load more
-            if (window.displayedQuizzes < window.availableQuizzes.length) {
-                loadMoreSection.style.display = 'block';
-                document.getElementById('loadMoreBtn').innerHTML = `
-                    <i class="fas fa-plus-circle me-2"></i>
-                    Load ${Math.min(window.loadIncrement, window.availableQuizzes.length - window.displayedQuizzes)} More Quizzes
-                `;
-            } else {
-                loadMoreSection.style.display = 'none';
-            }
-        };
-        
-        // Authentication functions
-        window.signInWithGoogle = async function() {
-            try {
-                const { signInWithGoogle } = await import('./firebase-auth.js');
-                await signInWithGoogle();
-                showToast('Success', 'Signed in successfully!', 'success');
-            } catch (error) {
-                showToast('Error', error.message, 'error');
-            }
-        };
-        
-        window.signOutUser = async function() {
-            try {
-                const { signOutUser } = await import('./firebase-auth.js');
-                await signOutUser();
-                document.getElementById('userWelcome').style.display = 'none';
-                showToast('Success', 'Signed out successfully', 'info');
-            } catch (error) {
-                showToast('Error', error.message, 'error');
-            }
-        };
-        
-        // Quiz functions
-        window.startQuiz = function(quizId) {
-            if (!window.currentUser) {
-                showToast('Sign In Required', 'Please sign in to start the quiz', 'warning');
-                return;
-            }
-            localStorage.setItem('selectedQuizId', quizId);
-            window.location.href = 'quiz.html';
-        };
-        
-        window.loadMoreQuizzes = function() {
-            displayQuizzes();
-            showToast('Success', 'More quizzes loaded!', 'success');
-        };
-        
-        window.refreshQuizzes = function() {
-            loadQuizzes();
-            showToast('Success', 'Quizzes refreshed!', 'success');
-        };
-        
-        // Utility functions
-        window.setupFilters = function() {
-            ['filterSubject', 'filterDifficulty'].forEach(id => {
-                document.getElementById(id)?.addEventListener('change', applyFilters);
-            });
-        };
-        
-        window.applyFilters = function() {
-            // Filter logic here
-            displayQuizzes();
-        };
-        
-        window.subscribeNewsletter = function() {
-            const email = document.getElementById('subscribeEmail').value;
-            if (email && email.includes('@')) {
-                showToast('Success', 'Thank you for subscribing!', 'success');
-                document.getElementById('subscribeEmail').value = '';
-            } else {
-                showToast('Error', 'Please enter a valid email', 'error');
-            }
-        };
-        
-        window.showErrorState = function() {
-            document.getElementById('quizCards').innerHTML = `
-                <div class="col-12 text-center py-5">
-                    <i class="fas fa-exclamation-triangle fa-4x text-warning mb-3"></i>
-                    <h4>Unable to load quizzes</h4>
-                    <p class="text-muted">Please check your connection and try again</p>
-                    <button class="btn btn-primary" onclick="loadQuizzes()">Retry</button>
-                </div>
-            `;
-        };
-        
-        window.showToast = function(title, message, type = 'info') {
-            const toast = document.getElementById('authToast');
-            const toastTitle = document.getElementById('toastTitle');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-            
-            const icons = {
-                success: 'fas fa-check-circle text-success',
-                error: 'fas fa-exclamation-circle text-danger',
-                warning: 'fas fa-exclamation-triangle text-warning',
-                info: 'fas fa-info-circle text-primary'
-            };
-            
-            toastTitle.textContent = title;
-            toastMessage.textContent = message;
-            toastIcon.className = icons[type] || icons.info;
-            
-            new bootstrap.Toast(toast).show();
-        };
-        
-        window.formatDate = function(dateString) {
-            if (!dateString) return 'Recent';
-            return new Date(dateString).toLocaleDateString('en-IN', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        };
     </script>
 </body>
 </html>
-
