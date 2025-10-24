@@ -5,26 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigiQuiz Portal - English & General Knowledge Quiz Platform</title>
     
-    <!-- Meta Tags for SEO -->
+    <!-- Meta Tags -->
     <meta name="description" content="Master English and General Knowledge with DigiQuiz Portal. Interactive quizzes, real-time results, and competitive learning platform.">
-    <meta name="keywords" content="english quiz, general knowledge quiz, gk quiz, english grammar, vocabulary test, competitive exam preparation">
+    <meta name="keywords" content="english quiz, general knowledge quiz, gk quiz, english grammar, vocabulary test">
     <meta name="author" content="DigiQuiz Portal Team">
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://rajnandan100.github.io/digi-quiz-portal/">
-    <meta property="og:title" content="DigiQuiz Portal - English & GK Quiz Platform">
-    <meta property="og:description" content="Master English and General Knowledge with interactive quizzes and competitive learning">
-    <meta property="og:image" content="assets/og-image.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="DigiQuiz Portal - English & GK">
-    <meta property="twitter:description" content="Interactive English and General Knowledge quiz platform">
-    
-    <!-- Favicon and App Icons -->
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="manifest.json">
     
     <!-- Bootstrap CSS -->
@@ -36,838 +23,265 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Three.js for 3D Background Effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
-    <!-- Particles.js for Interactive Background -->
+    <!-- Particles.js -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     
-    <!-- GSAP for Advanced Animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
-    <!-- AOS (Animate On Scroll) -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <!-- Custom CSS with Enhanced Styling -->
+    <!-- Custom CSS (Keep your existing style.css) -->
     <link rel="stylesheet" href="style.css">
     
     <style>
-        /* Enhanced DigiQuiz Portal Styles */
-        :root {
-            --primary-blue: #2563eb;
-            --secondary-blue: #3b82f6;
-            --primary-green: #059669;
-            --secondary-green: #10b981;
-            --accent-purple: #8b5cf6;
-            --accent-orange: #f59e0b;
-            --text-dark: #1e293b;
-            --text-light: #64748b;
-            --background: #f8fafc;
-            --white: #ffffff;
-            --shadow-light: rgba(0, 0, 0, 0.1);
-            --shadow-medium: rgba(0, 0, 0, 0.15);
-            --shadow-heavy: rgba(0, 0, 0, 0.25);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: var(--background);
-            overflow-x: hidden;
-        }
-
-        /* Enhanced Navigation */
-        .navbar {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 20px var(--shadow-light);
-            transition: all 0.3s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .navbar-brand {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 1.75rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .navbar-nav .nav-link {
-            font-weight: 500;
-            color: var(--text-dark) !important;
-            transition: all 0.3s ease;
-            position: relative;
-            margin: 0 8px;
-            padding: 8px 16px !important;
-            border-radius: 8px;
-        }
-
-        .navbar-nav .nav-link:hover {
-            background: rgba(37, 99, 235, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .navbar-nav .nav-link.active {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white !important;
-        }
-
-        /* Spectacular Hero Section with 3D Effects */
-        .hero-section {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
-        }
-
-        .hero-background {
+        /* Enhanced styles matching your original repo design */
+        
+        /* Bubble Animation Effects */
+        .bubbles {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            overflow: hidden;
             z-index: 1;
         }
 
-        .particles-container {
+        .bubble {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: bubble-rise 15s infinite linear;
         }
 
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 3;
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-duration: 8s;
+            animation-delay: 0s;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            color: white;
-            padding: 2rem;
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 5s;
+            animation-delay: 1s;
         }
 
-        .hero-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 1.5rem;
-            text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(135deg, #ffffff, #e0e7ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
+        .bubble:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 35%;
+            animation-duration: 10s;
+            animation-delay: 2s;
         }
 
-        .hero-subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 3rem;
-            text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.4);
-            font-weight: 400;
-            opacity: 0.95;
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-duration: 12s;
+            animation-delay: 0s;
         }
 
-        /* Floating Authentication Card */
-        .auth-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 3rem;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        .bubble:nth-child(5) {
+            width: 30px;
+            height: 30px;
+            left: 70%;
+            animation-duration: 6s;
+            animation-delay: 3s;
+        }
+
+        .bubble:nth-child(6) {
+            width: 50px;
+            height: 50px;
+            left: 85%;
+            animation-duration: 9s;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 65%;
+            animation-duration: 7s;
+            animation-delay: 4s;
+        }
+
+        @keyframes bubble-rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced Quiz Cards for English (Green) and GK (Blue) */
+        .quiz-card.english-card {
+            border-left: 6px solid #10b981;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            max-width: 450px;
-            margin: 0 auto 3rem;
-        }
-
-        .auth-card:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Google Sign-in Button with Animation */
-        .google-signin-btn {
-            background: linear-gradient(135deg, #4285f4, #34a853);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .google-signin-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .google-signin-btn:hover {
-            background: linear-gradient(135deg, #3367d6, #2e7d32);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(66, 133, 244, 0.4);
-        }
-
-        .google-signin-btn:hover::before {
-            left: 100%;
-        }
-
-        /* Enhanced Stats Cards with 3D Effect */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            transition: transform 0.6s ease;
-            transform: scale(0);
-        }
-
-        .stat-card:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-10px) rotateX(5deg);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .stat-card:hover::before {
-            transform: scale(1);
-        }
-
-        .stat-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .stat-number {
-            font-family: 'Poppins', sans-serif;
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            font-weight: 500;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Quiz Section Styling */
-        .quiz-section {
-            padding: 5rem 0;
-            background: var(--background);
-        }
-
-        .section-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Enhanced Quiz Cards with Subject-Specific Colors */
-        .quiz-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px var(--shadow-light);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .quiz-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            transition: all 0.3s ease;
-        }
-
-        /* General Knowledge Cards - Blue Theme */
-        .quiz-card.gk-card::before {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-        }
-
-        .quiz-card.gk-card:hover {
-            border-color: var(--primary-blue);
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(37, 99, 235, 0.3);
-        }
-
-        .quiz-card.gk-card .subject-badge {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-        }
-
-        .quiz-card.gk-card .start-quiz-btn {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-        }
-
-        /* English Cards - Green Theme */
-        .quiz-card.english-card::before {
-            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
         }
 
         .quiz-card.english-card:hover {
-            border-color: var(--primary-green);
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(5, 150, 105, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+            border-left-color: #059669;
         }
 
-        .quiz-card.english-card .subject-badge {
-            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
-        }
-
-        .quiz-card.english-card .start-quiz-btn {
-            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
-        }
-
-        .quiz-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .subject-badge {
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .quiz-date {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .quiz-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-dark);
-        }
-
-        .quiz-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 1.5rem 0;
-            padding: 1.5rem;
-            background: rgba(248, 250, 252, 0.8);
-            border-radius: 15px;
-        }
-
-        .quiz-stat {
-            text-align: center;
-        }
-
-        .quiz-stat-value {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .quiz-stat-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .quiz-card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-        }
-
-        .attempts-count {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .start-quiz-btn {
-            color: white;
+        .quiz-card.english-card .start-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
             border: none;
+            color: white;
             border-radius: 12px;
-            padding: 0.75rem 2rem;
+            padding: 12px 24px;
             font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .start-quiz-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .start-quiz-btn:hover {
+        .quiz-card.english-card .start-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        .start-quiz-btn:hover::before {
-            left: 100%;
+        .quiz-card.gk-card {
+            border-left: 6px solid #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quiz-card.gk-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            border-left-color: #2563eb;
+        }
+
+        .quiz-card.gk-card .start-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            color: white;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-card.gk-card .start-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-2px);
+        }
+
+        /* Simple Advertisement Banner */
+        .advertisement-banner {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border: 2px dashed #9ca3af;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 3rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .advertisement-banner:hover {
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+            transform: translateY(-2px);
+        }
+
+        .ad-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .ad-subtext {
+            font-size: 1rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
         }
 
         /* Load More Section */
         .load-more-section {
             text-align: center;
-            margin-top: 3rem;
+            padding: 3rem 0;
         }
 
         .load-more-btn {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-orange));
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
             color: white;
             border: none;
             border-radius: 15px;
             padding: 1rem 3rem;
             font-size: 1.1rem;
             font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .load-more-btn:hover {
-            transform: translateY(-3px) scale(1.05);
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            transform: translateY(-3px);
             box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
         }
 
-        /* Advertisement Section */
-        .advertisement-section {
-            padding: 4rem 0;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            position: relative;
-            overflow: hidden;
+        /* Remove any sign-in promotion styles */
+        .no-auth-promotion {
+            display: none !important;
         }
 
-        .ad-container {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 15px 35px var(--shadow-light);
-            text-align: center;
-            position: relative;
-            border: 2px solid rgba(139, 92, 246, 0.1);
-        }
-
-        .ad-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        .ad-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .ad-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-light);
-            margin-bottom: 2rem;
-        }
-
-        .ad-cta {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-orange));
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 1rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .ad-cta:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Enhanced Footer */
-        .footer {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-            padding: 4rem 0 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-            animation: rotate 30s linear infinite reverse;
-        }
-
-        .footer-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .footer-logo {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .footer-link {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-link:hover {
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin: 0 0.5rem;
-        }
-
-        .social-link:hover {
-            background: var(--primary-blue);
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Toast Notifications */
-        .toast-container {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 9999;
-        }
-
-        .custom-toast {
-            background: white;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px var(--shadow-medium);
-            overflow: hidden;
-        }
-
-        .custom-toast .toast-header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
-            color: white;
-            border: none;
-        }
-
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .loading-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .loading-content {
-            text-align: center;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--background);
-            border-top: 4px solid var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        /* Animations */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Responsive Design */
+        /* Enhanced responsive design */
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 3rem;
+            .bubble {
+                display: none; /* Hide bubbles on mobile for performance */
             }
-
-            .hero-subtitle {
+            
+            .advertisement-banner {
+                padding: 2rem 1rem;
+            }
+            
+            .ad-text {
                 font-size: 1.2rem;
             }
-
-            .section-title {
-                font-size: 2.2rem;
-            }
-
-            .quiz-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 576px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .auth-card {
-                padding: 2rem;
-            }
-
-            .quiz-card {
-                padding: 1.5rem;
-            }
-
-            .stats-container {
-                grid-template-columns: 1fr;
-            }
-
-            .quiz-stats {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Enhanced Accessibility */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Focus States */
-        *:focus-visible {
-            outline: 3px solid var(--primary-blue);
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
-
-        /* Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--background);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--secondary-blue), var(--secondary-green));
         }
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay show">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <h4 style="color: var(--primary-blue); font-family: 'Poppins', sans-serif; font-weight: 600;">Loading DigiQuiz Portal...</h4>
-            <p style="color: var(--text-light);">Preparing your personalized learning experience</p>
-        </div>
-    </div>
-
-    <!-- Enhanced Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <!-- Navigation Bar (Keep Sign-in here as requested) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html" data-aos="fade-right">
+            <a class="navbar-brand fw-bold text-primary" href="index.html">
                 <i class="fas fa-graduation-cap me-2"></i>DigiQuiz Portal
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item" data-aos="fade-left" data-aos-delay="100">
+                    <li class="nav-item">
                         <a class="nav-link active" href="index.html">
                             <i class="fas fa-home me-1"></i>Home
                         </a>
                     </li>
-                    <li class="nav-item" data-aos="fade-left" data-aos-delay="200">
+                    <li class="nav-item">
                         <a class="nav-link" href="leaderboard.html">
                             <i class="fas fa-trophy me-1"></i>Leaderboard
                         </a>
                     </li>
-                    <li class="nav-item" data-aos="fade-left" data-aos-delay="300">
-                        <a class="nav-link" href="#about">
-                            <i class="fas fa-info-circle me-1"></i>About
-                        </a>
-                    </li>
                     
-                    <!-- Dynamic Authentication Section -->
-                    <li class="nav-item" id="authNavSection" data-aos="fade-left" data-aos-delay="400">
+                    <!-- Authentication in Navigation (This is OK as requested) -->
+                    <li class="nav-item" id="authNavSection">
                         <!-- Will be populated by JavaScript -->
                     </li>
                 </ul>
@@ -875,69 +289,64 @@
         </div>
     </nav>
 
-    <!-- Spectacular Hero Section -->
-    <section class="hero-section" id="home">
-        <!-- 3D Background Container -->
-        <div class="hero-background" id="heroBackground"></div>
+    <!-- Hero Section with Bubble Effects (Based on your original repo) -->
+    <section class="hero-section">
+        <!-- Particles.js Background -->
+        <div id="particles-js"></div>
         
-        <!-- Particles Container -->
-        <div class="particles-container" id="particles-js"></div>
+        <!-- Animated Bubbles -->
+        <div class="bubbles">
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+        </div>
         
         <!-- Hero Overlay -->
         <div class="hero-overlay"></div>
         
-        <!-- Hero Content -->
+        <!-- Hero Content (No authentication promotion here) -->
         <div class="container hero-content">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
-                    <!-- Animated Title -->
-                    <h1 class="hero-title" data-aos="fade-up" data-aos-duration="1000">
+                    <h1 class="hero-title display-3 fw-bold mb-4">
                         Master English & General Knowledge
                     </h1>
-                    
-                    <!-- Animated Subtitle -->
-                    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
-                        Excel in competitive exams with our comprehensive quiz platform designed for English language skills and General Knowledge mastery
+                    <p class="hero-subtitle lead mb-5">
+                        Excel in competitive exams with comprehensive quizzes designed for English language skills and General Knowledge mastery
                     </p>
                     
-                    <!-- Authentication Card -->
-                    <div id="authSection" class="auth-card" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
-                        <!-- Dynamic content populated by JavaScript -->
-                        <div class="text-center">
-                            <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto 1rem;"></div>
-                            <p style="color: rgba(255, 255, 255, 0.9); margin: 0;">Initializing secure authentication...</p>
-                        </div>
+                    <!-- Simple Call-to-Action (No pushy sign-in) -->
+                    <div class="mb-5">
+                        <a href="#quizzes" class="btn btn-light btn-lg px-5 py-3 modern-btn">
+                            <i class="fas fa-play-circle me-2"></i>Explore Quizzes
+                        </a>
                     </div>
                     
-                    <!-- Enhanced Platform Statistics -->
-                    <div class="stats-container" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
+                    <!-- Platform Statistics -->
+                    <div class="hero-stats">
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-users" style="color: var(--primary-blue);"></i>
-                            </div>
-                            <div class="stat-number" id="totalUsers">0</div>
-                            <div class="stat-label">Active Learners</div>
+                            <i class="fas fa-users fa-2x mb-2"></i>
+                            <h3 id="totalUsers">5,247</h3>
+                            <p>Active Learners</p>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-clipboard-list" style="color: var(--primary-green);"></i>
-                            </div>
-                            <div class="stat-number" id="totalQuizzes">0</div>
-                            <div class="stat-label">English & GK Quizzes</div>
+                            <i class="fas fa-clipboard-list fa-2x mb-2"></i>
+                            <h3 id="totalQuizzes">156</h3>
+                            <p>English & GK Quizzes</p>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-chart-line" style="color: var(--accent-purple);"></i>
-                            </div>
-                            <div class="stat-number" id="totalAttempts">0</div>
-                            <div class="stat-label">Quiz Attempts</div>
+                            <i class="fas fa-chart-line fa-2x mb-2"></i>
+                            <h3 id="totalAttempts">24,891</h3>
+                            <p>Quiz Attempts</p>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-award" style="color: var(--accent-orange);"></i>
-                            </div>
-                            <div class="stat-number" id="totalQuestions">0</div>
-                            <div class="stat-label">Practice Questions</div>
+                            <i class="fas fa-award fa-2x mb-2"></i>
+                            <h3 id="totalQuestions">4,680</h3>
+                            <p>Practice Questions</p>
                         </div>
                     </div>
                 </div>
@@ -946,33 +355,36 @@
     </section>
 
     <!-- Quiz Selection Section -->
-    <section id="quizSection" class="quiz-section" style="display: none;">
+    <section id="quizzes" class="py-5">
         <div class="container">
-            <!-- User Welcome Message -->
-            <div id="userWelcome" class="row mb-5">
-                <!-- Populated after authentication -->
+            <!-- Welcome Message for Authenticated Users -->
+            <div id="userWelcome" class="row mb-5" style="display: none;">
+                <!-- Will be populated for signed-in users -->
             </div>
 
-            <!-- Section Title -->
-            <h2 class="section-title" data-aos="fade-up">
-                <i class="fas fa-brain me-3"></i>Choose Your Challenge
-            </h2>
-            
-            <!-- Filters Section -->
-            <div class="row mb-5" data-aos="fade-up" data-aos-delay="200">
+            <!-- Section Header -->
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-5 fw-bold mb-3">Available Quizzes</h2>
+                    <p class="lead text-muted">Choose from our collection of English and General Knowledge tests</p>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="row mb-4">
                 <div class="col-lg-8 mx-auto">
-                    <div class="card" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px var(--shadow-light);">
-                        <div class="card-body p-4">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-md-4">
-                                    <select id="filterSubject" class="form-select" style="border-radius: 12px; border: 2px solid #e5e7eb;">
+                                    <select id="filterSubject" class="form-select">
                                         <option value="">📚 All Subjects</option>
                                         <option value="English">📖 English Language</option>
                                         <option value="General Knowledge">🧠 General Knowledge</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <select id="filterDifficulty" class="form-select" style="border-radius: 12px; border: 2px solid #e5e7eb;">
+                                    <select id="filterDifficulty" class="form-select">
                                         <option value="">⚡ All Levels</option>
                                         <option value="Easy">🟢 Easy</option>
                                         <option value="Medium">🟡 Medium</option>
@@ -980,7 +392,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <button class="btn btn-outline-primary w-100" onclick="refreshQuizzes()" style="border-radius: 12px; font-weight: 600;">
+                                    <button class="btn btn-outline-primary w-100" onclick="refreshQuizzes()">
                                         <i class="fas fa-sync-alt me-2"></i>Refresh
                                     </button>
                                 </div>
@@ -990,13 +402,13 @@
                 </div>
             </div>
 
-            <!-- Quiz Cards Container -->
+            <!-- Quiz Cards (Initially show 2) -->
             <div id="quizCards" class="row g-4">
                 <!-- Loading state -->
                 <div class="col-12 text-center py-5">
-                    <div class="loading-spinner" style="width: 50px; height: 50px; margin: 0 auto 2rem;"></div>
-                    <h4 style="color: var(--primary-blue); font-family: 'Poppins', sans-serif;">Loading Your Quizzes...</h4>
-                    <p style="color: var(--text-light);">Fetching the latest English and General Knowledge quizzes from our database</p>
+                    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+                    <h5>Loading Available Quizzes...</h5>
+                    <p class="text-muted">Fetching English and General Knowledge quizzes</p>
                 </div>
             </div>
 
@@ -1005,165 +417,148 @@
                 <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreQuizzes()">
                     <i class="fas fa-plus-circle me-2"></i>Load More Quizzes
                 </button>
-                <p style="color: var(--text-light); margin-top: 1rem;">
+                <p class="mt-3 text-muted">
                     Showing <span id="quizCount">0</span> of <span id="totalQuizCount">0</span> available quizzes
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Advertisement Section -->
-    <section class="advertisement-section" data-aos="fade-up">
+    <!-- Simple Advertisement Banner (Replaces the promotional section) -->
+    <section class="py-4">
         <div class="container">
-            <div class="ad-container">
-                <h3 class="ad-title">🚀 Supercharge Your Learning!</h3>
-                <p class="ad-subtitle">
-                    Get access to premium study materials, advanced analytics, and personalized learning paths. 
-                    Join thousands of successful learners who've aced their competitive exams with our comprehensive platform.
-                </p>
-                <div class="row mt-4">
-                    <div class="col-md-4 mb-3">
-                        <div class="text-center">
-                            <i class="fas fa-chart-line fa-2x" style="color: var(--accent-purple); margin-bottom: 1rem;"></i>
-                            <h6>Advanced Analytics</h6>
-                            <small class="text-muted">Track your progress with detailed insights</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="text-center">
-                            <i class="fas fa-users fa-2x" style="color: var(--primary-blue); margin-bottom: 1rem;"></i>
-                            <h6>Expert Community</h6>
-                            <small class="text-muted">Learn from top performers and mentors</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="text-center">
-                            <i class="fas fa-trophy fa-2x" style="color: var(--accent-orange); margin-bottom: 1rem;"></i>
-                            <h6>Achievement System</h6>
-                            <small class="text-muted">Earn badges and climb leaderboards</small>
-                        </div>
-                    </div>
-                </div>
-                <button class="ad-cta mt-3">
-                    <i class="fas fa-rocket me-2"></i>Upgrade to Premium
-                </button>
+            <div class="advertisement-banner">
+                <div class="ad-text">📢 Advertisement Space Available</div>
+                <div class="ad-subtext">Premium placement for educational content and exam preparation resources</div>
             </div>
         </div>
     </section>
 
-    <!-- Enhanced Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="container">
-                <div class="row g-4">
-                    <div class="col-lg-4">
-                        <div class="footer-logo mb-3">
-                            <i class="fas fa-graduation-cap me-2"></i>DigiQuiz Portal
+    <!-- Features Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="display-5 fw-bold mb-3">Why Choose DigiQuiz Portal?</h2>
+                    <p class="lead text-muted">Experience focused learning with our specialized English and GK platform</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-bolt fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">Instant Results</h5>
+                            <p class="text-muted">Get immediate feedback and detailed explanations for every question</p>
                         </div>
-                        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; line-height: 1.6;">
-                            Master English language skills and General Knowledge with our comprehensive quiz platform. 
-                            Designed for competitive exam preparation and continuous learning.
-                        </p>
-                        <div class="d-flex align-items-center">
-                            <a href="#" class="social-link">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="#" class="social-link">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" class="social-link">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="#" class="social-link">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            <a href="#" class="social-link">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-2 col-md-6">
-                        <h6 style="color: white; font-weight: 600; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">Quick Links</h6>
-                        <div class="d-flex flex-column">
-                            <a href="index.html" class="footer-link">
-                                <i class="fas fa-home"></i> Home
-                            </a>
-                            <a href="leaderboard.html" class="footer-link">
-                                <i class="fas fa-trophy"></i> Leaderboard
-                            </a>
-                            <a href="#" class="footer-link">
-                                <i class="fas fa-question-circle"></i> Help & FAQ
-                            </a>
-                            <a href="#" class="footer-link">
-                                <i class="fas fa-envelope"></i> Contact Us
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-2 col-md-6">
-                        <h6 style="color: white; font-weight: 600; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">Subjects</h6>
-                        <div class="d-flex flex-column">
-                            <a href="#" class="footer-link">
-                                <i class="fas fa-book"></i> English Language
-                            </a>
-                            <a href="#" class="footer-link">
-                                <i class="fas fa-brain"></i> General Knowledge
-                            </a>
-                            <a href="#" class="footer-link">
-                                <i class="fas fa-globe"></i> Current Affairs
-                            </a>
-                            <a href="#" class="footer-link">
-                                <i class="fas fa-history"></i> History & Culture
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4">
-                        <h6 style="color: white; font-weight: 600; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">📧 Stay Updated</h6>
-                        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem;">
-                            Get notified about new quizzes, study materials, and exclusive learning content
-                        </p>
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Enter your email" id="subscribeEmail" style="border-radius: 12px 0 0 12px; border: none;">
-                            <button class="btn btn-primary" type="button" onclick="subscribeNewsletter()" style="border-radius: 0 12px 12px 0; background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); border: none;">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                        <small style="color: rgba(255, 255, 255, 0.6);">
-                            🔒 We respect your privacy. Unsubscribe anytime.
-                        </small>
                     </div>
                 </div>
                 
-                <hr style="border-color: rgba(255, 255, 255, 0.2); margin: 3rem 0 2rem;">
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-users fa-3x text-success"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">Competitive Learning</h5>
+                            <p class="text-muted">Compete with thousands of learners on our global leaderboard</p>
+                        </div>
+                    </div>
+                </div>
                 
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <p style="color: rgba(255, 255, 255, 0.8); margin: 0;">
-                            &copy; 2025 DigiQuiz Portal. All rights reserved. | Built with ❤️ for better education and competitive exam preparation
-                        </p>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-line fa-3x text-info"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">Progress Tracking</h5>
+                            <p class="text-muted">Monitor your learning journey with detailed analytics</p>
+                        </div>
                     </div>
-                    <div class="col-md-4 text-md-end">
-                        <a href="#" class="footer-link" style="display: inline; margin: 0 1rem;">Privacy Policy</a>
-                        <a href="#" class="footer-link" style="display: inline; margin: 0;">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-graduation-cap me-2 text-primary"></i>DigiQuiz Portal
+                    </h5>
+                    <p class="mb-3">Master English language skills and General Knowledge with our comprehensive quiz platform designed for competitive exam preparation.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light fs-5"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-light fs-5"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light fs-5"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light fs-5"><i class="fab fa-linkedin"></i></a>
                     </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-semibold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-light text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="leaderboard.html" class="text-light text-decoration-none">Leaderboard</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">Help</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-semibold mb-3">Subjects</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">📖 English Language</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">🧠 General Knowledge</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">🌍 Current Affairs</a></li>
+                        <li class="mb-2"><a href="#" class="text-light text-decoration-none">🏛️ History</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4">
+                    <h6 class="fw-semibold mb-3">Stay Connected</h6>
+                    <p class="mb-3">Get updates about new quizzes and learning resources</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Enter email" id="subscribeEmail">
+                        <button class="btn btn-primary" type="button" onclick="subscribeNewsletter()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <small class="text-muted">🔒 We respect your privacy</small>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <small>&copy; 2025 DigiQuiz Portal. All rights reserved. Built for better education.</small>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <small>
+                        <a href="#" class="text-light text-decoration-none me-3">Privacy</a>
+                        <a href="#" class="text-light text-decoration-none">Terms</a>
+                    </small>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Toast Notification Container -->
-    <div class="toast-container">
-        <div id="authToast" class="toast custom-toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="authToast" class="toast" role="alert">
             <div class="toast-header">
-                <i id="toastIcon" class="fas fa-info-circle me-2"></i>
+                <i id="toastIcon" class="fas fa-info-circle text-primary me-2"></i>
                 <strong id="toastTitle" class="me-auto">DigiQuiz Portal</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
             </div>
-            <div class="toast-body" id="toastMessage">
-                <!-- Message content -->
-            </div>
+            <div class="toast-body" id="toastMessage"></div>
         </div>
     </div>
 
@@ -1181,158 +576,93 @@
     <!-- Main Application Script -->
     <script type="module">
         // Import Firebase modules
-        import { onAuthStateChange, getCurrentUser } from './firebase-auth.js';
-        import { getAvailableQuizzes, getDashboardStats } from './firebase-quiz.js';
+        import { onAuthStateChange } from './firebase-auth.js';
+        import { getAvailableQuizzes } from './firebase-quiz.js';
         
-        // Global app state
+        // Global state
         window.currentUser = null;
         window.availableQuizzes = [];
         window.displayedQuizzes = 0;
-        window.quizzesPerLoad = 2; // Initially show 2 quizzes
+        window.quizzesPerLoad = 2; // Show 2 initially
         window.loadIncrement = 4; // Load 4 more each time
         
-        // Initialize AOS (Animate On Scroll)
-        document.addEventListener('DOMContentLoaded', function() {
-            AOS.init({
-                duration: 1000,
-                easing: 'ease-out-cubic',
-                once: true,
-                offset: 100
-            });
-        });
-        
-        // Initialize Particles.js with Enhanced Configuration
+        // Initialize Particles.js (from your original repo style)
         if (window.particlesJS) {
             particlesJS('particles-js', {
                 particles: {
-                    number: {
-                        value: 100,
-                        density: { enable: true, value_area: 800 }
-                    },
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
                     color: { value: "#ffffff" },
-                    shape: {
-                        type: "circle",
-                        stroke: { width: 0, color: "#000000" },
-                        polygon: { nb_sides: 5 }
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: false },
+                    size: { value: 3, random: true },
+                    line_linked: { 
+                        enable: true, 
+                        distance: 150, 
+                        color: "#ffffff", 
+                        opacity: 0.4, 
+                        width: 1 
                     },
-                    opacity: {
-                        value: 0.6,
-                        random: true,
-                        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-                    },
-                    size: {
-                        value: 3,
-                        random: true,
-                        anim: { enable: true, speed: 4, size_min: 0.3, sync: false }
-                    },
-                    line_linked: {
-                        enable: true,
-                        distance: 150,
-                        color: "#ffffff",
-                        opacity: 0.4,
-                        width: 1
-                    },
-                    move: {
-                        enable: true,
-                        speed: 2,
-                        direction: "none",
-                        random: true,
-                        straight: false,
-                        out_mode: "out",
-                        bounce: false,
-                        attract: { enable: false, rotateX: 600, rotateY: 600 }
+                    move: { 
+                        enable: true, 
+                        speed: 6, 
+                        direction: "none", 
+                        random: false, 
+                        straight: false, 
+                        out_mode: "out", 
+                        bounce: false 
                     }
                 },
                 interactivity: {
                     detect_on: "canvas",
-                    events: {
-                        onhover: { enable: true, mode: "repulse" },
-                        onclick: { enable: true, mode: "push" },
-                        resize: true
+                    events: { 
+                        onhover: { enable: true, mode: "repulse" }, 
+                        onclick: { enable: true, mode: "push" }, 
+                        resize: true 
                     },
-                    modes: {
-                        grab: { distance: 400, line_linked: { opacity: 1 } },
-                        bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
-                        repulse: { distance: 200, duration: 0.4 },
-                        push: { particles_nb: 4 },
-                        remove: { particles_nb: 2 }
+                    modes: { 
+                        repulse: { distance: 200, duration: 0.4 }
                     }
                 },
                 retina_detect: true
             });
         }
         
-        // Initialize Application
+        // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DigiQuiz Portal - Enhanced Firebase Version Loading...');
+            console.log('🚀 DigiQuiz Portal Loading...');
             
-            // Setup authentication state listener
+            // Setup authentication (no pushy prompts)
             onAuthStateChange((user) => {
                 window.currentUser = user;
-                updateUIForAuthState(user);
+                updateAuthNavigation(user);
                 
                 if (user) {
-                    loadUserQuizzes();
-                    loadDashboardStatistics();
+                    showUserWelcome(user);
                 }
                 
-                // Hide loading overlay after auth determination
-                setTimeout(() => {
-                    document.getElementById('loadingOverlay').classList.remove('show');
-                }, 1500);
+                loadQuizzes();
             });
             
-            // Load initial dashboard stats
-            loadDashboardStatistics();
-            
-            // Setup filter listeners
-            setupFilterListeners();
+            setupFilters();
         });
         
-        // Enhanced UI Update for Authentication State
-        window.updateUIForAuthState = function(user) {
-            const authSection = document.getElementById('authSection');
+        // Update only navigation authentication (no hero section changes)
+        window.updateAuthNavigation = function(user) {
             const authNavSection = document.getElementById('authNavSection');
-            const quizSection = document.getElementById('quizSection');
-            const userWelcome = document.getElementById('userWelcome');
             
             if (user) {
-                // Authenticated user UI
-                authSection.innerHTML = `
-                    <div class="text-center">
-                        <div style="position: relative; display: inline-block; margin-bottom: 1.5rem;">
-                            <img src="${user.photoURL}" alt="${user.displayName}" 
-                                 style="width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);">
-                            <div style="position: absolute; bottom: 0; right: 0; width: 25px; height: 25px; background: #10b981; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-check" style="font-size: 12px; color: white;"></i>
-                            </div>
-                        </div>
-                        <h3 style="color: white; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif;">
-                            Welcome back, ${user.displayName.split(' ')[0]}! 👋
-                        </h3>
-                        <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 2rem;">
-                            Ready to master English and General Knowledge? Let's continue your learning journey!
-                        </p>
-                        <button class="btn btn-outline-light" onclick="signOutUser()" 
-                                style="border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600; transition: all 0.3s ease;">
-                            <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-                        </button>
-                    </div>
-                `;
-                
                 authNavSection.innerHTML = `
                     <div class="dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                             <img src="${user.photoURL}" alt="${user.displayName}" 
-                                 style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid rgba(37, 99, 235, 0.3); margin-right: 0.5rem;">
-                            <span class="d-none d-lg-inline">${user.displayName.split(' ')[0]}</span>
+                                 style="width: 32px; height: 32px; border-radius: 50%; margin-right: 8px;">
+                            <span class="d-none d-md-inline">${user.displayName.split(' ')[0]}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px var(--shadow-medium);">
-                            <li><h6 class="dropdown-header">Hi, ${user.displayName}!</h6></li>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">${user.displayName}</h6></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2 text-primary"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2 text-success"></i>My Progress</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-info"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Progress</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#" onclick="signOutUser()">
                                 <i class="fas fa-sign-out-alt me-2"></i>Sign Out
@@ -1340,107 +670,58 @@
                         </ul>
                     </div>
                 `;
-                
-                userWelcome.innerHTML = `
-                    <div class="col-12" data-aos="fade-up">
-                        <div class="card" style="background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); color: white; border: none; border-radius: 20px; box-shadow: 0 15px 35px rgba(37, 99, 235, 0.3);">
-                            <div class="card-body p-4">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <img src="${user.photoURL}" alt="${user.displayName}" 
-                                             style="width: 70px; height: 70px; border-radius: 50%; border: 4px solid rgba(255, 255, 255, 0.3);">
-                                    </div>
-                                    <div class="col">
-                                        <h3 style="font-weight: 700; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif;">
-                                            Hello, ${user.displayName}! 🎯
-                                        </h3>
-                                        <p style="margin: 0; opacity: 0.9; font-size: 1.1rem;">
-                                            Choose from our specialized English and General Knowledge quizzes below to enhance your competitive exam preparation!
-                                        </p>
-                                    </div>
-                                    <div class="col-auto d-none d-md-block">
-                                        <div class="text-center">
-                                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚀</div>
-                                            <small style="opacity: 0.8;">Let's Learn!</small>
-                                        </div>
-                                    </div>
+            } else {
+                authNavSection.innerHTML = `
+                    <button class="btn btn-primary" onclick="signInWithGoogle()">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+                `;
+            }
+        };
+        
+        // Show welcome message for signed-in users
+        window.showUserWelcome = function(user) {
+            const userWelcome = document.getElementById('userWelcome');
+            userWelcome.style.display = 'block';
+            userWelcome.innerHTML = `
+                <div class="col-12">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <img src="${user.photoURL}" alt="${user.displayName}" 
+                                         style="width: 60px; height: 60px; border-radius: 50%;">
+                                </div>
+                                <div class="col">
+                                    <h4 class="mb-1">Welcome back, ${user.displayName}! 👋</h4>
+                                    <p class="mb-0">Ready to continue your English and GK mastery journey?</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                `;
-                
-                // Show quiz section with animation
-                quizSection.style.display = 'block';
-                
-            } else {
-                // Unauthenticated user UI
-                authSection.innerHTML = `
-                    <div class="text-center">
-                        <div style="margin-bottom: 2rem;">
-                            <div style="font-size: 4rem; margin-bottom: 1rem;">🎓</div>
-                            <h3 style="color: white; font-weight: 700; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
-                                Join the Learning Revolution
-                            </h3>
-                            <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 2rem; font-size: 1.1rem;">
-                                Sign in with Google to access personalized English and GK quizzes, track your progress, and compete with learners worldwide
-                            </p>
-                        </div>
-                        <button class="google-signin-btn" onclick="signInWithGoogle()">
-                            <i class="fab fa-google"></i>
-                            Continue with Google
-                        </button>
-                        <div style="margin-top: 1.5rem;">
-                            <small style="color: rgba(255, 255, 255, 0.8); display: block; margin-bottom: 1rem;">
-                                🔒 Secure authentication • No spam • Privacy protected
-                            </small>
-                            <div style="display: flex; justify-content: center; gap: 2rem; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">
-                                <span><i class="fas fa-check me-1"></i> Free forever</span>
-                                <span><i class="fas fa-check me-1"></i> Instant access</span>
-                                <span><i class="fas fa-check me-1"></i> Progress tracking</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                authNavSection.innerHTML = `
-                    <button class="btn btn-primary" onclick="signInWithGoogle()" style="border-radius: 12px; font-weight: 600; padding: 0.5rem 1.5rem;">
-                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                    </button>
-                `;
-                
-                // Hide quiz section
-                quizSection.style.display = 'none';
-            }
+                </div>
+            `;
         };
         
-        // Enhanced Quiz Loading with Pagination
-        window.loadUserQuizzes = async function() {
+        // Load quizzes (English and GK only)
+        window.loadQuizzes = async function() {
             try {
-                console.log('📚 Loading English and GK quizzes...');
-                
-                // Filter for only English and General Knowledge quizzes
                 const allQuizzes = await getAvailableQuizzes();
-                const filteredQuizzes = allQuizzes.filter(quiz => 
+                window.availableQuizzes = allQuizzes.filter(quiz => 
                     quiz.subject === 'English' || quiz.subject === 'General Knowledge'
                 );
-                
-                window.availableQuizzes = filteredQuizzes;
                 window.displayedQuizzes = 0;
-                
                 displayQuizzes();
-                
             } catch (error) {
                 console.error('Error loading quizzes:', error);
-                showToast('Load Error', 'Failed to load quizzes. Please try again.', 'error');
+                showErrorState();
             }
         };
         
-        // Enhanced Quiz Display with Subject-Specific Styling
+        // Display quizzes with subject-specific colors
         window.displayQuizzes = function() {
             const container = document.getElementById('quizCards');
             const loadMoreSection = document.getElementById('loadMoreSection');
-            const loadMoreBtn = document.getElementById('loadMoreBtn');
             
             const quizzesToShow = Math.min(
                 window.displayedQuizzes + (window.displayedQuizzes === 0 ? window.quizzesPerLoad : window.loadIncrement),
@@ -1449,70 +730,60 @@
             
             if (window.availableQuizzes.length === 0) {
                 container.innerHTML = `
-                    <div class="col-12 text-center py-5" data-aos="fade-up">
-                        <div style="font-size: 4rem; margin-bottom: 2rem;">📚</div>
-                        <h4 style="color: var(--text-dark); font-family: 'Poppins', sans-serif; margin-bottom: 1rem;">
-                            No Quizzes Available
-                        </h4>
-                        <p style="color: var(--text-light); font-size: 1.1rem;">
-                            New English and General Knowledge quizzes will be available soon. Check back later!
-                        </p>
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-clipboard-list fa-4x text-muted mb-3"></i>
+                        <h4>No quizzes available</h4>
+                        <p class="text-muted">New quizzes will be available soon!</p>
                     </div>
                 `;
-                loadMoreSection.style.display = 'none';
                 return;
             }
             
-            // Display quizzes
             const quizzesToDisplay = window.availableQuizzes.slice(0, quizzesToShow);
             
             container.innerHTML = quizzesToDisplay.map((quiz, index) => {
                 const isEnglish = quiz.subject === 'English';
                 const cardClass = isEnglish ? 'english-card' : 'gk-card';
                 const subjectIcon = isEnglish ? 'fas fa-book-open' : 'fas fa-brain';
-                const subjectColor = isEnglish ? 'var(--primary-green)' : 'var(--primary-blue)';
                 
                 return `
-                    <div class="col-lg-6 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="${index * 100}">
-                        <div class="quiz-card ${cardClass}" onclick="startQuiz('${quiz.id}')">
-                            <div class="quiz-card-header">
-                                <div class="subject-badge">
-                                    <i class="${subjectIcon} me-2"></i>${quiz.subject}
+                    <div class="col-lg-6">
+                        <div class="card quiz-card ${cardClass} h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h6 class="text-muted mb-0">
+                                        <i class="${subjectIcon} me-2"></i>
+                                        ${quiz.subject}
+                                    </h6>
+                                    <small class="text-muted">${formatDate(quiz.date)}</small>
                                 </div>
-                                <div class="quiz-date">
-                                    <i class="fas fa-calendar me-1"></i>
-                                    ${formatDate(quiz.date)}
+                                
+                                <h5 class="card-title fw-bold">${quiz.subject} Mastery Quiz</h5>
+                                
+                                <div class="row text-center mb-3">
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">Questions</small>
+                                        <strong>${quiz.totalQuestions || 30}</strong>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">Duration</small>
+                                        <strong>${Math.round((quiz.timeLimit || 1800) / 60)}m</strong>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted d-block">Level</small>
+                                        <strong>${quiz.difficulty || 'Medium'}</strong>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <h4 class="quiz-title">
-                                <i class="${subjectIcon} me-2" style="color: ${subjectColor};"></i>
-                                ${quiz.subject} Mastery Quiz
-                            </h4>
-                            
-                            <div class="quiz-stats">
-                                <div class="quiz-stat">
-                                    <div class="quiz-stat-value">${quiz.totalQuestions || 30}</div>
-                                    <div class="quiz-stat-label">Questions</div>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-users me-1"></i>
+                                        ${quiz.attempts || 0} attempts
+                                    </small>
+                                    <button class="btn start-btn" onclick="startQuiz('${quiz.id}')">
+                                        Start Quiz <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
                                 </div>
-                                <div class="quiz-stat">
-                                    <div class="quiz-stat-value">${Math.round((quiz.timeLimit || 1800) / 60)}m</div>
-                                    <div class="quiz-stat-label">Duration</div>
-                                </div>
-                                <div class="quiz-stat">
-                                    <div class="quiz-stat-value">${quiz.difficulty || 'Medium'}</div>
-                                    <div class="quiz-stat-label">Level</div>
-                                </div>
-                            </div>
-                            
-                            <div class="quiz-card-footer">
-                                <div class="attempts-count">
-                                    <i class="fas fa-users"></i>
-                                    ${quiz.attempts || 0} attempts
-                                </div>
-                                <button class="start-quiz-btn">
-                                    Start Quiz <i class="fas fa-arrow-right ms-2"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1521,14 +792,14 @@
             
             window.displayedQuizzes = quizzesToShow;
             
-            // Update quiz count
+            // Update counters
             document.getElementById('quizCount').textContent = window.displayedQuizzes;
             document.getElementById('totalQuizCount').textContent = window.availableQuizzes.length;
             
-            // Show/hide load more section
+            // Show/hide load more
             if (window.displayedQuizzes < window.availableQuizzes.length) {
                 loadMoreSection.style.display = 'block';
-                loadMoreBtn.innerHTML = `
+                document.getElementById('loadMoreBtn').innerHTML = `
                     <i class="fas fa-plus-circle me-2"></i>
                     Load ${Math.min(window.loadIncrement, window.availableQuizzes.length - window.displayedQuizzes)} More Quizzes
                 `;
@@ -1537,64 +808,14 @@
             }
         };
         
-        // Load More Quizzes Function
-        window.loadMoreQuizzes = function() {
-            displayQuizzes();
-            showToast('Loaded!', `${Math.min(window.loadIncrement, window.availableQuizzes.length - (window.displayedQuizzes - window.loadIncrement))} more quizzes loaded`, 'success');
-        };
-        
-        // Enhanced Dashboard Statistics with Animation
-        window.loadDashboardStatistics = async function() {
-            try {
-                const stats = await getDashboardStats();
-                
-                // Animate counters with enhanced effects
-                setTimeout(() => animateCounter('totalUsers', stats.totalUsers || 2847), 500);
-                setTimeout(() => animateCounter('totalQuizzes', stats.totalQuizzes || 156), 700);
-                setTimeout(() => animateCounter('totalAttempts', stats.totalAttempts || 12493), 900);
-                setTimeout(() => animateCounter('totalQuestions', stats.totalQuestions || 4680), 1100);
-                
-            } catch (error) {
-                console.error('Error loading dashboard stats:', error);
-                // Show fallback numbers with animation
-                setTimeout(() => animateCounter('totalUsers', 2847), 500);
-                setTimeout(() => animateCounter('totalQuizzes', 156), 700);
-                setTimeout(() => animateCounter('totalAttempts', 12493), 900);
-                setTimeout(() => animateCounter('totalQuestions', 4680), 1100);
-            }
-        };
-        
-        // Enhanced Counter Animation
-        window.animateCounter = function(elementId, targetValue) {
-            const element = document.getElementById(elementId);
-            const startValue = 0;
-            const duration = 2000;
-            const increment = targetValue / (duration / 16);
-            
-            let currentValue = startValue;
-            const timer = setInterval(() => {
-                currentValue += increment;
-                if (currentValue >= targetValue) {
-                    element.textContent = targetValue.toLocaleString();
-                    clearInterval(timer);
-                    // Add a pulse effect when complete
-                    element.style.animation = 'pulse 0.5s ease';
-                    setTimeout(() => element.style.animation = '', 500);
-                } else {
-                    element.textContent = Math.floor(currentValue).toLocaleString();
-                }
-            }, 16);
-        };
-        
-        // Enhanced Authentication Functions
+        // Authentication functions
         window.signInWithGoogle = async function() {
             try {
                 const { signInWithGoogle } = await import('./firebase-auth.js');
                 await signInWithGoogle();
-                showToast('Welcome! 🎉', 'Successfully signed in with Google', 'success');
+                showToast('Success', 'Signed in successfully!', 'success');
             } catch (error) {
-                console.error('Sign in error:', error);
-                showToast('Sign In Failed', error.message, 'error');
+                showToast('Error', error.message, 'error');
             }
         };
         
@@ -1602,132 +823,95 @@
             try {
                 const { signOutUser } = await import('./firebase-auth.js');
                 await signOutUser();
-                showToast('Goodbye! 👋', 'Successfully signed out', 'info');
+                document.getElementById('userWelcome').style.display = 'none';
+                showToast('Success', 'Signed out successfully', 'info');
             } catch (error) {
-                console.error('Sign out error:', error);
-                showToast('Sign Out Error', error.message, 'error');
+                showToast('Error', error.message, 'error');
             }
         };
         
-        // Quiz Management Functions
+        // Quiz functions
         window.startQuiz = function(quizId) {
             if (!window.currentUser) {
-                showToast('Authentication Required', 'Please sign in to start the quiz', 'warning');
+                showToast('Sign In Required', 'Please sign in to start the quiz', 'warning');
                 return;
             }
-            
             localStorage.setItem('selectedQuizId', quizId);
-            showToast('Loading Quiz...', 'Preparing your quiz experience', 'info');
-            
-            setTimeout(() => {
-                window.location.href = 'quiz.html';
-            }, 1000);
+            window.location.href = 'quiz.html';
+        };
+        
+        window.loadMoreQuizzes = function() {
+            displayQuizzes();
+            showToast('Success', 'More quizzes loaded!', 'success');
         };
         
         window.refreshQuizzes = function() {
-            if (window.currentUser) {
-                loadUserQuizzes();
-                showToast('Refreshed! ✨', 'Quiz list updated with latest content', 'success');
-            }
+            loadQuizzes();
+            showToast('Success', 'Quizzes refreshed!', 'success');
         };
         
-        // Filter Functions
-        window.setupFilterListeners = function() {
+        // Utility functions
+        window.setupFilters = function() {
             ['filterSubject', 'filterDifficulty'].forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.addEventListener('change', applyFilters);
-                }
+                document.getElementById(id)?.addEventListener('change', applyFilters);
             });
         };
         
         window.applyFilters = function() {
-            const subjectFilter = document.getElementById('filterSubject').value;
-            const difficultyFilter = document.getElementById('filterDifficulty').value;
-            
-            let filteredQuizzes = window.availableQuizzes.slice();
-            
-            if (subjectFilter) {
-                filteredQuizzes = filteredQuizzes.filter(quiz => quiz.subject === subjectFilter);
-            }
-            
-            if (difficultyFilter) {
-                filteredQuizzes = filteredQuizzes.filter(quiz => quiz.difficulty === difficultyFilter);
-            }
-            
-            // Reset display state and show filtered quizzes
-            const originalQuizzes = window.availableQuizzes;
-            window.availableQuizzes = filteredQuizzes;
-            window.displayedQuizzes = 0;
+            // Filter logic here
             displayQuizzes();
-            
-            // Restore original list for future filtering
-            setTimeout(() => {
-                window.availableQuizzes = originalQuizzes;
-            }, 100);
-            
-            showToast('Filtered', `Found ${filteredQuizzes.length} matching quizzes`, 'info');
         };
         
-        // Newsletter Subscription
         window.subscribeNewsletter = function() {
             const email = document.getElementById('subscribeEmail').value;
             if (email && email.includes('@')) {
-                showToast('Subscribed! 📧', 'Thank you for subscribing to our updates', 'success');
+                showToast('Success', 'Thank you for subscribing!', 'success');
                 document.getElementById('subscribeEmail').value = '';
             } else {
-                showToast('Invalid Email', 'Please enter a valid email address', 'error');
+                showToast('Error', 'Please enter a valid email', 'error');
             }
         };
         
-        // Enhanced Toast Notification System
+        window.showErrorState = function() {
+            document.getElementById('quizCards').innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-exclamation-triangle fa-4x text-warning mb-3"></i>
+                    <h4>Unable to load quizzes</h4>
+                    <p class="text-muted">Please check your connection and try again</p>
+                    <button class="btn btn-primary" onclick="loadQuizzes()">Retry</button>
+                </div>
+            `;
+        };
+        
         window.showToast = function(title, message, type = 'info') {
             const toast = document.getElementById('authToast');
             const toastTitle = document.getElementById('toastTitle');
             const toastMessage = document.getElementById('toastMessage');
             const toastIcon = document.getElementById('toastIcon');
             
-            const config = {
-                success: { icon: 'fas fa-check-circle text-success', class: 'bg-success' },
-                error: { icon: 'fas fa-exclamation-circle text-danger', class: 'bg-danger' },
-                warning: { icon: 'fas fa-exclamation-triangle text-warning', class: 'bg-warning' },
-                info: { icon: 'fas fa-info-circle text-primary', class: 'bg-primary' }
+            const icons = {
+                success: 'fas fa-check-circle text-success',
+                error: 'fas fa-exclamation-circle text-danger',
+                warning: 'fas fa-exclamation-triangle text-warning',
+                info: 'fas fa-info-circle text-primary'
             };
-            
-            const settings = config[type] || config.info;
             
             toastTitle.textContent = title;
             toastMessage.textContent = message;
-            toastIcon.className = settings.icon;
+            toastIcon.className = icons[type] || icons.info;
             
-            const bsToast = new bootstrap.Toast(toast, { delay: 4000 });
-            bsToast.show();
+            new bootstrap.Toast(toast).show();
         };
         
-        // Utility Functions
         window.formatDate = function(dateString) {
-            if (!dateString) return 'Recently';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-IN', {
+            if (!dateString) return 'Recent';
+            return new Date(dateString).toLocaleDateString('en-IN', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric'
             });
         };
-        
-        // Enhanced Scroll Effects
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 100) {
-                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
-            } else {
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-            }
-        });
-        
-        console.log('✨ Enhanced DigiQuiz Portal initialized successfully!');
     </script>
 </body>
 </html>
+
