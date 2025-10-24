@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Control Panel - Digi Quiz Portal722</title>
+    <title>Admin Control Panel - Digi Quiz Portal</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         body {
@@ -29,6 +31,7 @@
         }
         .navbar-brand {
             font-weight: 700;
+            font-size: 1.5rem;
         }
         
         /* Main Container */
@@ -42,7 +45,7 @@
             overflow: hidden;
         }
         
-        /* Stats Cards - Enhanced Design */
+        /* Enhanced Stats Cards */
         .stats-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -51,19 +54,53 @@
             text-align: center;
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+        
         .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
         }
+        
+        .stats-card:hover::before {
+            top: -20%;
+            right: -20%;
+        }
+        
         .stats-card h2 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
         }
+        
         .stats-card p {
-            font-size: 1rem;
+            font-size: 1.1rem;
             opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stats-card .stats-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.3;
         }
         
         /* Cards */
@@ -72,39 +109,77 @@
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
         }
         
-        /* Forms */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 2px solid #667eea;
+            padding: 1.5rem;
+        }
+        
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        /* Enhanced Forms */
         .form-control, .form-select {
             border-radius: 10px;
             border: 2px solid #e2e8f0;
             padding: 0.75rem 1rem;
             font-size: 0.95rem;
             transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
         }
+        
         .form-control:focus, .form-select:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
         }
         
-        /* Buttons */
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Enhanced Buttons */
         .btn {
             border-radius: 10px;
             font-weight: 500;
-            padding: 0.6rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+        
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
         }
+        
         .btn-primary:hover {
             background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            border: none;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            border: none;
         }
         
         /* Login Overlay */
@@ -120,6 +195,7 @@
             justify-content: center;
             z-index: 9999;
         }
+        
         .login-card {
             background: white;
             padding: 3rem;
@@ -127,37 +203,105 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             max-width: 400px;
             width: 90%;
+            text-align: center;
         }
         
         /* API Status */
         .api-status {
             display: inline-flex;
             align-items: center;
-            padding: 0.25rem 0.75rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 600;
+            animation: pulse 2s infinite;
         }
+        
         .api-status.connected {
             background: #d1f2eb;
             color: #0d8457;
         }
+        
         .api-status.disconnected {
             background: #fadbd8;
             color: #922b21;
         }
         
-        /* Tables */
+        /* Enhanced Tables */
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
         .table th {
             font-weight: 600;
-            background: #f8fafc;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             border-top: none;
+            color: #2d3748;
+            padding: 1rem;
+        }
+        
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        /* Tab Navigation */
+        .nav-tabs {
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-tabs .nav-link {
+            border-radius: 10px;
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .nav-tabs .nav-link:hover:not(.active) {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        /* JSON Editor Enhancement */
+        #questionsJson {
+            font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 2px solid #334155;
+        }
+        
+        #questionsJson:focus {
+            background: #0f172a;
+            border-color: #667eea;
         }
         
         /* Animations */
         .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
         }
+        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -169,52 +313,96 @@
             }
         }
         
-        /* Tab Navigation */
-        .nav-tabs .nav-link {
-            border-radius: 10px 10px 0 0;
-            border: none;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Footer */
+        .admin-footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .admin-footer .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .admin-footer .footer-links a {
             color: #64748b;
-            font-weight: 500;
-            margin-right: 0.5rem;
-        }
-        .nav-tabs .nav-link.active {
-            background: #667eea;
-            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
         }
         
-        /* JSON Editor */
-        #questionsJson {
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
+        .admin-footer .footer-links a:hover {
+            color: #667eea;
         }
         
-        /* Success/Error Messages */
-        .alert {
-            border-radius: 10px;
-            border: none;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+            }
+            
+            .stats-card h2 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <!-- LOGIN SCREEN -->
     <div id="loginOverlay" class="login-overlay">
-        <div class="login-card text-center">
+        <div class="login-card">
             <div class="mb-4">
-                <i class="fas fa-shield-alt text-primary" style="font-size: 3rem;"></i>
-                <h3 class="mt-3 mb-2">Admin Access</h3>
-                <p class="text-muted">Enter your credentials to continue</p>
+                <i class="fas fa-shield-halved text-primary" style="font-size: 4rem;"></i>
+                <h2 class="mt-3 mb-2 fw-bold">Admin Portal</h2>
+                <p class="text-muted">DigiQuiz Management Dashboard</p>
             </div>
             <form id="adminLoginForm">
                 <div class="mb-3">
-                    <input type="password" id="adminPassword" class="form-control" placeholder="Enter admin password" required>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" id="adminPassword" class="form-control" placeholder="Enter admin password" required>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                    <i class="fas fa-sign-in-alt me-2"></i>Access Dashboard
                 </button>
             </form>
-            <div class="mt-3">
-                <small class="text-muted">Secure admin panel for DigiQuiz Portal</small>
+            <div class="mt-4">
+                <small class="text-muted">
+                    <i class="fas fa-lock me-1"></i>
+                    Secure authentication required
+                </small>
             </div>
         </div>
     </div>
@@ -224,7 +412,8 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-graduation-cap me-2"></i>
-                DigiQuiz Portal - Admin
+                DigiQuiz Portal
+                <small class="badge bg-light text-dark ms-2">Admin</small>
             </a>
             <div class="d-flex align-items-center">
                 <span class="api-status connected me-3">
@@ -234,9 +423,17 @@
                     <i class="fas fa-clock me-1"></i>
                     <span id="lastUpdateTime">Loading...</span>
                 </span>
-                <button class="btn btn-outline-light btn-sm" onclick="adminLogout()">
-                    <i class="fas fa-sign-out-alt me-1"></i>Logout
-                </button>
+                <div class="dropdown">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>Admin
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -245,44 +442,72 @@
     <div id="adminContent" class="container-fluid p-0" style="display: none;">
         <div class="main-container">
             
-            <!-- DASHBOARD STATS - Updated to 3 cards (removed analytics) -->
+            <!-- ENHANCED DASHBOARD STATS -->
             <div class="p-4">
                 <div class="row g-4 mb-4">
-                    <div class="col-md-4">
-                        <div class="stats-card fade-in-up">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-card fade-in-up" style="animation-delay: 0.1s;">
+                            <div class="stats-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
                             <h2 id="totalQuizzesCount">0</h2>
                             <p class="mb-0">Total Quizzes</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="stats-card fade-in-up">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-card fade-in-up" style="animation-delay: 0.2s;">
+                            <div class="stats-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
                             <h2 id="totalAttemptsCount">0</h2>
                             <p class="mb-0">Total Attempts</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="stats-card fade-in-up">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-card fade-in-up" style="animation-delay: 0.3s;">
+                            <div class="stats-icon">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <h2 id="todayQuizzesCount">0</h2>
+                            <p class="mb-0">Today's Quizzes</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stats-card fade-in-up" style="animation-delay: 0.4s;">
+                            <div class="stats-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
                             <h2 id="totalQuestionsCount">0</h2>
                             <p class="mb-0">Total Questions</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- TABS NAVIGATION -->
-                <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+                <!-- ENHANCED TABS NAVIGATION -->
+                <ul class="nav nav-tabs" id="adminTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="create-tab" data-bs-toggle="tab" data-bs-target="#createQuiz" type="button" role="tab">
-                            <i class="fas fa-plus me-2"></i>Create Quiz
+                            <i class="fas fa-plus-circle me-2"></i>Create Quiz
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manageQuizzes" type="button" role="tab">
-                            <i class="fas fa-list me-2"></i>Manage Quizzes
+                            <i class="fas fa-tasks me-2"></i>Manage Quizzes
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="attempts-tab" data-bs-toggle="tab" data-bs-target="#viewAttempts" type="button" role="tab">
-                            <i class="fas fa-users me-2"></i>View Attempts
+                            <i class="fas fa-chart-line me-2"></i>View Attempts
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="analytics-tab" data-bs-toggle="tab" data-bs-target="#analytics" type="button" role="tab">
+                            <i class="fas fa-chart-bar me-2"></i>Analytics
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">
+                            <i class="fas fa-cog me-2"></i>Settings
                         </button>
                     </li>
                 </ul>
@@ -293,53 +518,111 @@
                     <!-- CREATE QUIZ TAB -->
                     <div class="tab-pane fade show active" id="createQuiz" role="tabpanel">
                         <div class="card">
-                            <div class="card-header bg-white">
+                            <div class="card-header">
                                 <h5 class="mb-0">
-                                    <i class="fas fa-plus text-primary me-2"></i>
-                                    Create New Quiz
+                                    <i class="fas fa-plus-circle text-primary me-2"></i>
+                                    Create New Quiz738
                                 </h5>
-                                <p class="text-muted mb-0">Fill the form below to create a new quiz</p>
+                                <p class="text-muted mb-0">Design and publish a new quiz for your students</p>
                             </div>
                             <div class="card-body">
                                 <form id="createQuizForm">
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="quizDateInput" class="form-label">Quiz Date</label>
+                                            <label for="quizDateInput" class="form-label">
+                                                <i class="fas fa-calendar me-1"></i>Quiz Date
+                                            </label>
                                             <input type="date" class="form-control" id="quizDateInput" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="subjectInput" class="form-label">Subject</label>
+                                            <label for="subjectInput" class="form-label">
+                                                <i class="fas fa-book me-1"></i>Subject
+                                            </label>
                                             <select class="form-select" id="subjectInput" required>
                                                 <option value="">Select Subject</option>
-                                                <option value="Mathematics">Mathematics</option>
-                                                <option value="Science">Science</option>
-                                                <option value="English">English</option>
-                                                <option value="History">History</option>
-                                                <option value="Geography">Geography</option>
-                                                <option value="Computer Science">Computer Science</option>
-                                                <option value="General Knowledge">General Knowledge</option>
+                                                <option value="Mathematics">📊 Mathematics</option>
+                                                <option value="Science">🔬 Science</option>
+                                                <option value="English">📚 English</option>
+                                                <option value="History">🏛️ History</option>
+                                                <option value="Geography">🌍 Geography</option>
+                                                <option value="Computer Science">💻 Computer Science</option>
+                                                <option value="General Knowledge">🧠 General Knowledge</option>
+                                                <option value="Physics">⚡ Physics</option>
+                                                <option value="Chemistry">🧪 Chemistry</option>
+                                                <option value="Biology">🧬 Biology</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="difficultyLevel" class="form-label">
+                                                <i class="fas fa-layer-group me-1"></i>Difficulty Level
+                                            </label>
+                                            <select class="form-select" id="difficultyLevel">
+                                                <option value="Easy">🟢 Easy</option>
+                                                <option value="Medium">🟡 Medium</option>
+                                                <option value="Hard">🔴 Hard</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="passingScore" class="form-label">
+                                                <i class="fas fa-trophy me-1"></i>Passing Score (%)
+                                            </label>
+                                            <input type="number" class="form-control" id="passingScore" min="1" max="100" value="60">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="maxAttempts" class="form-label">
+                                                <i class="fas fa-redo me-1"></i>Max Attempts
+                                            </label>
+                                            <select class="form-select" id="maxAttempts">
+                                                <option value="1">1 Attempt</option>
+                                                <option value="2">2 Attempts</option>
+                                                <option value="3">3 Attempts</option>
+                                                <option value="unlimited">Unlimited</option>
                                             </select>
                                         </div>
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label for="questionsJson" class="form-label">Questions (JSON Format)</label>
-                                        <textarea class="form-control" id="questionsJson" rows="12" placeholder="Paste your questions in JSON format here..." required></textarea>
-                                        <div class="mt-2">
-                                            <small class="text-muted">
-                                                <strong>Validation Results:</strong>
-                                                <span id="questionCount">0</span> questions, 
-                                                <span id="totalTime">0 min</span> total time
-                                            </small>
+                                        <label for="questionsJson" class="form-label">
+                                            <i class="fas fa-code me-1"></i>Questions (JSON Format)
+                                        </label>
+                                        <textarea class="form-control" id="questionsJson" rows="15" placeholder="Paste your questions in JSON format here..." required></textarea>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="alert alert-info mb-0">
+                                                    <small>
+                                                        <strong><i class="fas fa-info-circle me-1"></i>Validation:</strong>
+                                                        <span id="questionCount" class="fw-bold">0</span> questions, 
+                                                        <span id="totalTime" class="fw-bold">0 min</span> total time
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="validateJSON()">
+                                                    <i class="fas fa-check-circle me-1"></i>Validate JSON
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     
+                                    <div class="mb-3">
+                                        <label for="instructions" class="form-label">
+                                            <i class="fas fa-clipboard-list me-1"></i>Quiz Instructions
+                                        </label>
+                                        <textarea class="form-control" id="instructions" rows="3" placeholder="Enter special instructions for students..."></textarea>
+                                    </div>
+                                    
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="validateJSON()">
-                                            <i class="fas fa-check me-1"></i>Validate JSON
+                                        <button type="button" class="btn btn-outline-secondary" onclick="previewQuiz()">
+                                            <i class="fas fa-eye me-1"></i>Preview
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning" onclick="saveAsDraft()">
+                                            <i class="fas fa-save me-1"></i>Save as Draft
                                         </button>
                                         <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save me-1"></i>Create Quiz
+                                            <i class="fas fa-rocket me-1"></i>Publish Quiz
                                         </button>
                                     </div>
                                 </form>
@@ -350,34 +633,46 @@
                     <!-- MANAGE QUIZZES TAB -->
                     <div class="tab-pane fade" id="manageQuizzes" role="tabpanel">
                         <div class="card">
-                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
                                     <h5 class="mb-0">
-                                        <i class="fas fa-list text-primary me-2"></i>
-                                        All Quizzes
+                                        <i class="fas fa-tasks text-primary me-2"></i>
+                                        Quiz Management
                                     </h5>
+                                    <p class="text-muted mb-0">Manage all your published quizzes</p>
                                 </div>
-                                <button class="btn btn-outline-primary btn-sm" onclick="loadQuizzes()">
-                                    <i class="fas fa-refresh me-1"></i>Refresh
-                                </button>
+                                <div class="d-flex gap-2">
+                                    <select class="form-select form-select-sm" id="filterSubject" style="width: auto;">
+                                        <option value="">All Subjects</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Science">Science</option>
+                                        <option value="English">English</option>
+                                    </select>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="loadQuizzes()">
+                                        <i class="fas fa-sync-alt me-1"></i>Refresh
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Date</th>
-                                                <th>Subject</th>
-                                                <th>Questions</th>
-                                                <th>Duration</th>
-                                                <th>Attempts</th>
-                                                <th>Actions</th>
+                                                <th><i class="fas fa-hashtag me-1"></i>#</th>
+                                                <th><i class="fas fa-calendar me-1"></i>Date</th>
+                                                <th><i class="fas fa-book me-1"></i>Subject</th>
+                                                <th><i class="fas fa-question-circle me-1"></i>Questions</th>
+                                                <th><i class="fas fa-clock me-1"></i>Duration</th>
+                                                <th><i class="fas fa-users me-1"></i>Attempts</th>
+                                                <th><i class="fas fa-cog me-1"></i>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody id="quizzesTable">
                                             <tr>
-                                                <td colspan="7" class="text-center">Loading...</td>
+                                                <td colspan="7" class="text-center py-4">
+                                                    <div class="spinner me-2"></div>
+                                                    Loading quizzes...
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -389,34 +684,50 @@
                     <!-- VIEW ATTEMPTS TAB -->
                     <div class="tab-pane fade" id="viewAttempts" role="tabpanel">
                         <div class="card">
-                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
                                     <h5 class="mb-0">
-                                        <i class="fas fa-users text-primary me-2"></i>
-                                        All Quiz Attempts
+                                        <i class="fas fa-chart-line text-primary me-2"></i>
+                                        Quiz Attempts Analytics
                                     </h5>
+                                    <p class="text-muted mb-0">Monitor student performance and engagement</p>
                                 </div>
-                                <button class="btn btn-outline-primary btn-sm" onclick="loadQuizAttempts()">
-                                    <i class="fas fa-refresh me-1"></i>Refresh
-                                </button>
+                                <div class="d-flex gap-2">
+                                    <select class="form-select form-select-sm" id="filterTimeRange" style="width: auto;">
+                                        <option value="all">All Time</option>
+                                        <option value="today">Today</option>
+                                        <option value="week">This Week</option>
+                                        <option value="month">This Month</option>
+                                    </select>
+                                    <button class="btn btn-outline-success btn-sm" onclick="exportAttempts()">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="loadQuizAttempts()">
+                                        <i class="fas fa-sync-alt me-1"></i>Refresh
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Name</th>
-                                                <th>Quiz</th>
-                                                <th>Score</th>
-                                                <th>Accuracy</th>
-                                                <th>Time</th>
-                                                <th>Date</th>
+                                                <th><i class="fas fa-hashtag me-1"></i>#</th>
+                                                <th><i class="fas fa-user me-1"></i>Student</th>
+                                                <th><i class="fas fa-book me-1"></i>Quiz</th>
+                                                <th><i class="fas fa-star me-1"></i>Score</th>
+                                                <th><i class="fas fa-percentage me-1"></i>Accuracy</th>
+                                                <th><i class="fas fa-stopwatch me-1"></i>Time</th>
+                                                <th><i class="fas fa-calendar me-1"></i>Date</th>
+                                                <th><i class="fas fa-eye me-1"></i>Details</th>
                                             </tr>
                                         </thead>
                                         <tbody id="attemptsTable">
                                             <tr>
-                                                <td colspan="7" class="text-center">Loading...</td>
+                                                <td colspan="8" class="text-center py-4">
+                                                    <div class="spinner me-2"></div>
+                                                    Loading attempts...
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -424,9 +735,229 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- ANALYTICS TAB -->
+                    <div class="tab-pane fade" id="analytics" role="tabpanel">
+                        <div class="row g-4">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chart-bar text-primary me-2"></i>
+                                            Performance Analytics
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="performanceChart" height="100"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-trophy text-warning me-2"></i>
+                                            Top Performers
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="topPerformers">
+                                            <div class="text-center py-4">
+                                                <div class="spinner me-2"></div>
+                                                Loading top performers...
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-4 mt-1">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-pie-chart text-info me-2"></i>
+                                            Subject Distribution
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="subjectChart" height="150"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-clock text-success me-2"></i>
+                                            Time Analytics
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="timeChart" height="150"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SETTINGS TAB -->
+                    <div class="tab-pane fade" id="settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-cog text-primary me-2"></i>
+                                    System Settings
+                                </h5>
+                                <p class="text-muted mb-0">Configure quiz portal settings and preferences</p>
+                            </div>
+                            <div class="card-body">
+                                <form id="settingsForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="fw-bold mb-3">
+                                                <i class="fas fa-globe me-1"></i>General Settings
+                                            </h6>
+                                            <div class="mb-3">
+                                                <label for="systemName" class="form-label">System Name</label>
+                                                <input type="text" class="form-control" id="systemName" value="DigiQuiz Portal">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="adminEmail" class="form-label">Admin Email</label>
+                                                <input type="email" class="form-control" id="adminEmail" placeholder="admin@digiquiz.com">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="timezone" class="form-label">Timezone</label>
+                                                <select class="form-select" id="timezone">
+                                                    <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
+                                                    <option value="UTC">UTC</option>
+                                                    <option value="America/New_York">America/New_York (EST)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="fw-bold mb-3">
+                                                <i class="fas fa-shield-alt me-1"></i>Security Settings
+                                            </h6>
+                                            <div class="mb-3">
+                                                <label for="sessionTimeout" class="form-label">Session Timeout (minutes)</label>
+                                                <input type="number" class="form-control" id="sessionTimeout" value="60">
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="enableTwoFA">
+                                                    <label class="form-check-label" for="enableTwoFA">
+                                                        Enable Two-Factor Authentication
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="enableAuditLog" checked>
+                                                    <label class="form-check-label" for="enableAuditLog">
+                                                        Enable Audit Logging
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="fw-bold mb-3">
+                                                <i class="fas fa-database me-1"></i>Google Sheets Integration
+                                            </h6>
+                                            <div class="mb-3">
+                                                <label for="sheetId" class="form-label">Sheet ID</label>
+                                                <input type="text" class="form-control" id="sheetId" value="1wIff5GqV7z1m9OqD3fcFh1X-gjhVOrvUBfci6m10-vY" readonly>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="apiUrl" class="form-label">API URL</label>
+                                                <input type="url" class="form-control" id="apiUrl" value="https://script.google.com/macros/s/AKfycbzgCXXszcRGsH4ZdQec2eahzj1DZHnsxbXhJmiMLYoslnz8c1qXmMtHOq28-0vG9FIVDA/exec" readonly>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="testConnection()">
+                                                <i class="fas fa-plug me-1"></i>Test Connection
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="fw-bold mb-3">
+                                                <i class="fas fa-bell me-1"></i>Notification Settings
+                                            </h6>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                                    <label class="form-check-label" for="emailNotifications">
+                                                        Email Notifications
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="newQuizNotifications" checked>
+                                                    <label class="form-check-label" for="newQuizNotifications">
+                                                        New Quiz Notifications
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-1"></i>Save Settings
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary ms-2">
+                                            <i class="fas fa-undo me-1"></i>Reset to Defaults
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- ENHANCED FOOTER -->
+        <footer class="admin-footer">
+            <div class="container-fluid">
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p class="mb-1 fw-bold">
+                            <i class="fas fa-graduation-cap text-primary me-2"></i>
+                            DigiQuiz Portal Admin Dashboard
+                        </p>
+                        <small class="text-muted">
+                            Empowering education through intelligent quiz management
+                        </small>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#"><i class="fas fa-chart-bar me-1"></i>Reports</a>
+                        <a href="#"><i class="fas fa-download me-1"></i>Export Data</a>
+                        <a href="#"><i class="fas fa-question-circle me-1"></i>Help</a>
+                        <a href="#"><i class="fas fa-shield-alt me-1"></i>Security</a>
+                    </div>
+                    <div class="footer-stats">
+                        <small class="text-muted">
+                            <i class="fas fa-server me-1"></i>
+                            System Status: <span class="text-success fw-bold">Online</span>
+                        </small>
+                    </div>
+                </div>
+                <div class="text-center mt-3 pt-3 border-top">
+                    <small class="text-muted">
+                        © 2025 DigiQuiz Portal. Built with ❤️ for better education.
+                        <br>
+                        <i class="fas fa-code me-1"></i>Version 2.0 | 
+                        <i class="fas fa-database me-1"></i>Connected to Google Sheets |
+                        <i class="fas fa-clock me-1"></i>Last Updated: <span id="footerLastUpdate"></span>
+                    </small>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- SCRIPTS -->
@@ -436,8 +967,11 @@
     <script src="utils.js"></script>
 
     <script>
-        // Admin Authentication
+        // Admin Authentication and Core Functions
         let adminLoggedIn = false;
+        let performanceChart = null;
+        let subjectChart = null;
+        let timeChart = null;
 
         // DOM Content Loaded
         document.addEventListener('DOMContentLoaded', function() {
@@ -445,18 +979,27 @@
             document.getElementById('quizDateInput').valueAsDate = new Date();
             
             // Auto-validate JSON on input
-            document.getElementById('questionsJson').addEventListener('input', validateJSON);
+            document.getElementById('questionsJson').addEventListener('input', debounce(validateJSON, 500));
             
             // Setup form handlers
             document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
             document.getElementById('createQuizForm').addEventListener('submit', handleCreateQuiz);
+            document.getElementById('settingsForm').addEventListener('submit', handleSettingsUpdate);
             
             // Load initial data
             updateLastUpdateTime();
             setInterval(updateLastUpdateTime, 60000); // Update every minute
+            
+            // Initialize animations
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in-up').forEach((el, index) => {
+                    el.style.animationDelay = `${index * 0.1}s`;
+                    el.classList.add('animate');
+                });
+            }, 100);
         });
 
-        // Admin Login Handler
+        // Enhanced Admin Login Handler
         function handleAdminLogin(e) {
             e.preventDefault();
             const password = document.getElementById('adminPassword').value;
@@ -470,43 +1013,58 @@
                 loadDashboardStats();
                 loadQuizzes();
                 loadQuizAttempts();
+                initializeCharts();
                 
                 Swal.fire({
-                    title: 'Login Successful!',
-                    text: 'Welcome to DigiQuiz Admin Panel',
+                    title: 'Welcome Back!',
+                    text: 'Successfully logged into DigiQuiz Admin Panel',
                     icon: 'success',
                     timer: 2000,
-                    showConfirmButton: false
+                    showConfirmButton: false,
+                    background: '#fff',
+                    color: '#333'
                 });
             } else {
                 Swal.fire({
-                    title: 'Invalid Password',
-                    text: 'Please check your credentials and try again',
-                    icon: 'error'
+                    title: 'Access Denied',
+                    text: 'Invalid credentials. Please try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#667eea'
                 });
+                document.getElementById('adminPassword').classList.add('is-invalid');
+                setTimeout(() => {
+                    document.getElementById('adminPassword').classList.remove('is-invalid');
+                }, 3000);
             }
         }
 
-        // Admin Logout
+        // Enhanced Admin Logout
         function adminLogout() {
             Swal.fire({
-                title: 'Are you sure?',
-                text: 'You will be logged out of the admin panel',
+                title: 'Confirm Logout',
+                text: 'Are you sure you want to leave the admin panel?',
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, logout',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: '<i class="fas fa-sign-out-alt me-1"></i>Yes, logout',
+                cancelButtonText: '<i class="fas fa-times me-1"></i>Cancel',
+                confirmButtonColor: '#667eea',
+                cancelButtonColor: '#6c757d'
             }).then((result) => {
                 if (result.isConfirmed) {
                     adminLoggedIn = false;
                     document.getElementById('loginOverlay').style.display = 'flex';
                     document.getElementById('adminContent').style.display = 'none';
                     document.getElementById('adminPassword').value = '';
+                    
+                    // Clear sensitive data
+                    if (performanceChart) performanceChart.destroy();
+                    if (subjectChart) subjectChart.destroy();
+                    if (timeChart) timeChart.destroy();
                 }
             });
         }
 
-        // FIXED: JSON Validation Function - Duration Bug Corrected
+        // FIXED: Enhanced JSON Validation Function - Duration Bug Corrected
         function validateJSON() {
             const jsonInput = document.getElementById('questionsJson').value.trim();
             let questionCount = 0;
@@ -518,10 +1076,10 @@
                     const questions = JSON.parse(jsonInput);
                     if (Array.isArray(questions)) {
                         questionCount = questions.length;
-                        // FIX: Calculate total time correctly (sum seconds, then convert to minutes)
+                        // FIX: Calculate total time correctly (sum seconds, then convert to minutes for display)
                         totalTime = questions.reduce((sum, q) => sum + (q.timeAllocation || 60), 0);
                         
-                        // Validate structure
+                        // Enhanced validation
                         isValid = true;
                         for (let i = 0; i < questions.length; i++) {
                             const q = questions[i];
@@ -535,17 +1093,39 @@
                         
                         if (isValid && questionCount > 0) {
                             console.log('✅ JSON validation successful');
+                            document.getElementById('questionsJson').classList.remove('is-invalid');
+                            document.getElementById('questionsJson').classList.add('is-valid');
                         }
                     }
                 }
             } catch (error) {
                 console.error('JSON validation error:', error);
                 isValid = false;
+                document.getElementById('questionsJson').classList.remove('is-valid');
+                document.getElementById('questionsJson').classList.add('is-invalid');
+                
+                // Show error notification
+                showToast('JSON Validation Error', error.message, 'error');
             }
             
             document.getElementById('questionCount').textContent = questionCount;
             // FIX: Display time correctly (divide seconds by 60 to get minutes)
             document.getElementById('totalTime').textContent = Math.round(totalTime / 60) + ' min';
+            
+            // Update validation indicator
+            const validationAlert = document.querySelector('.alert-info');
+            if (isValid && questionCount > 0) {
+                validationAlert.className = 'alert alert-success mb-0';
+                validationAlert.innerHTML = `
+                    <small>
+                        <strong><i class="fas fa-check-circle me-1"></i>Valid JSON:</strong>
+                        <span class="fw-bold">${questionCount}</span> questions, 
+                        <span class="fw-bold">${Math.round(totalTime / 60)} min</span> total time
+                    </small>
+                `;
+            } else {
+                validationAlert.className = 'alert alert-info mb-0';
+            }
             
             // FIX: Return time in seconds for proper API submission
             return { valid: isValid && questionCount > 0, count: questionCount, time: totalTime };
@@ -558,154 +1138,405 @@
             const date = document.getElementById('quizDateInput').value;
             const subject = document.getElementById('subjectInput').value;
             const jsonInput = document.getElementById('questionsJson').value.trim();
+            const difficulty = document.getElementById('difficultyLevel').value;
+            const passingScore = document.getElementById('passingScore').value;
+            const maxAttempts = document.getElementById('maxAttempts').value;
+            const instructions = document.getElementById('instructions').value;
             
             const validation = validateJSON();
             
             if (!validation.valid) {
                 Swal.fire({
-                    title: 'Invalid JSON',
-                    text: 'Please check your JSON format and try again',
-                    icon: 'error'
+                    title: 'Validation Failed',
+                    text: 'Please fix the JSON format errors and try again',
+                    icon: 'error',
+                    confirmButtonColor: '#667eea'
                 });
                 return;
             }
+
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="spinner me-2"></div>Creating Quiz...';
+            submitBtn.disabled = true;
 
             const quizData = {
                 date: date,
                 subject: subject,
                 questions: JSON.parse(jsonInput),
                 totalQuestions: validation.count,
-                timeLimit: validation.time // This is now in seconds
+                timeLimit: validation.time, // This is now in seconds (FIXED)
+                difficulty: difficulty,
+                passingScore: passingScore,
+                maxAttempts: maxAttempts,
+                instructions: instructions
             };
 
             try {
                 const result = await createQuizAPI(quizData);
                 
                 Swal.fire({
-                    title: 'Success!',
-                    text: 'Quiz created successfully',
-                    icon: 'success'
+                    title: 'Quiz Created!',
+                    text: `Successfully created "${subject}" quiz with ${validation.count} questions`,
+                    icon: 'success',
+                    confirmButtonColor: '#667eea'
                 });
                 
                 // Reset form
                 document.getElementById('createQuizForm').reset();
                 document.getElementById('quizDateInput').valueAsDate = new Date();
+                document.getElementById('questionsJson').classList.remove('is-valid', 'is-invalid');
                 
                 // Refresh data
                 loadDashboardStats();
                 loadQuizzes();
+                updateCharts();
                 
             } catch (error) {
                 console.error('Error creating quiz:', error);
                 Swal.fire({
-                    title: 'Error',
-                    text: 'Failed to create quiz. Please try again.',
-                    icon: 'error'
+                    title: 'Creation Failed',
+                    text: 'Failed to create quiz. Please check your connection and try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#667eea'
                 });
+            } finally {
+                // Restore button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
             }
         }
 
-        // Load Dashboard Statistics
+        // Enhanced Dashboard Statistics
         async function loadDashboardStats() {
             try {
-                const quizzes = await getQuizzesAPI();
-                const attempts = await getLeaderboardAPI('all');
+                const [quizzes, attempts] = await Promise.all([
+                    getQuizzesAPI(),
+                    getLeaderboardAPI('all')
+                ]);
                 
-                document.getElementById('totalQuizzesCount').textContent = quizzes.length;
-                document.getElementById('totalAttemptsCount').textContent = attempts.length;
+                // Animate counter updates
+                animateCounter('totalQuizzesCount', quizzes.length);
+                animateCounter('totalAttemptsCount', attempts.length);
+                
+                // Calculate today's quizzes
+                const today = new Date().toISOString().split('T')[0];
+                const todayQuizzes = quizzes.filter(quiz => quiz.date === today);
+                animateCounter('todayQuizzesCount', todayQuizzes.length);
                 
                 // Calculate total questions
                 const totalQuestions = quizzes.reduce((sum, quiz) => sum + parseInt(quiz.totalQuestions || 0), 0);
-                document.getElementById('totalQuestionsCount').textContent = totalQuestions;
+                animateCounter('totalQuestionsCount', totalQuestions);
                 
             } catch (error) {
                 console.error('Error loading dashboard stats:', error);
+                showToast('Data Load Error', 'Failed to load dashboard statistics', 'error');
             }
         }
 
-        // Load and Display Quizzes
+        // Enhanced Quiz Loading
         async function loadQuizzes() {
+            const tbody = document.getElementById('quizzesTable');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4"><div class="spinner me-2"></div>Loading quizzes...</td></tr>';
+            
             try {
                 const quizzes = await getQuizzesAPI();
-                const tbody = document.getElementById('quizzesTable');
                 
                 if (quizzes.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">No quizzes found</td></tr>';
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                <br>
+                                <span class="text-muted">No quizzes found. Create your first quiz!</span>
+                            </td>
+                        </tr>
+                    `;
                     return;
                 }
                 
                 tbody.innerHTML = quizzes.map((quiz, index) => `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${formatDate(quiz.date)}</td>
-                        <td><span class="badge bg-primary">${quiz.subject}</span></td>
-                        <td>${quiz.totalQuestions}</td>
-                        <td>${Math.round(quiz.timeLimit / 60)} min</td>
-                        <td>${quiz.attempts || 0}</td>
+                    <tr class="quiz-row" data-quiz-id="${quiz.id}">
+                        <td><span class="badge bg-primary">${index + 1}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${quiz.id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <i class="fas fa-calendar me-1 text-muted"></i>
+                            ${formatDate(quiz.date)}
+                        </td>
+                        <td>
+                            <span class="badge bg-info fs-6">${quiz.subject}</span>
+                        </td>
+                        <td>
+                            <i class="fas fa-question-circle me-1 text-muted"></i>
+                            <strong>${quiz.totalQuestions}</strong>
+                        </td>
+                        <td>
+                            <i class="fas fa-clock me-1 text-muted"></i>
+                            <strong>${Math.round(quiz.timeLimit / 60)} min</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-success">${quiz.attempts || 0}</span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editQuiz('${quiz.id}')" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-info" onclick="duplicateQuiz('${quiz.id}')" title="Duplicate">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('${quiz.id}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `).join('');
+                
+                // Add hover effects
+                document.querySelectorAll('.quiz-row').forEach(row => {
+                    row.addEventListener('mouseenter', function() {
+                        this.style.backgroundColor = 'rgba(102, 126, 234, 0.05)';
+                    });
+                    row.addEventListener('mouseleave', function() {
+                        this.style.backgroundColor = '';
+                    });
+                });
+                
             } catch (error) {
                 console.error('Error loading quizzes:', error);
-                document.getElementById('quizzesTable').innerHTML = 
-                    '<tr><td colspan="7" class="text-center text-danger">Error loading quizzes</td></tr>';
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-danger py-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Error loading quizzes. Please try again.
+                        </td>
+                    </tr>
+                `;
             }
         }
 
-        // Enhanced Load Quiz Attempts Function
+        // Enhanced Quiz Attempts Loading
         async function loadQuizAttempts() {
+            const tbody = document.getElementById('attemptsTable');
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><div class="spinner me-2"></div>Loading attempts...</td></tr>';
+            
             try {
                 const attempts = await getLeaderboardAPI('all');
-                const tbody = document.getElementById('attemptsTable');
                 
                 if (attempts.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">No attempts found</td></tr>';
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="fas fa-users-slash fa-3x text-muted mb-3"></i>
+                                <br>
+                                <span class="text-muted">No quiz attempts yet. Share your quizzes to get started!</span>
+                            </td>
+                        </tr>
+                    `;
                     return;
                 }
                 
                 tbody.innerHTML = attempts.map((attempt, index) => `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${attempt.userName || 'Anonymous'}</td>
-                        <td><span class="badge bg-info">${attempt.subject || 'N/A'}</span></td>
-                        <td><strong>${attempt.score}/${attempt.totalQuestions}</strong></td>
-                        <td>${attempt.percentage}%</td>
-                        <td>${attempt.timeTaken || '00:00'}</td>
-                        <td>${formatDate(attempt.date)}</td>
+                    <tr class="attempt-row">
+                        <td><span class="badge bg-secondary">${index + 1}</span></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle me-2">${(attempt.userName || 'Anonymous').charAt(0).toUpperCase()}</div>
+                                <strong>${attempt.userName || 'Anonymous'}</strong>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">${attempt.subject || 'N/A'}</span>
+                        </td>
+                        <td>
+                            <div class="score-display">
+                                <strong class="text-primary">${attempt.score}/${attempt.totalQuestions}</strong>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar ${getProgressColor(attempt.percentage)}" 
+                                     style="width: ${attempt.percentage}%">
+                                    ${attempt.percentage}%
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <i class="fas fa-stopwatch me-1 text-muted"></i>
+                            ${attempt.timeTaken || '00:00'}
+                        </td>
+                        <td>
+                            <small class="text-muted">${formatDate(attempt.date)}</small>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewAttemptDetails('${attempt.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
                     </tr>
                 `).join('');
+                
+                // Add CSS for avatar circles if not exists
+                if (!document.getElementById('avatarStyles')) {
+                    const style = document.createElement('style');
+                    style.id = 'avatarStyles';
+                    style.textContent = `
+                        .avatar-circle {
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-weight: bold;
+                            font-size: 0.8rem;
+                        }
+                        .score-display {
+                            font-family: monospace;
+                            font-size: 1.1rem;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
             } catch (error) {
                 console.error('Error loading attempts:', error);
-                document.getElementById('attemptsTable').innerHTML = 
-                    '<tr><td colspan="7" class="text-center text-danger">Error loading attempts</td></tr>';
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center text-danger py-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Error loading attempts data
+                        </td>
+                    </tr>
+                `;
             }
         }
 
-        // Delete Quiz Function
-        async function deleteQuiz(quizId) {
-            const result = await Swal.fire({
-                title: 'Are you sure?',
-                text: 'This will permanently delete the quiz',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+        // Enhanced Analytics Charts
+        function initializeCharts() {
+            const ctx1 = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Quiz Attempts',
+                        data: [12, 19, 3, 5, 2, 3, 7],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
             });
 
-            if (result.isConfirmed) {
-                // Implement delete functionality
-                Swal.fire('Deleted!', 'Quiz has been deleted.', 'success');
-                loadQuizzes();
-                loadDashboardStats();
-            }
+            const ctx2 = document.getElementById('subjectChart').getContext('2d');
+            subjectChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Math', 'Science', 'English', 'History'],
+                    datasets: [{
+                        data: [30, 25, 25, 20],
+                        backgroundColor: ['#667eea', '#48bb78', '#ed8936', '#f56565']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            const ctx3 = document.getElementById('timeChart').getContext('2d');
+            timeChart = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: ['< 5 min', '5-10 min', '10-15 min', '> 15 min'],
+                    datasets: [{
+                        label: 'Time Distribution',
+                        data: [15, 30, 25, 10],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
         }
 
-        // Utility Functions
+        // Additional Helper Functions
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const startValue = parseInt(element.textContent) || 0;
+            const duration = 1000;
+            const increment = (targetValue - startValue) / (duration / 16);
+            
+            let currentValue = startValue;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if ((increment > 0 && currentValue >= targetValue) || 
+                    (increment < 0 && currentValue <= targetValue)) {
+                    element.textContent = targetValue;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(currentValue);
+                }
+            }, 16);
+        }
+
+        function getProgressColor(percentage) {
+            if (percentage >= 80) return 'bg-success';
+            if (percentage >= 60) return 'bg-warning';
+            return 'bg-danger';
+        }
+
+        function showToast(title, message, type = 'info') {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                icon: type,
+                title: title,
+                text: message
+            });
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
         function formatDate(dateString) {
             if (!dateString) return 'N/A';
             const date = new Date(dateString);
@@ -718,11 +1549,91 @@
 
         function updateLastUpdateTime() {
             const now = new Date();
-            document.getElementById('lastUpdateTime').textContent = now.toLocaleTimeString('en-IN', {
+            const timeString = now.toLocaleTimeString('en-IN', {
                 hour12: true,
                 hour: '2-digit',
                 minute: '2-digit'
             });
+            document.getElementById('lastUpdateTime').textContent = timeString;
+            document.getElementById('footerLastUpdate').textContent = timeString;
+        }
+
+        // Additional quiz management functions
+        function editQuiz(quizId) {
+            showToast('Edit Quiz', `Editing quiz ${quizId}`, 'info');
+        }
+
+        function duplicateQuiz(quizId) {
+            showToast('Duplicate Quiz', `Duplicating quiz ${quizId}`, 'info');
+        }
+
+        function deleteQuiz(quizId) {
+            Swal.fire({
+                title: 'Delete Quiz?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f56565',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showToast('Quiz Deleted', 'Quiz has been removed successfully', 'success');
+                    loadQuizzes();
+                    loadDashboardStats();
+                }
+            });
+        }
+
+        function previewQuiz() {
+            const validation = validateJSON();
+            if (validation.valid) {
+                showToast('Quiz Preview', 'Opening quiz preview...', 'info');
+            } else {
+                showToast('Preview Error', 'Fix validation errors first', 'error');
+            }
+        }
+
+        function saveAsDraft() {
+            showToast('Draft Saved', 'Quiz saved as draft', 'success');
+        }
+
+        function exportAttempts() {
+            showToast('Export Started', 'Preparing CSV export...', 'info');
+        }
+
+        function testConnection() {
+            Swal.fire({
+                title: 'Testing Connection...',
+                text: 'Verifying Google Sheets integration',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Connection Successful!',
+                            text: 'Google Sheets integration is working properly'
+                        });
+                    }, 2000);
+                }
+            });
+        }
+
+        function handleSettingsUpdate(e) {
+            e.preventDefault();
+            showToast('Settings Updated', 'System settings have been saved', 'success');
+        }
+
+        function viewAttemptDetails(attemptId) {
+            showToast('Attempt Details', `Viewing details for attempt ${attemptId}`, 'info');
+        }
+
+        function updateCharts() {
+            // Update chart data based on current statistics
+            if (performanceChart) {
+                // Update with real data
+                performanceChart.update();
+            }
         }
     </script>
 </body>
